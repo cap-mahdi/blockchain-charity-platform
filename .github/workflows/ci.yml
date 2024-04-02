@@ -3,7 +3,7 @@ on:
   push:
     branches:
     - development
-    pull_request:
+  pull_request:
 
 jobs:
   lint:
