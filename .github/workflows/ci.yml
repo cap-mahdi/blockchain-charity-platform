@@ -15,8 +15,8 @@ jobs:
         node-version: 18
     - run: npm ci
     - run: npm i  nx
-    - run: npx nx lint ui
-    - run: npx nx lint api
-    - run: npx nx build ui
-    - run: npx nx build api
+    - run: npx nx lint ui --verbose
+    - run: npx nx lint api --verbose
+    - run: npx nx build ui --verbose
+    - run: npx nx build api --verbose
   
