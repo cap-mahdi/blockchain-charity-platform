@@ -6,7 +6,7 @@ on:
   pull_request:
 
 jobs:
-  lint:
+  - lint:
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v4
@@ -14,6 +14,11 @@ jobs:
       with:
         node-version: 18
     - run: npm ci
-    - run: npm i -g nx
-    - run: nx lint ui
-    - run: nx lint api
+    - run: npm i  nx
+    - run: npx nx lint ui
+    - run: npx nx lint api
+  
+  - build:
+    depends: lint
+    run: npx nx build ui
+    run: npx nx build api
