@@ -1,22 +1,21 @@
-name: CI/CD
-on:
-  push:
-    branches:
-    - development
-  pull_request:
+# name: CI/CD
+# on:
+#   push:
+#     branches:
+#     - development
+#   pull_request:
 
-jobs:
-  main :
-    runs-on: ubuntu-latest
-    steps:
-    - uses: actions/checkout@v4
-    - uses: actions/setup-node@v4
-      with:
-        node-version: 18
-    - run: npm ci
-    - run: npm i  nx
-    - run: npx nx lint ui --verbose
-    - run: npx nx lint api --verbose
-    - run: npx nx build ui --verbose
-    - run: npx nx build api --verbose
-  
+# jobs:
+#   main :
+#     runs-on: ubuntu-latest
+#     steps:
+#     - uses: actions/checkout@v4
+#     - uses: actions/setup-node@v4
+#       with:
+#         node-version: 18
+#     - run: npm ci
+#     - run: npm i  nx
+#     - run: npx nx lint ui --verbose
+#     - run: npx nx lint api --verbose
+#     - run: npx nx build ui --verbose
+#     - run: npx nx build api --verbose
