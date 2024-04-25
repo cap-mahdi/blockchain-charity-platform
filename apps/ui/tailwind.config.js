@@ -21,14 +21,18 @@ module.exports = {
       colors: {
         'dark-blue': '#022539',
         orange: '#fb991c',
-        white: '#fbf3f1',
+        beige: '#fbf3f1',
+        white: '#ffffff',
+
+        'light-blue': '#28B5E1',
         blue: '#1c7690',
         'gray-dark': '#273444',
         gray: '#b5b5b5',
-        'gray-light': '#d3dce6',
+        'light-gray': '#efefef',
+        'dark-gray': '#414D55',
       },
       height: {
-        screen: '1000dvh',
+        screen: '100dvh',
       },
     },
   },
