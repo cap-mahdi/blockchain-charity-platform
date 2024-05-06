@@ -35,12 +35,16 @@ export function ProgressBar({
           style={{ width, height }}
           className={styles.common + styles.blankBar + commonStyle + barStyle}
         ></div>
-        <div
-          style={{ width: progressWidth, height }}
-          className={
-            styles.common + styles.progressBar + commonStyle + progressStyle
-          }
-        ></div>
+        {percentage > 0.1 ? (
+          <div
+            style={{ width: progressWidth, height }}
+            className={
+              styles.common + styles.progressBar + commonStyle + progressStyle
+            }
+          ></div>
+        ) : (
+          ''
+        )}
       </div>
       <h5
         style={{ fontSize: label.size }}

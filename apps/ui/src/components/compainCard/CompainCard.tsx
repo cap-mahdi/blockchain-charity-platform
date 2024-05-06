@@ -21,7 +21,7 @@ export function CompainCard({
   description = 'Rebuilding Alliance is dedicated to advancing equal rights for Palestinians through education, advocacy, and support that assures Palestinian families the right to a home, schooling, economic security, safety, and a promising future.',
 }: PropsType) {
   const styles = {
-    wrapper: `m-8 bg-beige p-5 rounded-2xl box-border `,
+    wrapper: ` bg-beige p-5 rounded-2xl box-border `,
     category: `text-light-blue text-[11px] font-medium `,
     compainName: `text-dark-gray font-bold   `,
     textExpander: `text-dark-gray text-xs font-medium mt-2 px-2`,
