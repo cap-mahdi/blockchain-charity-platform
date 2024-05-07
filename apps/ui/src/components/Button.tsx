@@ -1,8 +1,6 @@
-import React from 'react';
-
 export function Button({
-  className,
-  onClick,
+  className = '',
+  onClick = () => {},
   children,
   disablePointer = false,
 }) {
