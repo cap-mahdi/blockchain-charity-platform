@@ -8,7 +8,8 @@ import { StyledChart } from '../components/chart/StyledChart';
 import { AppLayout } from '../layout/AppLayout';
 import { HomePage } from './home';
 import { FullBleedCarousel } from '../components/carousel/FullBleedCarousel';
-import { CompainDetails } from './compain/CompainDetails';
+import { CampaignDetails } from './compain/CompainDetails';
+import { CampaignFeed } from './compain/CompainFeed';
 
 export const router = createBrowserRouter([
   {
@@ -48,8 +49,12 @@ export const router = createBrowserRouter([
         element: <Register />,
       },
       {
-        path: '/compain',
-        element: <CompainDetails />,
+        path: '/campaign',
+        element: <CampaignDetails />,
+      },
+      {
+        path: '/campaign/feed',
+        element: <CampaignFeed />,
       },
     ],
   },
