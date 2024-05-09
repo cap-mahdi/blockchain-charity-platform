@@ -2,6 +2,7 @@ import React from 'react';
 import { CompainLayout } from './CompainLayout';
 import filesIcon from '../../assets/files-icon.png';
 import { Button } from '../../components/Button';
+import { ExchangeSection } from './ExchangeSection';
 export function CompainDetails(props) {
   return (
     <CompainLayout>
@@ -27,6 +28,7 @@ export function CompainDetails(props) {
           <img src={filesIcon} className="w-20 h-20" alt="files" />
           <Button className="bg-orange">White papaer and documents</Button>
         </div>
+        <ExchangeSection />
       </div>
     </CompainLayout>
   );

@@ -5,10 +5,14 @@ import { Sections } from './Sections';
 import { MetamaskBtn } from './MetamaskBtn';
 import { Avatar } from '../Avatar';
 import { IoOptionsOutline } from 'react-icons/io5';
+import useMetaMask from '../../hooks/useMetaMask';
+import { connect } from 'http2';
 
 export function Navbar(props) {
   const [connectHover, setConnectHover] = useState(false);
-  const connected = false;
+  const [connectedWallet, connectWallet] = useMetaMask();
+
+  // const connected = false;
   const fixedHeight = 'h-[60%]';
   const styles = {
     wrapper: `w-[100%] h-20 bg-white flex flex-row text-black items-center  justify-between  px-4 `,
@@ -28,13 +32,14 @@ export function Navbar(props) {
           <Sections classname="w-[40%]" />
         </div>
         {/* Join us  */}
-        {!connected ? (
+        {!connectedWallet ? (
           <div className={` flex flex-row items-center  gap-4  ${fixedHeight}`}>
             <button className={styles.joinUs}>Join Us</button>
             {/* Connect btn  */}
             <MetamaskBtn
               className={styles.connectBtn}
               setConnectHover={setConnectHover}
+              connectWallet={connectWallet}
             />
           </div>
         ) : (

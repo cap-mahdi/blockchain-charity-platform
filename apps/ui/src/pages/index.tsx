@@ -9,12 +9,14 @@ import { AppLayout } from '../layout/AppLayout';
 import { HomePage } from './home';
 import { FullBleedCarousel } from '../components/carousel/FullBleedCarousel';
 import { CompainDetails } from './compain/CompainDetails';
+import MetaMask from '../hooks/useMetaMask';
 
 export const router = createBrowserRouter([
   {
     path: '/auth',
     element: <FullBleedCarousel />,
   },
+
   {
     path: '/card-test',
     element: (
