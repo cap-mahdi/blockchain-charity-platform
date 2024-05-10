@@ -2,7 +2,7 @@ import React from 'react';
 import { Card } from '../../components/Card';
 import { Avatar } from '../../components/Avatar';
 
-export function CampainLayout({ children }) {
+export function CompainLayout({ children }) {
   return (
     <Card className={' bg-orange  '}>
       <div className="w-full relative ">
@@ -33,7 +33,7 @@ export function CampainLayout({ children }) {
           </div>
         </div>
       </div>
-      <div className=" w-full px-8 pb-8 ">{children}</div>
+      {children}
     </Card>
   );
 }

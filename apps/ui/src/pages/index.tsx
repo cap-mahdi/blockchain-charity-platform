@@ -8,14 +8,15 @@ import { StyledChart } from '../components/chart/StyledChart';
 import { AppLayout } from '../layout/AppLayout';
 import { HomePage } from './home';
 import { FullBleedCarousel } from '../components/carousel/FullBleedCarousel';
-import { CampaignDetails } from './compain/CompainDetails';
-import { CampaignFeed } from './compain/CompainFeed';
+import { CompainDetails } from './compain/CompainDetails';
+import MetaMask from '../hooks/useMetaMask';
 
 export const router = createBrowserRouter([
   {
     path: '/auth',
     element: <FullBleedCarousel />,
   },
+
   {
     path: '/card-test',
     element: (
@@ -49,12 +50,8 @@ export const router = createBrowserRouter([
         element: <Register />,
       },
       {
-        path: '/campaign',
-        element: <CampaignDetails />,
-      },
-      {
-        path: '/campaign/feed',
-        element: <CampaignFeed />,
+        path: '/compain',
+        element: <CompainDetails />,
       },
     ],
   },

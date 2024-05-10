@@ -1,8 +1,10 @@
 import React, { useState } from 'react';
 import metamask from '../../assets/MetamaskLogo.png';
+import useMetaMask from '../../hooks/useMetaMask';
 
-export function MetamaskBtn({ className, setConnectHover }) {
+export function MetamaskBtn({ className, setConnectHover, connectWallet }) {
   const [hover, setHover] = useState(false);
+
   // const [connected, setHover] = useState(false);
   const styles = {
     wrapper: `flex flex-row items-center pl-4 overflow-hidden   `,
@@ -11,18 +13,6 @@ export function MetamaskBtn({ className, setConnectHover }) {
     associationButton: `  `,
     hover: ``,
   };
-
-  const toRender = !hover ? (
-    <h1 className="pr-4">Connect your wallet</h1>
-  ) : (
-    <>
-      <h1>Connect as </h1>
-      <button className={styles.roleButton + styles.userButton}>User</button>
-      <button className={styles.roleButton + styles.associationButton}>
-        Association
-      </button>
-    </>
-  );
 
   return (
     <div
@@ -54,7 +44,12 @@ export function MetamaskBtn({ className, setConnectHover }) {
         ) : (
           <>
             <h1>Connect as </h1>
-            <button className="bg-orange h-[100%] w-[8rem] rounded-bl-full rounded-tr-full">
+            <button
+              className="bg-orange h-[100%] w-[8rem] rounded-bl-full rounded-tr-full"
+              onClick={() => {
+                connectWallet();
+              }}
+            >
               User
             </button>
             <button className="bg-orange h-[100%] w-[8rem] rounded-bl-full ">
