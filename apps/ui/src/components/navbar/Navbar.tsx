@@ -7,6 +7,7 @@ import { Avatar } from '../Avatar';
 import { IoOptionsOutline } from 'react-icons/io5';
 import useMetaMask from '../../hooks/useMetaMask';
 import { connect } from 'http2';
+import { Button } from '../Button';
 
 export function Navbar(props) {
   const [connectHover, setConnectHover] = useState(false);
@@ -43,10 +44,13 @@ export function Navbar(props) {
             />
           </div>
         ) : (
-          <div className="flex flex-row items-center gap-3">
-            <IoOptionsOutline className="h-8 w-8  " />
-            <Avatar src="https://www.croissant-rouge.tn/logo.png" />
-          </div>
+          // <div className="flex flex-row items-center gap-3">
+          //   <IoOptionsOutline className="h-8 w-8  " />
+          //   <Avatar src="https://www.croissant-rouge.tn/logo.png" />
+          // </div>
+          <Button className="bg-orange text-sm">
+            Connected as {connectedWallet}
+          </Button>
         )}
       </div>
       {/* <div className="w-[100%] h-3 bg-light-gray"></div> */}
