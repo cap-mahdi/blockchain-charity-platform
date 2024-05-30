@@ -11,6 +11,7 @@ import { FullBleedCarousel } from '../components/carousel/FullBleedCarousel';
 import { CompainDetails } from './compain/CompainDetails';
 import MetaMask from '../hooks/useMetaMask';
 import { CampaignFeed } from './compain/CompainFeed';
+import { CampaignProvider } from '../context/useCampaignContext';
 
 export const router = createBrowserRouter([
   {
@@ -51,8 +52,13 @@ export const router = createBrowserRouter([
         element: <Register />,
       },
       {
-        path: '/campaign',
-        element: <CompainDetails />,
+        path: '/campaign/:campaignAddress',
+        element: (
+          <CampaignProvider>
+            {' '}
+            <CompainDetails />{' '}
+          </CampaignProvider>
+        ),
       },
       {
         path: '/campaign-feed',

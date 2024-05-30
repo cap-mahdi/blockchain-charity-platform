@@ -1,20 +1,44 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Button } from '../../components/Button';
 import { Box } from './Box';
 import { TokenBox, TokenBoxRef } from './TokenBox';
 import exchangeBtn from '../../assets/exchange-btn.svg';
 import tetherIcon from '../../assets/tetherIcon.png';
 import tokenIcon from '../../assets/tokenIcon.png';
+import { useParams } from 'react-router-dom';
+import useCampaignContext from '../../context/useCampaignContext';
+
+const convertTokens = (amount: number, conversionRate: number) => {
+  return amount * conversionRate;
+};
+const conversionRate = 1.5;
 
 export function ExchangeSection(props) {
-  const sourceTokenBoxRef = React.useRef<TokenBoxRef>(null);
-  const targetTokenBoxRef = React.useRef<TokenBoxRef>(null);
+  const [campainState, setCampaignState] = useCampaignContext();
+  console.log(campainState);
 
-  useEffect(() => {
-    console.log(sourceTokenBoxRef.current?.amount);
-    console.log(targetTokenBoxRef.current?.amount);
-  }, [sourceTokenBoxRef.current?.amount, targetTokenBoxRef.current?.amount]);
+  const [sourceAmount, setSourceAmount] = useState<number | string>(0);
+  const [targetAmount, setTargetAmount] = useState<number | string>(0);
+  const handleSourceAmountChange = (newAmount: number | string) => {
+    setSourceAmount(newAmount);
+    if (typeof newAmount === 'string') {
+      newAmount = parseFloat(newAmount);
+    }
+    const convertedAmount = convertTokens(newAmount, conversionRate);
+    setTargetAmount(convertedAmount.toFixed(2));
+  };
 
+  const handleTargetAmountChange = (newAmount: number | string) => {
+    setTargetAmount(newAmount);
+    if (typeof newAmount === 'string') {
+      newAmount = parseFloat(newAmount);
+    }
+    const convertedAmount = convertTokens(newAmount, 1 / conversionRate);
+    setSourceAmount(convertedAmount.toFixed(2));
+  };
+
+  const params = useParams();
+  // console.log(params);
   return (
     <div className="flex flex-row w-full p-5 h-48 ">
       {/* Left Section  */}
@@ -32,21 +56,19 @@ export function ExchangeSection(props) {
           <TokenBox
             imageSrc={tetherIcon}
             label="USDT"
-            ref={sourceTokenBoxRef}
-            changeToken={targetTokenBoxRef.current?.amount}
-            handleChangeToken={() => {}}
+            amount={sourceAmount}
+            onAmountChange={handleSourceAmountChange}
           />
           <TokenBox
             imageSrc={tokenIcon}
             label="TOKEN"
-            ref={targetTokenBoxRef}
-            changeToken={sourceTokenBoxRef.current?.amount}
-            handleChangeToken={() => {}}
+            amount={targetAmount}
+            onAmountChange={handleTargetAmountChange}
           />
           <img
             src={exchangeBtn}
             alt="Exhange Button"
-            className="w-8 h-8 absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 cursor-pointer "
+            className="w-8 h-8 absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2  "
           />
         </div>
 
