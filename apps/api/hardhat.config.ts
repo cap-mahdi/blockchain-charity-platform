@@ -35,7 +35,7 @@ const config: HardhatUserConfig = {
   solidity: {
     compilers: [
       {
-        version: '0.8.7',
+        version: '0.8.20',
       },
     ],
   },
@@ -51,7 +51,6 @@ const config: HardhatUserConfig = {
     tests: './src/services/blockchain/test',
     cache: './src/services/blockchain/cache',
     artifacts: './src/services/blockchain/artifacts',
-    
   },
 };
 

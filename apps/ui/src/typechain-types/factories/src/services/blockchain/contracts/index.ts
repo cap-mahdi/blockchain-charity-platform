@@ -2,4 +2,5 @@
 /* tslint:disable */
 /* eslint-disable */
 export * as associationSol from "./Association.sol";
+export * as campaign from "./Campaign";
 export { AssociationFactory__factory } from "./AssociationFactory__factory";
