@@ -1,36 +1,91 @@
 import { TextArea, TextField } from '../../../components';
-import { FC } from 'react';
+import { FC, useState } from 'react';
 import { ProfileImageUpload } from './ProfileImageUpload';
 import { FilesUpload } from './FilesUpload';
 
 export const RegisterForm: FC = () => {
+  const [name, setName] = useState('Name');
+  const [about, setAbout] = useState('about');
+  const [email, setEmail] = useState('Email');
+  const [phoneNumber, setPhoneNumber] = useState('Phone Number');
+  const [country, setCountry] = useState('Country');
+  const [streetAddress, setStreetAddress] = useState('Street Address');
+  const [city, setCity] = useState('City');
+  const [state, setState] = useState('State / Province');
+  const [zip, setZip] = useState('Zip / Postal Code');
+  const [creationDate, setCreationDate] = useState('2002-12-12');
+  const [associationSize, setAssociationSize] = useState(5);
   return (
     <div className="flex flex-col justify-start gap-2 w-full">
       <div className="flex flex-col gap-3 w-full items-start">
         <div className="flex flex-row gap-3 w-full justify-between">
-          <TextField name="Association Name" reqiuired />
+          <TextField
+            name="Association Name"
+            reqiuired
+            value={name}
+            onChange={(e) => setName(e.target.value)}
+          />
         </div>
         <div className="flex flex-row gap-3 w-full justify-between">
           <TextArea
             name="About"
             required
             captionText="Write a few sentences about your association"
+            value={about}
+            onChange={(e) => setAbout(e.target.value)}
           />
         </div>
         <div className="flex flex-row gap-3 w-full justify-between">
-          <TextField name="Email" type="email" reqiuired />
-          <TextField name="Phone Number" reqiuired />
+          <TextField
+            name="Email"
+            type="email"
+            reqiuired
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+          />
+          <TextField
+            name="Phone Number"
+            reqiuired
+            value={phoneNumber}
+            onChange={(e) => setPhoneNumber(e.target.value)}
+          />
         </div>
         <div className="flex flex-row gap-3 w-2/3 justify-between">
-          <TextField name="Country" reqiuired />
+          <TextField
+            name="Country"
+            reqiuired
+            value={country}
+            onChange={(e) => setCountry(e.target.value)}
+          />
         </div>
         <div className="flex flex-row gap-3 w-full justify-between">
-          <TextField name="Street Address" reqiuired />
+          <TextField
+            name="Street Address"
+            reqiuired
+            value={streetAddress}
+            onChange={(e) => setStreetAddress(e.target.value)}
+          />
         </div>
         <div className="flex flex-row gap-3 w-full justify-between">
-          <TextField name="City" reqiuired />
-          <TextField name="State / Province" reqiuired />
-          <TextField name="Zip / Postal Code" reqiuired type="number" />
+          <TextField
+            name="City"
+            reqiuired
+            value={city}
+            onChange={(e) => setCity(e.target.value)}
+          />
+          <TextField
+            name="State / Province"
+            reqiuired
+            value={state}
+            onChange={(e) => setState(e.target.value)}
+          />
+          <TextField
+            name="Zip / Postal Code"
+            reqiuired
+            type="number"
+            value={zip}
+            onChange={(e) => setZip(e.target.value)}
+          />
         </div>
         <hr className="w-full border-1 border-gray rounded-lg my-2" />
         <div className="flex flex-row gap-3 w-full justify-between">
@@ -39,8 +94,16 @@ export const RegisterForm: FC = () => {
             reqiuired
             placeholder="YYYY/MM/DD"
             type="date"
+            value={creationDate}
+            onChange={(e) => setCreationDate(e.target.value)}
           />
-          <TextField name="Association Size" reqiuired type="number" />
+          <TextField
+            name="Association Size"
+            reqiuired
+            type="number"
+            value={associationSize}
+            onChange={(e) => setAssociationSize(e.target.value)}
+          />
         </div>
         <div className="flex flex-row gap-3 w-full items-end">
           <TextField name="Domain" reqiuired />
