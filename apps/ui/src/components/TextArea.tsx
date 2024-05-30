@@ -6,6 +6,8 @@ interface TextAreaProps {
   required?: boolean;
   captionText?: string;
   className?: string;
+  value?: string;
+  onChange?: (e: any) => void;
 }
 
 export const TextArea: FC<TextAreaProps> = ({
@@ -14,6 +16,8 @@ export const TextArea: FC<TextAreaProps> = ({
   required,
   captionText,
   className,
+  value,
+  onChange,
 }) => {
   return (
     <div className={`flex flex-col gap-1 w-full items-start `}>
@@ -28,6 +32,8 @@ export const TextArea: FC<TextAreaProps> = ({
         placeholder={placeholder}
         style={{ resize: 'none' }} /* to prevent resizing */
         required={required}
+        value={value}
+        onChange={onChange}
       />
       {captionText && (
         <caption className="text-sm text-dark-gray">{captionText}</caption>
