@@ -10,6 +10,6 @@ async function copyFolder(source, destination) {
 
 // Replace sourcePath and destinationPath with your actual paths
 const sourcePath = 'apps/api/typechain-types';
-const destinationPath = 'apps/ui/typechain-types';
+const destinationPath = 'apps/ui/src/typechain-types';
 
 copyFolder(sourcePath, destinationPath);

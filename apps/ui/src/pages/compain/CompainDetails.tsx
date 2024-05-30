@@ -1,24 +1,26 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { CompainLayout } from './CompainLayout';
 import filesIcon from '../../assets/files-icon.png';
 import { Button } from '../../components/Button';
 import { ExchangeSection } from './ExchangeSection';
 
-// import CharityCampaignAbi from '../../contracts/CharityCampain.abi';
 import { useParams } from 'react-router-dom';
 import { ethers } from 'ethers';
 import useCampaignContext from '../../context/useCampaignContext';
 import { useLaodContract } from '../../hooks/useLaodContract';
+import {
+  CharityCampaign,
+  CharityCampaign__factory,
+} from '../../typechain-types';
 
 export function CompainDetails(props) {
   const { campaignAddress } = useParams();
   const [campaignState, setCampaignState] = useCampaignContext();
-
   useLaodContract({
     contractAddress: campaignAddress,
-    // abi: CharityCampaignAbi,
+    abi: CharityCampaign__factory.abi,
     contract: campaignState.contract,
-    setContract: (contract) => {
+    setContract: (contract: CharityCampaign) => {
       setCampaignState((prev) => {
         return {
           ...prev,
@@ -28,10 +30,18 @@ export function CompainDetails(props) {
     },
   });
 
+  const [campaign, setCampaign] = useState<CharityCampaign | null>(null);
+
   useEffect(() => {
     if (campaignState.contract) {
       const desc = async () => {
-        const desc = await campaignState.contract.description();
+        const desc = await campaignState.contract?.description();
+        setCampaign((prev) => {
+          return {
+            ...prev,
+            description: desc,
+          };
+        });
         console.log('Contract loaded:', desc);
       };
 
@@ -42,22 +52,10 @@ export function CompainDetails(props) {
     <CompainLayout>
       <div className=" w-full px-8 pb-8 ">
         <h1 className="text-3xl font-[500] mb-4">Description</h1>
-        <p className="text-lg mb-12">
-          Le lorem ipsum est, en imprimerie, une suite de mots sans
-          signification utilisée à titre provisoire pour calibrer une mise en
-          page, le texte définitif venant remplacer le faux-texte dès qu'il est
-          prêt ou que la mise en page est achevée. Généralement, on utilise un
-          texte en faux latin, le Lorem ipsum ou Lipsum. 
-        </p>
+        <p className="text-lg mb-12">{campaign?.description}</p>
 
         <h1 className="text-3xl font-[500] mb-4">Our Goal</h1>
-        <p className="text-lg mb-12">
-          Le lorem ipsum est, en imprimerie, une suite de mots sans
-          signification utilisée à titre provisoire pour calibrer une mise en
-          page, le texte définitif venant remplacer le faux-texte dès qu'il est
-          prêt ou que la mise en page est achevée. Généralement, on utilise un
-          texte en faux latin, le Lorem ipsum ou Lipsum. 
-        </p>
+        <p className="text-lg mb-12">{campaign?.description}</p>
         <div className="flex flex-row gap-4 justify-start items-center">
           <img src={filesIcon} className="w-20 h-20" alt="files" />
           <Button className="bg-orange">White papaer and documents</Button>
