@@ -1,9 +1,15 @@
+interface ButtonProps {
+  className?: string;
+  onClick?: () => void | Promise<void>;
+  children: React.ReactNode;
+  disablePointer?: boolean;
+}
 export function Button({
   className = '',
-  onClick = () => {},
+  onClick,
   children,
   disablePointer = false,
-}) {
+}: ButtonProps) {
   return (
     <div
       className={

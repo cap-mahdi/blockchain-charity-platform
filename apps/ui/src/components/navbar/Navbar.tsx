@@ -1,19 +1,36 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
+import useMetaMask from '../../hooks/useMetaMask';
+import { Button } from '../Button';
 import { Logo } from '../Logo';
 import { SearchBar } from '../SearchBar';
 import { Sections } from './Sections';
 import { MetamaskBtn } from './MetamaskBtn';
-import { Avatar } from '../Avatar';
-import { IoOptionsOutline } from 'react-icons/io5';
-import useMetaMask from '../../hooks/useMetaMask';
-import { connect } from 'http2';
-import { Button } from '../Button';
+import axios from 'axios';
 
-export function Navbar(props) {
+export function Navbar() {
   const [connectHover, setConnectHover] = useState(false);
   const [connectedWallet, connectWallet] = useMetaMask();
+  const connectWithMetamask = async () => {
+    if (!connectedWallet) {
+      connectWallet();
+    }
+    const selectedAddress = window.ethereum.selectedAddress;
+    const {
+      data: { nonce },
+    } = await axios.get(
+      `http://localhost:3000/api/auth/metamask/nonce?address=${selectedAddress}`
+    );
+    console.log('nonce', nonce);
+    const signature = await window.ethereum.request({
+      method: 'personal_sign',
+      params: [nonce, selectedAddress],
+    });
 
-  // const connected = false;
+    await axios.post(
+      `http://localhost:3000/api/auth/metamask/login?address=${selectedAddress}`,
+      { signature }
+    );
+  };
   const fixedHeight = 'h-[60%]';
   const styles = {
     wrapper: `w-[100%] h-20 bg-white flex flex-row text-black items-center  justify-between  px-4 `,
@@ -40,7 +57,7 @@ export function Navbar(props) {
             <MetamaskBtn
               className={styles.connectBtn}
               setConnectHover={setConnectHover}
-              connectWallet={connectWallet}
+              connectWallet={connectWithMetamask}
             />
           </div>
         ) : (
@@ -48,7 +65,7 @@ export function Navbar(props) {
           //   <IoOptionsOutline className="h-8 w-8  " />
           //   <Avatar src="https://www.croissant-rouge.tn/logo.png" />
           // </div>
-          <Button className="bg-orange text-sm">
+          <Button className="bg-orange text-sm" onClick={connectWithMetamask}>
             Connected as {connectedWallet}
           </Button>
         )}

@@ -6,7 +6,6 @@ export default function useMetaMask() {
     getConnectedWallet();
   }, []);
 
-  console.log('from meta : ', connectedWallet);
 
   const getConnectedWallet = async () => {
     if (window.ethereum) {
@@ -14,7 +13,6 @@ export default function useMetaMask() {
         const accounts = await window.ethereum.request({
           method: 'eth_accounts',
         });
-        console.log('from get  : ', accounts);
         if (accounts[0]) setConnectedWallet(accounts[0]);
       } catch (err) {
         console.error(err);

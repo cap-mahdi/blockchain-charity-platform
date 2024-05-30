@@ -4,7 +4,7 @@ import filesIcon from '../../assets/files-icon.png';
 import { Button } from '../../components/Button';
 import { ExchangeSection } from './ExchangeSection';
 
-import CharityCampaignAbi from '../../contracts/CharityCampain.abi';
+// import CharityCampaignAbi from '../../contracts/CharityCampain.abi';
 import { useParams } from 'react-router-dom';
 import { ethers } from 'ethers';
 import useCampaignContext from '../../context/useCampaignContext';
@@ -16,7 +16,7 @@ export function CompainDetails(props) {
 
   useLaodContract({
     contractAddress: campaignAddress,
-    abi: CharityCampaignAbi,
+    // abi: CharityCampaignAbi,
     contract: campaignState.contract,
     setContract: (contract) => {
       setCampaignState((prev) => {
