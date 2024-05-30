@@ -13,10 +13,10 @@ const deployFundMe: DeployFunction = async function (
   const chainId: number = network.config.chainId!;
 
   log('----------------------------------------------------');
-  log('Deploying FundMe and waiting for confirmations...');
+  log('Deploying AssociationFactory and waiting for confirmations...');
   const fundMe = await deploy('AssociationFactory', {
     from: deployer,
-    log: true,
+    log: false,
     // we need to wait if on a live network so we can verify properly
     waitConfirmations: networkConfig[network.name].blockConfirmations || 0,
   });

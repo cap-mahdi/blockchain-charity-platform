@@ -47,11 +47,10 @@ const config: HardhatUserConfig = {
   },
   paths: {
     sources: './src/services/blockchain/contracts',
-
+    deploy: './src/services/blockchain/deploy',
     tests: './src/services/blockchain/test',
     cache: './src/services/blockchain/cache',
     artifacts: './src/services/blockchain/artifacts',
-    
   },
 };
 
