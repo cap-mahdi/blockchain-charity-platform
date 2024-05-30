@@ -5,9 +5,7 @@
     {
       "files": ["*.ts", "*.tsx", "*.js", "*.jsx"],
       "rules": {
-          "no-console":[
-          "error"
-        ]
+        
       }
     },
     {
