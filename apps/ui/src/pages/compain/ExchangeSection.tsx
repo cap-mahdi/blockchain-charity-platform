@@ -1,3 +1,4 @@
+
 import React, { useEffect } from 'react';
 import { Button } from '../../components/Button';
 import { Box } from './Box';
@@ -47,6 +48,7 @@ export function ExchangeSection(props) {
             src={exchangeBtn}
             alt="Exhange Button"
             className="w-8 h-8 absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 cursor-pointer "
+
           />
         </div>
 

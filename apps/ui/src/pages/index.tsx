@@ -12,6 +12,7 @@ import { CompainDetails } from './compain/CompainDetails';
 import MetaMask from '../hooks/useMetaMask';
 import { CampaignFeed } from './compain/CompainFeed';
 
+
 export const router = createBrowserRouter([
   {
     path: '/auth',
@@ -57,6 +58,7 @@ export const router = createBrowserRouter([
       {
         path: '/campaign-feed',
         element: <CampaignFeed />,
+
       },
     ],
   },
