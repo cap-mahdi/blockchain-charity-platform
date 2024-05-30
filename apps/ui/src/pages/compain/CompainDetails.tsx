@@ -1,9 +1,43 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { CompainLayout } from './CompainLayout';
 import filesIcon from '../../assets/files-icon.png';
 import { Button } from '../../components/Button';
 import { ExchangeSection } from './ExchangeSection';
+
+import CharityCampaignAbi from '../../contracts/CharityCampain.abi';
+import { useParams } from 'react-router-dom';
+import { ethers } from 'ethers';
+import useCampaignContext from '../../context/useCampaignContext';
+import { useLaodContract } from '../../hooks/useLaodContract';
+
 export function CompainDetails(props) {
+  const { campaignAddress } = useParams();
+  const [campaignState, setCampaignState] = useCampaignContext();
+
+  useLaodContract({
+    contractAddress: campaignAddress,
+    abi: CharityCampaignAbi,
+    contract: campaignState.contract,
+    setContract: (contract) => {
+      setCampaignState((prev) => {
+        return {
+          ...prev,
+          contract,
+        };
+      });
+    },
+  });
+
+  useEffect(() => {
+    if (campaignState.contract) {
+      const desc = async () => {
+        const desc = await campaignState.contract.description();
+        console.log('Contract loaded:', desc);
+      };
+
+      desc();
+    }
+  }, [campaignState.contract]);
   return (
     <CompainLayout>
       <div className=" w-full px-8 pb-8 ">
