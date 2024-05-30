@@ -8,6 +8,7 @@ import { StyledChart } from '../components/chart/StyledChart';
 import { AppLayout } from '../layout/AppLayout';
 import { HomePage } from './home';
 import { FullBleedCarousel } from '../components/carousel/FullBleedCarousel';
+
 import { CompainDetails } from './compain/CompainDetails';
 import MetaMask from '../hooks/useMetaMask';
 import { CampaignFeed } from './compain/CompainFeed';

@@ -2,7 +2,9 @@
   "name": "@blockchain-charity/source",
   "version": "0.0.0",
   "license": "MIT",
-  "scripts": {},
+  "scripts": {
+    "generate-contracts-types": "cd apps/api/src/services/blockchain && npx hardhat compile && npx hardhat typechain && cd ../../../../.. && node generate-type.js "
+  },
   "private": true,
   "devDependencies": {
     "@nestjs/schematics": "^10.0.1",
