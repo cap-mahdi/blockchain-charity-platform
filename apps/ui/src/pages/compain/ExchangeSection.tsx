@@ -1,10 +1,20 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { Button } from '../../components/Button';
 import { Box } from './Box';
-import { TokenBox } from './TokenBox';
+import { TokenBox, TokenBoxRef } from './TokenBox';
 import exchangeBtn from '../../assets/exchange-btn.svg';
+import tetherIcon from '../../assets/tetherIcon.png';
+import tokenIcon from '../../assets/tokenIcon.png';
 
 export function ExchangeSection(props) {
+  const sourceTokenBoxRef = React.useRef<TokenBoxRef>(null);
+  const targetTokenBoxRef = React.useRef<TokenBoxRef>(null);
+
+  useEffect(() => {
+    console.log(sourceTokenBoxRef.current?.amount);
+    console.log(targetTokenBoxRef.current?.amount);
+  }, [sourceTokenBoxRef.current?.amount, targetTokenBoxRef.current?.amount]);
+
   return (
     <div className="flex flex-row w-full p-5 h-48 ">
       {/* Left Section  */}
@@ -19,11 +29,24 @@ export function ExchangeSection(props) {
 
       <div className="w-[35%]  px-2 flex flex-col justify-between  ">
         <div className=" flex flex-col justify-between gap-2 relative ">
-          <TokenBox />
-          <TokenBox />
+          <TokenBox
+            imageSrc={tetherIcon}
+            label="USDT"
+            ref={sourceTokenBoxRef}
+            changeToken={targetTokenBoxRef.current?.amount}
+            handleChangeToken={() => {}}
+          />
+          <TokenBox
+            imageSrc={tokenIcon}
+            label="TOKEN"
+            ref={targetTokenBoxRef}
+            changeToken={sourceTokenBoxRef.current?.amount}
+            handleChangeToken={() => {}}
+          />
           <img
             src={exchangeBtn}
-            className="w-8 h-8 absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2  "
+            alt="Exhange Button"
+            className="w-8 h-8 absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 cursor-pointer "
           />
         </div>
 

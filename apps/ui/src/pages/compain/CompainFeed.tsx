@@ -1,13 +1,13 @@
-import { CampainLayout } from './CompainLayout';
+import { CompainLayout } from './CompainLayout';
 import { CommentPublish, Comment } from './comment';
 
 export const CampaignFeed = () => {
   return (
-    <CampainLayout>
-      <div className="flex flex-col gap-6">
+    <CompainLayout>
+      <div className="flex flex-col gap-6 px-4 py-2">
         <CommentPublish />
         <Comment />
       </div>
-    </CampainLayout>
+    </CompainLayout>
   );
 };

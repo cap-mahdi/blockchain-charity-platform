@@ -10,6 +10,7 @@ import { HomePage } from './home';
 import { FullBleedCarousel } from '../components/carousel/FullBleedCarousel';
 import { CompainDetails } from './compain/CompainDetails';
 import MetaMask from '../hooks/useMetaMask';
+import { CampaignFeed } from './compain/CompainFeed';
 
 export const router = createBrowserRouter([
   {
@@ -50,8 +51,12 @@ export const router = createBrowserRouter([
         element: <Register />,
       },
       {
-        path: '/compain',
+        path: '/campaign',
         element: <CompainDetails />,
+      },
+      {
+        path: '/campaign-feed',
+        element: <CampaignFeed />,
       },
     ],
   },
