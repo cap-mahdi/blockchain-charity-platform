@@ -7,6 +7,7 @@ import tetherIcon from '../../assets/tetherIcon.png';
 import tokenIcon from '../../assets/tokenIcon.png';
 import { useParams } from 'react-router-dom';
 import useCampaignContext from '../../context/useCampaignContext';
+import { ethers } from 'ethers';
 
 const convertTokens = (amount: number, conversionRate: number) => {
   return amount * conversionRate;
@@ -15,7 +16,6 @@ const conversionRate = 1.5;
 
 export function ExchangeSection(props) {
   const [campainState, setCampaignState] = useCampaignContext();
-  console.log(campainState);
 
   const [sourceAmount, setSourceAmount] = useState<number | string>(0);
   const [targetAmount, setTargetAmount] = useState<number | string>(0);
@@ -72,9 +72,28 @@ export function ExchangeSection(props) {
           />
         </div>
 
-        <div className="bg-orange text-center h-11  flex flex-col items-center justify-center rounded-lg font-medium">
+        <button
+          className="bg-orange text-center h-11  flex flex-col items-center justify-center rounded-lg font-medium"
+          onClick={async () => {
+            const contract = campainState.contract;
+            const amountToSend = ethers.parseEther(sourceAmount + '');
+            console.log(sourceAmount);
+
+            if (contract) {
+              // const amountToSend = ethers.parseEther(sourceAmount + '');
+              const tx = await contract.donate({
+                value: sourceAmount,
+                gasLimit: 1000000,
+              });
+              console.log('tx', tx);
+
+              const txrec = await tx.wait();
+              console.log(txrec);
+            }
+          }}
+        >
           Donate Now | Be The Impact
-        </div>
+        </button>
       </div>
     </div>
   );

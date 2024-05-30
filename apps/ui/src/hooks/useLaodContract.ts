@@ -18,16 +18,18 @@ export function useLaodContract({
     async function loadContract() {
       try {
         // Connect to Ethereum provider
-        const provider = new ethers.InfuraProvider(
-          'sepolia',
-          'bdd74acc7435477ea4d463970034c98d',
-          'qac8S7MMbsHiWiYL9GDGSw88GqZ/ReD3MuQahH7xi0UWv1xQ4RIscQ'
-        );
+        // const provider = new ethers.InfuraProvider(
+        //   'sepolia',
+        //   'bdd74acc7435477ea4d463970034c98d',
+        //   'qac8S7MMbsHiWiYL9GDGSw88GqZ/ReD3MuQahH7xi0UWv1xQ4RIscQ'
+        // );
+        const provider = new ethers.BrowserProvider(window.ethereum);
+        const signer = await provider.getSigner();
         // Load the contract
         const loadedContract = new ethers.Contract(
           contractAddress,
           abi,
-          provider
+          signer
         );
 
         setContract(loadedContract);
