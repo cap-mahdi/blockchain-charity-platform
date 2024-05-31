@@ -66,6 +66,10 @@ export const router = createBrowserRouter([
         element: <Register />,
       },
       {
+        path: '/create-campaign',
+        element: <AddCampaign />,
+      },
+      {
         path: '/campaign/:campaignAddress',
         element: (
           <CampaignProvider>
