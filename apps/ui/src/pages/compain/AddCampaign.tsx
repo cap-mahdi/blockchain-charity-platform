@@ -8,6 +8,7 @@ import {
   CharityCampaignFactory__factory,
 } from '../../typechain-types';
 import useMetaMask from '../../hooks/useMetaMask';
+import FileUploadIPFS from '../../components/FileUploadIPFS';
 
 export function AddCampaign(props) {
   const [connectedWallet] = useMetaMask();
@@ -19,6 +20,8 @@ export function AddCampaign(props) {
     contract: campaignFactoryContract,
     setContract: setCampaignFactoryContract,
   });
+
+  const [ipfsHashes, setIpfsHashes] = useState([]);
 
   useEffect(() => {
     console.log('Campaign Factory Contract:', campaignFactoryContract);
@@ -45,8 +48,13 @@ export function AddCampaign(props) {
     console.log(txrec);
   };
 
+  useEffect(() => {
+    console.log(ipfsHashes);
+  }, [ipfsHashes]);
+
   return (
     <Card>
+      <FileUploadIPFS setIpfsHashes={setIpfsHashes} style={{}} />
       <FormHeader
         title="Create a New Campaign"
         subTitle="Help Save The World"
