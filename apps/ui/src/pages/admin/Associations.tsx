@@ -3,6 +3,7 @@ import { Card } from '../../components/Card';
 import { Link } from 'react-router-dom';
 import { TbListDetails } from 'react-icons/tb';
 import { Pagination } from '../../components/Pagination';
+import { Status } from '../../components/Status';
 
 const associations = [
   {
@@ -83,17 +84,7 @@ export const Associations: FC = () => {
             </p>
             <p className="w-2/12 p-1">{association.email}</p>
             <p className="w-2/12 p-1">{association.country}</p>
-            <p
-              className={`w-2/12 p-1 rounded-2xl h-12 flex justify-center items-center bg-${
-                association.status === 'Pending'
-                  ? 'yellow-500'
-                  : association.status === 'Accepted'
-                  ? 'green-500'
-                  : 'red-500'
-              }  font-bold `}
-            >
-              {association.status}
-            </p>
+            <Status status={association.status} />
             <p className="w-1/12  p-1 flex justify-center text-lg">
               <Link to={`/admin/association/${index}`}>
                 <TbListDetails />
