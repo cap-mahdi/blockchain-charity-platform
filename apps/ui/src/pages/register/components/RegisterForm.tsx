@@ -1,12 +1,16 @@
 import { TextArea, TextField } from '../../../components';
-import { FC, useState } from 'react';
+import { FC, FormEvent, useState } from 'react';
 import { ProfileImageUpload } from './ProfileImageUpload';
 import { FilesUpload } from './FilesUpload';
+import { abi, contractAddress } from '../../../constants';
+import { listenForTransactionMine } from '../../../helper';
+import { ethers } from 'ethers';
+import { AssociationFactory } from '../../../typechain-types';
 
 export const RegisterForm: FC = () => {
   const [name, setName] = useState('Name');
   const [about, setAbout] = useState('about');
-  const [email, setEmail] = useState('Email');
+  const [email, setEmail] = useState('Email@gmail.com');
   const [phoneNumber, setPhoneNumber] = useState('Phone Number');
   const [country, setCountry] = useState('Country');
   const [streetAddress, setStreetAddress] = useState('Street Address');
@@ -15,8 +19,47 @@ export const RegisterForm: FC = () => {
   const [zip, setZip] = useState('Zip / Postal Code');
   const [creationDate, setCreationDate] = useState('2002-12-12');
   const [associationSize, setAssociationSize] = useState(5);
+
+  const register = async (e: FormEvent) => {
+    e.preventDefault();
+    if (typeof window.ethereum !== 'undefined') {
+      const provider = new ethers.BrowserProvider(window.ethereum);
+      await provider.send('eth_requestAccounts', []);
+      const signer = await provider.getSigner();
+      const contract: AssociationFactory = new ethers.Contract(
+        contractAddress,
+        abi,
+        signer
+      );
+      try {
+        const transactionResponse = await contract.deployAssociationContract(
+          name,
+          about,
+          email,
+          phoneNumber,
+          country,
+          streetAddress,
+          city,
+          state,
+          zip,
+          new Date(creationDate).getTime(),
+          associationSize
+        );
+        await listenForTransactionMine(transactionResponse, provider);
+        // await transactionResponse.wait(1);
+      } catch (error) {
+        console.error(error);
+      }
+    } else {
+      //'Please install MetaMask'
+      //Show TOAST
+    }
+  };
   return (
-    <div className="flex flex-col justify-start gap-2 w-full">
+    <form
+      className="flex flex-col justify-start gap-2 w-full"
+      onSubmit={register}
+    >
       <div className="flex flex-col gap-3 w-full items-start">
         <div className="flex flex-row gap-3 w-full justify-between">
           <TextField
@@ -131,13 +174,16 @@ export const RegisterForm: FC = () => {
       </div>
 
       <div className="flex flex-row gap-3 w-full justify-end">
-        <button className="bg-light-gray text-black py-3 px-4 text-xs  rounded-xl">
+        <button
+          className="bg-light-gray text-black py-3 px-4 text-xs  rounded-xl"
+          type="reset"
+        >
           Cancel{' '}
         </button>
         <button className="bg-orange text-black py-3 px-4 text-xs font-semibold rounded-xl">
           Submit{' '}
         </button>
       </div>
-    </div>
+    </form>
   );
 };

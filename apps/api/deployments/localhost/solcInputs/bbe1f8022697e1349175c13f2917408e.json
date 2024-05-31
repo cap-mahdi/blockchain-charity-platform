@@ -1,0 +1,38 @@
+{
+  "language": "Solidity",
+  "sources": {
+    "src/services/blockchain/contracts/Association.sol": {
+      "content": "// SPDX-License-Identifier: MIT\npragma solidity 0.8.7;\n\ncontract AssociationContract {\n    // State variables to hold the association details\n    string public name;\n    string public description;\n    string public email;\n    string public phoneNumber;\n    string public country;\n    string public streetAddress;\n    string public city;\n    string public state;\n    string public postalCode;\n    uint256 public creationDate; // Custom creation date for the association\n    uint256 public size;\n\n    // Event to be emitted when the association contract is deployed\n    event AssociationContractDeployed(\n        string name,\n        string description,\n        string email,\n        string phoneNumber,\n        string country,\n        string streetAddress,\n        string city,\n        string state,\n        string postalCode,\n        uint256 creationDate,\n        uint256 size\n    );\n\n    // Constructor to initialize the association details\n    constructor(\n        string memory _name,\n        string memory _description,\n        string memory _email,\n        string memory _phoneNumber,\n        string memory _country,\n        string memory _streetAddress,\n        string memory _city,\n        string memory _state,\n        string memory _postalCode,\n        uint256 _creationDate, // Custom creation date parameter\n        uint256 _size\n            ) {\n        name = _name;\n        description = _description;\n        email = _email;\n        phoneNumber = _phoneNumber;\n        country = _country;\n        streetAddress = _streetAddress;\n        city = _city;\n        state = _state;\n        postalCode = _postalCode;\n        creationDate = _creationDate; // Assign custom creation date\n        size = _size;\n\n        emit AssociationContractDeployed(\n            _name,\n            _description,\n            _email,\n            _phoneNumber,\n            _country,\n            _streetAddress,\n            _city,\n            _state,\n            _postalCode,\n            _creationDate, // Emit custom creation date\n            _size\n        );\n    }\n\n    // Function to get the association details\n    function getAssociationDetails() public view returns (\n        string memory _name,\n        string memory _description,\n        string memory _email,\n        string memory _phoneNumber,\n        string memory _country,\n        string memory _streetAddress,\n        string memory _city,\n        string memory _state,\n        string memory _postalCode,\n        uint256 _creationDate,\n        uint256 _size\n    ) {\n        return (\n            name,\n            description,\n            email,\n            phoneNumber,\n            country,\n            streetAddress,\n            city,\n            state,\n            postalCode,\n            creationDate,\n            size\n        );\n    }\n}\n"
+    },
+    "src/services/blockchain/contracts/AssociationFactory.sol": {
+      "content": "// SPDX-License-Identifier: MIT\npragma solidity 0.8.7;\n\nimport \"./Association.sol\";\n\ncontract AssociationFactory {\n    // Event to be emitted when a new AssociationContract is deployed\n    event AssociationContractDeployed(address indexed associationContract, address indexed creator);\n\n    // Function to deploy a new AssociationContract\n    function deployAssociationContract(\n        string memory _name,\n        string memory _description,\n        string memory _email,\n        string memory _phoneNumber,\n        string memory _country,\n        string memory _streetAddress,\n        string memory _city,\n        string memory _state,\n        string memory _postalCode,\n        uint256 _creationDate,\n        uint256 _size\n    ) external returns (address) {\n        AssociationContract newContract = new AssociationContract(\n            _name,\n            _description,\n            _email,\n            _phoneNumber,\n            _country,\n            _streetAddress,\n            _city,\n            _state,\n            _postalCode,\n            _creationDate,\n            _size\n        );\n\n        emit AssociationContractDeployed(address(newContract), msg.sender);\n\n        return address(newContract);\n    }\n}\n"
+    }
+  },
+  "settings": {
+    "optimizer": {
+      "enabled": false,
+      "runs": 200
+    },
+    "outputSelection": {
+      "*": {
+        "*": [
+          "abi",
+          "evm.bytecode",
+          "evm.deployedBytecode",
+          "evm.methodIdentifiers",
+          "metadata",
+          "devdoc",
+          "userdoc",
+          "storageLayout",
+          "evm.gasEstimates"
+        ],
+        "": [
+          "ast"
+        ]
+      }
+    },
+    "metadata": {
+      "useLiteralContent": true
+    }
+  }
+}
