@@ -18,7 +18,7 @@ export function CompainDetails(props) {
   const [campaignState, setCampaignState] = useCampaignContext();
   useLaodContract({
     contractAddress: campaignAddress,
-    abi: CharityCampaignAbi,
+    abi: CharityCampaign__factory.abi,
     contract: campaignState.contract,
     setContract: (contract: CharityCampaign) => {
       setCampaignState((prev) => {
