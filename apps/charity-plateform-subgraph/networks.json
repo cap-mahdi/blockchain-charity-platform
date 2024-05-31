@@ -1,0 +1,8 @@
+{
+  "sepolia": {
+    "CharityCampaignFactory": {
+      "address": "0x912a059CF95E9b1caafdbd39E6B13201e169B458",
+      "startBlock": 0
+    }
+  }
+}
