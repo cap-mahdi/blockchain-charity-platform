@@ -10,7 +10,6 @@ import {
 import useMetaMask from '../../hooks/useMetaMask';
 import FileUploadIPFS from '../../components/FileUploadIPFS';
 
-
 export function AddCampaign(props) {
   const [connectedWallet] = useMetaMask();
   const [campaignFactoryContract, setCampaignFactoryContract] =
