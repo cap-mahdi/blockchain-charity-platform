@@ -1,12 +1,17 @@
 import { FC } from 'react';
-import { RegisterHeader } from './components/RegisterHeader';
+import { FormHeader } from '../../components/Form/FormHeader';
 import { RegisterForm } from './components/RegisterForm';
 import { Card } from '../../components/Card';
 
 export const Register: FC = () => {
   return (
     <Card>
-      <RegisterHeader />
+      <FormHeader
+        title="        Register Association
+"
+        subTitle=" This information will be displayed publicly so be careful what you
+        share."
+      />
       <RegisterForm />
     </Card>
   );

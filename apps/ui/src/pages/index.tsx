@@ -13,6 +13,7 @@ import { CompainDetails } from './compain/CompainDetails';
 import MetaMask from '../hooks/useMetaMask';
 import { CampaignFeed } from './compain/CompainFeed';
 import { CampaignProvider } from '../context/useCampaignContext';
+import { AddCampaign } from './compain/AddCampaign';
 
 export const router = createBrowserRouter([
   {
@@ -51,6 +52,10 @@ export const router = createBrowserRouter([
       {
         path: '/register',
         element: <Register />,
+      },
+      {
+        path: '/create-campaign',
+        element: <AddCampaign />,
       },
       {
         path: '/campaign/:campaignAddress',

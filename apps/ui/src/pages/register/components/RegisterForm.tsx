@@ -109,7 +109,10 @@ export const RegisterForm: FC = () => {
           <TextField name="Domain" reqiuired />
           <ProfileImageUpload />
         </div>
-        <FilesUpload />
+        <FilesUpload
+          title={'Attach legal files *'}
+          description="Upload any legal Document or File that may be helpful in the process"
+        />
         <div className="flex flex-row gap-2 item-start">
           <input type="checkbox" />
           <p>

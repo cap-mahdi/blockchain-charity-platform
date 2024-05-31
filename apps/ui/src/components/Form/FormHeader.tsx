@@ -1,15 +1,17 @@
 import { FC } from 'react';
 
-export const RegisterHeader: FC = () => {
+interface FormHeaderProps {
+  title: string;
+  subTitle: string;
+}
+
+export const FormHeader = ({ title, subTitle }: FormHeaderProps) => {
   return (
     <div className="flex flex-col items-center gap-2 w-full ">
       <h1 className="text-4xl font-bold underline underline-offset-8 decoration-2 uppercase">
-        Register Association
+        {title}{' '}
       </h1>
-      <p className="font-light text-sm">
-        This information will be displayed publicly so be careful what you
-        share.
-      </p>
+      <p className="font-light text-sm">{subTitle}</p>
     </div>
   );
 };
