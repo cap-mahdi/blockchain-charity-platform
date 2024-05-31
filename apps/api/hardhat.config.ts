@@ -1,7 +1,7 @@
-import '@typechain/hardhat';
-// import '@nomiclabs/hardhat-ethers';
 import 'dotenv/config';
 import 'hardhat-deploy';
+import '@typechain/hardhat';
+import '@nomiclabs/hardhat-etherscan';
 import { HardhatUserConfig } from 'hardhat/config';
 
 // You need to export an object to set up your config
@@ -19,6 +19,10 @@ const PRIVATE_KEY =
   '0x11ee3108a03081fe260ecdc106554d09d9d1209bcafd46942b10e02943effc4a';
 const ETHERSCAN_API_KEY = process.env.ETHERSCAN_API_KEY || '';
 
+console.log('COINMARKETCAP_API_KEY', COINMARKETCAP_API_KEY);
+console.log('SEPOLIA_RPC_URL', process.env.SEPOLIA_RPC_URL);
+console.log('PRIVATE_KEY', PRIVATE_KEY);
+console.log('ETHERSCAN_API_KEY', ETHERSCAN_API_KEY);
 const config: HardhatUserConfig = {
   defaultNetwork: 'hardhat',
   networks: {
@@ -36,6 +40,13 @@ const config: HardhatUserConfig = {
     compilers: [
       {
         version: '0.8.20',
+        settings: {
+          optimizer: {
+            enabled: true,
+            runs: 100,
+          },
+          viaIR: true,
+        },
       },
     ],
   },
@@ -44,6 +55,9 @@ const config: HardhatUserConfig = {
       default: 0, // here this will by default take the first account as deployer
       1: 0, // similarly on mainnet it will take the first account as deployer. Note though that depending on how hardhat network are configured, the account 0 on one network can be different than on another
     },
+  },
+  etherscan: {
+    apiKey: ETHERSCAN_API_KEY,
   },
   paths: {
     sources: './src/services/blockchain/contracts',

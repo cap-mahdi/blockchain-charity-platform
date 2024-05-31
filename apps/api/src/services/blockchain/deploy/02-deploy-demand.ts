@@ -7,7 +7,7 @@ import {
 } from '../../../../helper-hardhat-config';
 import verify from '../utils/verify';
 
-const deployAssociationFactory: DeployFunction = async function (
+const deployDemandContract: DeployFunction = async function (
   hre: HardhatRuntimeEnvironment
 ) {
   // @ts-ignore
@@ -17,21 +17,21 @@ const deployAssociationFactory: DeployFunction = async function (
   const chainId: number = network.config.chainId!;
 
   log('----------------------------------------------------');
-  log('Deploying AssociationFactory and waiting for confirmations...');
-  const associationFactory = await deploy('AssociationFactory', {
+  log('Deploying DemandContract and waiting for confirmations...');
+  const demandContract = await deploy('Demand', {
     from: deployer,
     log: false,
     // we need to wait if on a live network so we can verify properly
     waitConfirmations: networkConfig[network.name].blockConfirmations || 0,
   });
-  log(`Association Factory deployed at ${associationFactory.address}`);
+  log(`Demand deployed at ${demandContract.address}`);
+
   if (
     !developmentChains.includes(network.name) &&
     process.env.ETHERSCAN_API_KEY
   ) {
-    await verify(associationFactory.address, []);
+    await verify(demandContract.address, []);
   }
 };
-
-export default deployAssociationFactory;
-deployAssociationFactory.tags = ['all', 'Association'];
+export default deployDemandContract;
+deployDemandContract.tags = ['all', 'Demand'];

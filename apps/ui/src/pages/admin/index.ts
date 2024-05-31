@@ -1,2 +1,2 @@
-export * from './Associations';
-export * from './Association';
+export * from './Demands';
+export * from './Demand';
