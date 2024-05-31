@@ -8,19 +8,41 @@ dataSources:
     name: CharityCampaignFactory
     network: sepolia
     source:
-      address: "0x912a059CF95E9b1caafdbd39E6B13201e169B458"
+      address: '0x912a059CF95E9b1caafdbd39E6B13201e169B458'
       abi: CharityCampaignFactory
-      startBlock: 0
+      startBlock: 6005632
     mapping:
       kind: ethereum/events
       apiVersion: 0.0.7
       language: wasm/assemblyscript
       entities:
-        - CampaignCreated
+        - CharityCampaign
       abis:
         - name: CharityCampaignFactory
           file: ./abis/CharityCampaignFactory.json
+        - name: CharityCampaign
+          file: ./abis/CharityCampaign.json
       eventHandlers:
         - event: CampaignCreated(address,address)
           handler: handleCampaignCreated
       file: ./src/charity-campaign-factory.ts
+
+templates:
+  - name: CharityCampaign
+    kind: ethereum/contract
+    network: sepolia
+    source:
+      abi: CharityCampaign
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.7
+      language: wasm/assemblyscript
+      entities:
+        - CharityCampaignEntity
+      abis:
+        - name: CharityCampaign
+          file: ./abis/CharityCampaign.json
+      eventHandlers:
+        - event: DonationReceived(indexed address,uint256,uint256)
+          handler: handleDonationReceived
+      file: ./src/charity-campaign.ts
