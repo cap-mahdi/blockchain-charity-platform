@@ -3,7 +3,6 @@ import { Card } from '../../components/Card';
 import { FaArrowAltCircleLeft } from 'react-icons/fa';
 import { FaArrowAltCircleRight } from 'react-icons/fa';
 import { Modal } from '../../components/Modal';
-import { useOutsideClick } from '../../hooks/useOutsideClick';
 
 interface ImagesModalProps {
   images: string[];
@@ -19,7 +18,10 @@ export const ImagesModal: FC<ImagesModalProps> = ({
 
   return (
     <Modal onClose={onClose}>
-      <Card className="!flex-row px-2">
+      <Card
+        className="flex flex-row items-center justify-center  "
+        resetClassName={true}
+      >
         <div>
           <FaArrowAltCircleLeft
             onClick={() => {

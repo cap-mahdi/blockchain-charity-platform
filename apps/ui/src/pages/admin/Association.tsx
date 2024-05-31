@@ -20,7 +20,7 @@ const association = {
   domain: 'www.association.com',
 };
 export const Association: FC = () => {
-  const [selectedImage, setSelectedImage] = useState<null | number>(null);
+  const [selectedImage, setSelectedImage] = useState<null | number>(2);
   return (
     <Card>
       <h1 className="text-2xl font-semibold text-gray-900">
@@ -81,7 +81,8 @@ export const Association: FC = () => {
           ))}
         </div>
       </div>
-      {selectedImage && (
+
+      {selectedImage != null && (
         <ImagesModal
           images={[
             'images/post-image.png',
@@ -93,7 +94,6 @@ export const Association: FC = () => {
           onClose={() => setSelectedImage(null)}
         />
       )}
-
       <div className="flex flex-row gap-3 w-full justify-end">
         <button
           className="bg-red-500 text-black py-3 px-4 text-xs font-semibold rounded-xl "
