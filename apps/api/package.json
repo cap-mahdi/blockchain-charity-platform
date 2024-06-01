@@ -8,5 +8,8 @@
     "dotenv": "^16.4.5",
     "hardhat": "^2.22.4",
     "hardhat-deploy": "^0.12.4"
+  },
+  "scripts": {
+    "hardhat:scripts": "hardhat run services/blockchain/scripts/script.ts"
   }
 }

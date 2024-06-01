@@ -4,7 +4,6 @@ pragma solidity 0.8.20;
 import "./Association.sol";
 
 contract AssociationFactory {
-
     event AssociationContractDeployed(address indexed associationContract, address indexed creator);
 
     address public plateformAddress;
@@ -13,11 +12,38 @@ contract AssociationFactory {
         Active,
         InActive
     }
+
+    struct AssociationInfo {
+        address associationAddress;
+        Status status;
+    }
+
     mapping(address => Status) public associations;
-    
+    address[] public associationsArray;
+    uint public associationsCount;
 
     constructor(address _plateformCAddress) {
         plateformAddress = _plateformCAddress;
+    }
+
+    function getAssociationWithStatus(uint _index) public view returns (AssociationInfo memory) {
+        address associationAddress = associationsArray[_index];
+        return AssociationInfo({
+            associationAddress: associationAddress,
+            status: associations[associationAddress]
+        });
+    }
+
+    function getAssociationsWithStatus() public view returns (AssociationInfo[] memory) {
+        AssociationInfo[] memory associationInfoArray = new AssociationInfo[](associationsCount);
+        for (uint i = 0; i < associationsArray.length; i++) {
+            address associationAddress = associationsArray[i];
+            associationInfoArray[i] = AssociationInfo({
+                associationAddress: associationAddress,
+                status: associations[associationAddress]
+            });
+        }
+        return associationInfoArray;
     }
 
     function deployAssociationContract(
@@ -47,6 +73,8 @@ contract AssociationFactory {
             _size
         );
         associations[address(newContract)] = Status.Active;
+        associationsArray.push(address(newContract));
+        associationsCount++;
 
         emit AssociationContractDeployed(address(newContract), msg.sender);
 

@@ -50,10 +50,6 @@ declare module "hardhat/types/runtime" {
       signerOrOptions?: ethers.Signer | FactoryOptions
     ): Promise<Contracts.AssociationFactory__factory>;
     getContractFactory(
-      name: "Demand",
-      signerOrOptions?: ethers.Signer | FactoryOptions
-    ): Promise<Contracts.Demand__factory>;
-    getContractFactory(
       name: "CharityCampaign",
       signerOrOptions?: ethers.Signer | FactoryOptions
     ): Promise<Contracts.CharityCampaign__factory>;
@@ -65,6 +61,10 @@ declare module "hardhat/types/runtime" {
       name: "Token",
       signerOrOptions?: ethers.Signer | FactoryOptions
     ): Promise<Contracts.Token__factory>;
+    getContractFactory(
+      name: "PlateformContract",
+      signerOrOptions?: ethers.Signer | FactoryOptions
+    ): Promise<Contracts.PlateformContract__factory>;
 
     getContractAt(
       name: "Ownable",
@@ -112,11 +112,6 @@ declare module "hardhat/types/runtime" {
       signer?: ethers.Signer
     ): Promise<Contracts.AssociationFactory>;
     getContractAt(
-      name: "Demand",
-      address: string | ethers.Addressable,
-      signer?: ethers.Signer
-    ): Promise<Contracts.Demand>;
-    getContractAt(
       name: "CharityCampaign",
       address: string | ethers.Addressable,
       signer?: ethers.Signer
@@ -131,6 +126,11 @@ declare module "hardhat/types/runtime" {
       address: string | ethers.Addressable,
       signer?: ethers.Signer
     ): Promise<Contracts.Token>;
+    getContractAt(
+      name: "PlateformContract",
+      address: string | ethers.Addressable,
+      signer?: ethers.Signer
+    ): Promise<Contracts.PlateformContract>;
 
     deployContract(
       name: "Ownable",
@@ -169,10 +169,6 @@ declare module "hardhat/types/runtime" {
       signerOrOptions?: ethers.Signer | DeployContractOptions
     ): Promise<Contracts.AssociationFactory>;
     deployContract(
-      name: "Demand",
-      signerOrOptions?: ethers.Signer | DeployContractOptions
-    ): Promise<Contracts.Demand>;
-    deployContract(
       name: "CharityCampaign",
       signerOrOptions?: ethers.Signer | DeployContractOptions
     ): Promise<Contracts.CharityCampaign>;
@@ -184,6 +180,10 @@ declare module "hardhat/types/runtime" {
       name: "Token",
       signerOrOptions?: ethers.Signer | DeployContractOptions
     ): Promise<Contracts.Token>;
+    deployContract(
+      name: "PlateformContract",
+      signerOrOptions?: ethers.Signer | DeployContractOptions
+    ): Promise<Contracts.PlateformContract>;
 
     deployContract(
       name: "Ownable",
@@ -231,11 +231,6 @@ declare module "hardhat/types/runtime" {
       signerOrOptions?: ethers.Signer | DeployContractOptions
     ): Promise<Contracts.AssociationFactory>;
     deployContract(
-      name: "Demand",
-      args: any[],
-      signerOrOptions?: ethers.Signer | DeployContractOptions
-    ): Promise<Contracts.Demand>;
-    deployContract(
       name: "CharityCampaign",
       args: any[],
       signerOrOptions?: ethers.Signer | DeployContractOptions
@@ -250,6 +245,11 @@ declare module "hardhat/types/runtime" {
       args: any[],
       signerOrOptions?: ethers.Signer | DeployContractOptions
     ): Promise<Contracts.Token>;
+    deployContract(
+      name: "PlateformContract",
+      args: any[],
+      signerOrOptions?: ethers.Signer | DeployContractOptions
+    ): Promise<Contracts.PlateformContract>;
 
     // default types
     getContractFactory(

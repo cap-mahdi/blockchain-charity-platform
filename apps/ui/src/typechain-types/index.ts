@@ -24,11 +24,11 @@ export type { AssociationContract } from "./src/services/blockchain/contracts/As
 export { AssociationContract__factory } from "./factories/src/services/blockchain/contracts/Association/Association.sol/AssociationContract__factory";
 export type { AssociationFactory } from "./src/services/blockchain/contracts/Association/AssociationFactory";
 export { AssociationFactory__factory } from "./factories/src/services/blockchain/contracts/Association/AssociationFactory__factory";
-export type { Demand } from "./src/services/blockchain/contracts/Association/Demand";
-export { Demand__factory } from "./factories/src/services/blockchain/contracts/Association/Demand__factory";
 export type { CharityCampaign } from "./src/services/blockchain/contracts/Campaign/CharityCampaign";
 export { CharityCampaign__factory } from "./factories/src/services/blockchain/contracts/Campaign/CharityCampaign__factory";
 export type { CharityCampaignFactory } from "./src/services/blockchain/contracts/Campaign/CharityCampaignFactory";
 export { CharityCampaignFactory__factory } from "./factories/src/services/blockchain/contracts/Campaign/CharityCampaignFactory__factory";
 export type { Token } from "./src/services/blockchain/contracts/Campaign/Token";
 export { Token__factory } from "./factories/src/services/blockchain/contracts/Campaign/Token__factory";
+export type { PlateformContract } from "./src/services/blockchain/contracts/Plateform.sol/PlateformContract";
+export { PlateformContract__factory } from "./factories/src/services/blockchain/contracts/Plateform.sol/PlateformContract__factory";

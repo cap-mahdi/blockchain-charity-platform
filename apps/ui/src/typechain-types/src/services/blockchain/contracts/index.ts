@@ -5,3 +5,5 @@ import type * as association from "./Association";
 export type { association };
 import type * as campaign from "./Campaign";
 export type { campaign };
+import type * as plateformSol from "./Plateform.sol";
+export type { plateformSol };
