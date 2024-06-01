@@ -5,7 +5,11 @@ import { Status } from '../../components/Status';
 import { Avatar } from '../../components/Avatar';
 import { ImagesModal } from './ImagesModal';
 import { useParams } from 'react-router-dom';
-import { DemandType, numberToDemandStatusMapper } from '../../types/Demand';
+import {
+  DemandStatus,
+  DemandType,
+  numberToDemandStatusMapper,
+} from '../../types/Demand';
 import { plateformContractAddress } from '../../constants';
 import { ethers } from 'ethers';
 import {
@@ -18,7 +22,10 @@ export const DemandInfo: FC = () => {
   const { index } = useParams();
 
   const [isLoading, setIsLoading] = useState(true);
-  const [{ association, status }, setDemand] = useState<DemandType>(null);
+  const [{ association, status }, setDemand] = useState<DemandType>({
+    association: null,
+    status: DemandStatus.PENDING,
+  });
 
   const refuseDemand = async () => {
     if (index === undefined) return;

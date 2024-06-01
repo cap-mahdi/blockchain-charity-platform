@@ -27,13 +27,14 @@ export const RegisterForm: FC = () => {
   const register = async (e: FormEvent) => {
     e.preventDefault();
     console.log('Registering');
+    console.log('Registering');
     if (typeof window.ethereum !== 'undefined') {
       const provider = new ethers.BrowserProvider(window.ethereum);
       await provider.send('eth_requestAccounts', []);
       const signer = await provider.getSigner();
-      const contract: PlateformContract = new ethers.Contract(
-        plateformContractAddress,
-        PlateformContract__factory.abi,
+      const contract: AssociationFactory = new ethers.Contract(
+        contractAddress,
+        abi,
         signer
       );
       console.log('MetaMask is installed!');
