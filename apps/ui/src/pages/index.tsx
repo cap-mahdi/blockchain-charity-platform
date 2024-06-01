@@ -11,9 +11,10 @@ import { FullBleedCarousel } from '../components/carousel/FullBleedCarousel';
 
 import { CompainDetails } from './compain/CompainDetails';
 import { CampaignProvider } from '../context/useCampaignContext';
+import { AddCampaign } from './compain/AddCampaign';
+
 import { DemandInfo, Demands } from './admin';
 import { CampaignFeed } from './compain/CompainFeed';
-import { AddCampaign } from './compain/AddCampaign';
 
 export const router = createBrowserRouter([
   {

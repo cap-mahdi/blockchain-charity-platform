@@ -1,0 +1,15 @@
+type CampaignCreated @entity(immutable: true) {
+  id: Bytes!
+  campaignAddress: Bytes! # address
+  tokenAddress: Bytes! # address
+  blockNumber: BigInt!
+  blockTimestamp: BigInt!
+  transactionHash: Bytes!
+}
+
+type Donation @entity {
+  id: ID!
+  donor: Bytes!
+  amount: BigInt!
+  tokensIssued: BigInt!
+}
