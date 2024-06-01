@@ -1,9 +1,13 @@
 import { HardhatRuntimeEnvironment } from 'hardhat/types';
 import { DeployFunction } from 'hardhat-deploy/types';
 // import verify from '../utils/verify';
-import { networkConfig } from '../../../../helper-hardhat-config';
+import {
+  developmentChains,
+  networkConfig,
+} from '../../../../helper-hardhat-config';
+import verify from '../utils/verify';
 
-const deployFundMe: DeployFunction = async function (
+const deployDemandContract: DeployFunction = async function (
   hre: HardhatRuntimeEnvironment
 ) {
   // @ts-ignore
@@ -13,14 +17,21 @@ const deployFundMe: DeployFunction = async function (
   const chainId: number = network.config.chainId!;
 
   log('----------------------------------------------------');
-  log('Deploying AssociationFactory and waiting for confirmations...');
-  const fundMe = await deploy('AssociationFactory', {
+  log('Deploying PlateformContract and waiting for confirmations...');
+  const PlateformContract = await deploy('PlateformContract', {
     from: deployer,
     log: false,
     // we need to wait if on a live network so we can verify properly
     waitConfirmations: networkConfig[network.name].blockConfirmations || 0,
   });
-  log(`Association Factory deployed at ${fundMe.address}`);
+  log(`PlateformContract deployed at ${PlateformContract.address}`);
+
+  if (
+    !developmentChains.includes(network.name) &&
+    process.env.ETHERSCAN_API_KEY
+  ) {
+    await verify(PlateformContract.address, []);
+  }
 };
-export default deployFundMe;
-deployFundMe.tags = ['all', 'Association'];
+export default deployDemandContract;
+deployDemandContract.tags = ['all', 'Plateform'];

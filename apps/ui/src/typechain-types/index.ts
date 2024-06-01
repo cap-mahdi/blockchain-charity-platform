@@ -20,10 +20,12 @@ export type { IERC20Metadata } from "./@openzeppelin/contracts/token/ERC20/exten
 export { IERC20Metadata__factory } from "./factories/@openzeppelin/contracts/token/ERC20/extensions/IERC20Metadata__factory";
 export type { IERC20 } from "./@openzeppelin/contracts/token/ERC20/IERC20";
 export { IERC20__factory } from "./factories/@openzeppelin/contracts/token/ERC20/IERC20__factory";
-export type { AssociationContract } from "./src/services/blockchain/contracts/Association.sol/AssociationContract";
-export { AssociationContract__factory } from "./factories/src/services/blockchain/contracts/Association.sol/AssociationContract__factory";
-export type { AssociationFactory } from "./src/services/blockchain/contracts/AssociationFactory";
-export { AssociationFactory__factory } from "./factories/src/services/blockchain/contracts/AssociationFactory__factory";
+export type { AssociationContract } from "./src/services/blockchain/contracts/Association/Association.sol/AssociationContract";
+export { AssociationContract__factory } from "./factories/src/services/blockchain/contracts/Association/Association.sol/AssociationContract__factory";
+export type { AssociationFactory } from "./src/services/blockchain/contracts/Association/AssociationFactory";
+export { AssociationFactory__factory } from "./factories/src/services/blockchain/contracts/Association/AssociationFactory__factory";
+export type { Demand } from "./src/services/blockchain/contracts/Association/Demand";
+export { Demand__factory } from "./factories/src/services/blockchain/contracts/Association/Demand__factory";
 export type { CharityCampaign } from "./src/services/blockchain/contracts/Campaign/CharityCampaign";
 export { CharityCampaign__factory } from "./factories/src/services/blockchain/contracts/Campaign/CharityCampaign__factory";
 export type { CharityCampaignFactory } from "./src/services/blockchain/contracts/Campaign/CharityCampaignFactory";

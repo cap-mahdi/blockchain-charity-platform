@@ -1,0 +1,37 @@
+{
+  "language": "Solidity",
+  "sources": {
+    "src/services/blockchain/contracts/Association/Demand.sol": {
+      "content": "// SPDX-License-Identifier: MIT\npragma solidity ^0.8.7;\n\ncontract Demand {\n    struct Association {\n        string name;\n        string description;\n        string email;\n        string phoneNumber;\n        string country;\n        string streetAddress;\n        string city;\n        string state;\n        string postalCode;\n        uint256 creationDate;\n        uint256 size;\n        string domain;\n    }\n\n    enum Status {\n        Pending,\n        Refused\n    }\n\n    struct Demand {\n        Association association;\n        address owner;\n        Status status;\n    }\n\n    Demand[] public demands;\n\n    function addDemand(\n        string memory _name,\n        string memory _description,\n        string memory _email,\n        string memory _phoneNumber,\n        string memory _country,\n        string memory _streetAddress,\n        string memory _city,\n        string memory _state,\n        string memory _postalCode,\n        uint256 _creationDate,\n        uint256 _size,\n        string memory _domain\n    ) public {\n        Association memory newAssociation = Association({\n            name: _name,\n            description: _description,\n            email: _email,\n            phoneNumber: _phoneNumber,\n            country: _country,\n            streetAddress: _streetAddress,\n            city: _city,\n            state: _state,\n            postalCode: _postalCode,\n            creationDate: _creationDate,\n            size: _size,\n            domain: _domain\n        });\n\n        Demand memory newDemand = Demand({\n            association: newAssociation,\n            owner: msg.sender,\n            status: Status.Pending\n        });\n\n        demands.push(newDemand);\n    }\n\n    function getAllDemands() public view returns (Demand[] memory) {\n        return demands;\n    }\n}\n"
+    }
+  },
+  "settings": {
+    "optimizer": {
+      "enabled": true,
+      "runs": 100
+    },
+    "viaIR": true,
+    "evmVersion": "paris",
+    "outputSelection": {
+      "*": {
+        "*": [
+          "abi",
+          "evm.bytecode",
+          "evm.deployedBytecode",
+          "evm.methodIdentifiers",
+          "metadata",
+          "devdoc",
+          "userdoc",
+          "storageLayout",
+          "evm.gasEstimates"
+        ],
+        "": [
+          "ast"
+        ]
+      }
+    },
+    "metadata": {
+      "useLiteralContent": true
+    }
+  }
+}

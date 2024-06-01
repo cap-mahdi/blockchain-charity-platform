@@ -1,0 +1,43 @@
+{
+  "language": "Solidity",
+  "sources": {
+    "src/services/blockchain/contracts/Association/Association.sol": {
+      "content": "// SPDX-License-Identifier: MIT\npragma solidity 0.8.20;\n\ncontract AssociationContract {\n    // State variables to hold the association details\n    string public name;\n    string public description;\n    string public email;\n    string public phoneNumber;\n    string public country;\n    string public streetAddress;\n    string public city;\n    string public state;\n    string public postalCode;\n    uint256 public creationDate; // Custom creation date for the association\n    uint256 public size;\n\n    // Event to be emitted when the association contract is deployed\n    event AssociationContractDeployed(\n        string name,\n        string description,\n        string email,\n        string phoneNumber,\n        string country,\n        string streetAddress,\n        string city,\n        string state,\n        string postalCode,\n        uint256 creationDate,\n        uint256 size\n    );\n\n    // Constructor to initialize the association details\n    constructor(\n        string memory _name,\n        string memory _description,\n        string memory _email,\n        string memory _phoneNumber,\n        string memory _country,\n        string memory _streetAddress,\n        string memory _city,\n        string memory _state,\n        string memory _postalCode,\n        uint256 _creationDate, // Custom creation date parameter\n        uint256 _size\n            ) {\n        name = _name;\n        description = _description;\n        email = _email;\n        phoneNumber = _phoneNumber;\n        country = _country;\n        streetAddress = _streetAddress;\n        city = _city;\n        state = _state;\n        postalCode = _postalCode;\n        creationDate = _creationDate; // Assign custom creation date\n        size = _size;\n\n        emit AssociationContractDeployed(\n            _name,\n            _description,\n            _email,\n            _phoneNumber,\n            _country,\n            _streetAddress,\n            _city,\n            _state,\n            _postalCode,\n            _creationDate, // Emit custom creation date\n            _size\n        );\n    }\n\n    // Function to get the association details\n    function getAssociationDetails() public view returns (\n        string memory _name,\n        string memory _description,\n        string memory _email,\n        string memory _phoneNumber,\n        string memory _country,\n        string memory _streetAddress,\n        string memory _city,\n        string memory _state,\n        string memory _postalCode,\n        uint256 _creationDate,\n        uint256 _size\n    ) {\n        return (\n            name,\n            description,\n            email,\n            phoneNumber,\n            country,\n            streetAddress,\n            city,\n            state,\n            postalCode,\n            creationDate,\n            size\n        );\n    }\n}\n"
+    },
+    "src/services/blockchain/contracts/Association/AssociationFactory.sol": {
+      "content": "// SPDX-License-Identifier: MIT\npragma solidity 0.8.20;\n\nimport \"./Association.sol\";\nimport \"../Plateform.sol\";\n\ncontract AssociationFactory {\n\n    event AssociationContractDeployed(address indexed associationContract, address indexed creator);\n\n    PlateformContract private plateformContract;\n\n    constructor(address _plateformContract) {\n        plateformContract = PlateformContract(_plateformContract);\n    }\n\n    function deployAssociationContract(\n        string memory _name,\n        string memory _description,\n        string memory _email,\n        string memory _phoneNumber,\n        string memory _country,\n        string memory _streetAddress,\n        string memory _city,\n        string memory _state,\n        string memory _postalCode,\n        uint256 _creationDate,\n        uint256 _size\n    ) external returns (address) {\n        AssociationContract newContract = new AssociationContract(\n            _name,\n            _description,\n            _email,\n            _phoneNumber,\n            _country,\n            _streetAddress,\n            _city,\n            _state,\n            _postalCode,\n            _creationDate,\n            _size\n        );\n\n        emit AssociationContractDeployed(address(newContract), msg.sender);\n\n        return address(newContract);\n    }\n}\n"
+    },
+    "src/services/blockchain/contracts/Plateform.sol": {
+      "content": "// SPDX-License-Identifier: MIT\npragma solidity ^0.8.7;\n\nimport \"./Association/AssociationFactory.sol\";\n\ncontract PlateformContract {\n    struct Association {\n        string name;\n        string description;\n        string email;\n        string phoneNumber;\n        string country;\n        string streetAddress;\n        string city;\n        string state;\n        string postalCode;\n        uint256 creationDate;\n        uint256 size;\n        string domain;\n    }\n\n    enum Status {\n        Pending,\n        Refused\n    }\n\n    struct Demand {\n        Association association;\n        address owner;\n        Status status;\n    }\n\n    Demand[] public demands;\n    address[] public admins;\n    AssociationFactory private associationFactory;\n\n    constructor() {\n        admins.push(msg.sender);\n    }\n\n    function  setAssociationFactory(address _associationFactory) onlyAdmin public  {\n        associationFactory = AssociationFactory(_associationFactory);\n    }   \n\n    function addDemand(\n        string memory _name,\n        string memory _description,\n        string memory _email,\n        string memory _phoneNumber,\n        string memory _country,\n        string memory _streetAddress,\n        string memory _city,\n        string memory _state,\n        string memory _postalCode,\n        uint256 _creationDate,\n        uint256 _size,\n        string memory _domain\n    ) public {\n        Association memory newAssociation = Association({\n            name: _name,\n            description: _description,\n            email: _email,\n            phoneNumber: _phoneNumber,\n            country: _country,\n            streetAddress: _streetAddress,\n            city: _city,\n            state: _state,\n            postalCode: _postalCode,\n            creationDate: _creationDate,\n            size: _size,\n            domain: _domain\n        });\n\n        Demand memory newDemand = Demand({\n            association: newAssociation,\n            owner: msg.sender,\n            status: Status.Pending\n        });\n\n        demands.push(newDemand);\n    }\n\n    function getAllDemands() public view returns (Demand[] memory) {\n        return demands;\n    }\n\n\n    modifier onlyAdmin {\n        bool isAdmin = false;\n        for (uint i = 0; i < admins.length; i++) {\n            if (admins[i] == msg.sender) {\n                isAdmin = true;\n                break;\n            }\n        }\n\n        require(isAdmin, \"Only admins can call this function\");\n        _;\n    }\n}\n"
+    }
+  },
+  "settings": {
+    "optimizer": {
+      "enabled": true,
+      "runs": 100
+    },
+    "viaIR": true,
+    "evmVersion": "paris",
+    "outputSelection": {
+      "*": {
+        "*": [
+          "abi",
+          "evm.bytecode",
+          "evm.deployedBytecode",
+          "evm.methodIdentifiers",
+          "metadata",
+          "devdoc",
+          "userdoc",
+          "storageLayout",
+          "evm.gasEstimates"
+        ],
+        "": [
+          "ast"
+        ]
+      }
+    },
+    "metadata": {
+      "useLiteralContent": true
+    }
+  }
+}

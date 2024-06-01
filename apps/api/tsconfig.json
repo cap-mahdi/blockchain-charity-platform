@@ -10,6 +10,9 @@
     "baseUrl": "./",
     "experimentalDecorators": true,
     "strictPropertyInitialization": false,
-
-  }
+    "rootDirs": ["./src", "./scripts", "./test"],
+  },
+  "exclude": ["dist", "node_modules"],
+  "include": ["./test", "./src", "./scripts"],
+  "files": ["./hardhat.config.ts"]
 }

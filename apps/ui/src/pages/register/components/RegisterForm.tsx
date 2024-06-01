@@ -2,10 +2,10 @@ import { TextArea, TextField } from '../../../components';
 import { FC, FormEvent, useState } from 'react';
 import { ProfileImageUpload } from './ProfileImageUpload';
 import { FilesUpload } from './FilesUpload';
-import { abi, contractAddress } from '../../../constants';
+import { contractAddress } from '../../../constants';
 import { listenForTransactionMine } from '../../../helper';
 import { ethers } from 'ethers';
-import { AssociationFactory } from '../../../typechain-types';
+import { Demand, Demand__factory } from '../../../typechain-types';
 
 export const RegisterForm: FC = () => {
   const [name, setName] = useState('Name');
@@ -19,20 +19,23 @@ export const RegisterForm: FC = () => {
   const [zip, setZip] = useState('Zip / Postal Code');
   const [creationDate, setCreationDate] = useState('2002-12-12');
   const [associationSize, setAssociationSize] = useState(5);
+  const [domain, setDomain] = useState('Domain');
 
   const register = async (e: FormEvent) => {
     e.preventDefault();
+    console.log('Registering');
     if (typeof window.ethereum !== 'undefined') {
       const provider = new ethers.BrowserProvider(window.ethereum);
       await provider.send('eth_requestAccounts', []);
       const signer = await provider.getSigner();
-      const contract: AssociationFactory = new ethers.Contract(
+      const contract: Demand = new ethers.Contract(
         contractAddress,
-        abi,
+        Demand__factory.abi,
         signer
       );
+      console.log('MetaMask is installed!');
       try {
-        const transactionResponse = await contract.deployAssociationContract(
+        const transactionResponse = await contract.addDemand(
           name,
           about,
           email,
@@ -43,7 +46,8 @@ export const RegisterForm: FC = () => {
           state,
           zip,
           new Date(creationDate).getTime(),
-          associationSize
+          associationSize,
+          domain
         );
         await listenForTransactionMine(transactionResponse, provider);
         // await transactionResponse.wait(1);
@@ -51,6 +55,7 @@ export const RegisterForm: FC = () => {
         console.error(error);
       }
     } else {
+      console.log('Please Install MetaMask');
       //'Please install MetaMask'
       //Show TOAST
     }
@@ -149,7 +154,12 @@ export const RegisterForm: FC = () => {
           />
         </div>
         <div className="flex flex-row gap-3 w-full items-end">
-          <TextField name="Domain" reqiuired />
+          <TextField
+            name="Domain"
+            reqiuired
+            value={domain}
+            onChange={(e) => setDomain(e.target.value)}
+          />
           <ProfileImageUpload />
         </div>
         <FilesUpload

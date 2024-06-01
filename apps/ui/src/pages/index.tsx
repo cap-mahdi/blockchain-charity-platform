@@ -13,9 +13,8 @@ import { CompainDetails } from './compain/CompainDetails';
 import { CampaignProvider } from '../context/useCampaignContext';
 import { AddCampaign } from './compain/AddCampaign';
 
-import { Association, Associations } from './admin';
+import { DemandInfo, Demands } from './admin';
 import { CampaignFeed } from './compain/CompainFeed';
-
 
 export const router = createBrowserRouter([
   {
@@ -55,12 +54,12 @@ export const router = createBrowserRouter([
         path: 'admin',
         children: [
           {
-            path: 'associations',
-            element: <Associations />,
+            path: 'demands',
+            element: <Demands />,
           },
           {
-            path: 'association/:address',
-            element: <Association />,
+            path: 'demand/:index',
+            element: <DemandInfo />,
           },
         ],
       },
