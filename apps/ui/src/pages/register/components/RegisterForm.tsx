@@ -2,10 +2,13 @@ import { TextArea, TextField } from '../../../components';
 import { FC, FormEvent, useState } from 'react';
 import { ProfileImageUpload } from './ProfileImageUpload';
 import { FilesUpload } from './FilesUpload';
-import { contractAddress } from '../../../constants';
+import { plateformContractAddress } from '../../../constants';
 import { listenForTransactionMine } from '../../../helper';
 import { ethers } from 'ethers';
-import { Demand, Demand__factory } from '../../../typechain-types';
+import {
+  PlateformContract,
+  PlateformContract__factory,
+} from '../../../typechain-types';
 
 export const RegisterForm: FC = () => {
   const [name, setName] = useState('Name');
@@ -24,13 +27,14 @@ export const RegisterForm: FC = () => {
   const register = async (e: FormEvent) => {
     e.preventDefault();
     console.log('Registering');
+    console.log('Registering');
     if (typeof window.ethereum !== 'undefined') {
       const provider = new ethers.BrowserProvider(window.ethereum);
       await provider.send('eth_requestAccounts', []);
       const signer = await provider.getSigner();
-      const contract: Demand = new ethers.Contract(
+      const contract: AssociationFactory = new ethers.Contract(
         contractAddress,
-        Demand__factory.abi,
+        abi,
         signer
       );
       console.log('MetaMask is installed!');

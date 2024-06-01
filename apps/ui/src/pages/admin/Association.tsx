@@ -1,123 +1,128 @@
 import { FC, useEffect, useState } from 'react';
 import { Card } from '../../components/Card';
 import { InfoDisplayer } from '../../components/InfoDisplayer';
-import { Status } from '../../components/Status';
 import { Avatar } from '../../components/Avatar';
 import { ImagesModal } from './ImagesModal';
 import { useParams } from 'react-router-dom';
 import {
-  DemandStatus,
-  DemandType,
-  numberToDemandStatusMapper,
-} from '../../types/Demand';
-import { plateformContractAddress } from '../../constants';
+  associationContractAddress,
+  plateformContractAddress,
+} from '../../constants';
 import { ethers } from 'ethers';
 import {
+  AssociationFactory,
+  AssociationFactory__factory,
   PlateformContract,
   PlateformContract__factory,
 } from '../../typechain-types';
+import {
+  AssociationStatus,
+  AssociationType,
+  numberToAssociationEnumMapper,
+} from '../../types/Association';
+import { AssociationContract } from '../../typechain-types/Association.sol';
+import { AssociationContract__factory } from '../../typechain-types/factories/Association.sol';
+import { Status } from '../../components/Status';
 
-export const DemandInfo: FC = () => {
+export const AssociationInfo: FC = () => {
   const [selectedImage, setSelectedImage] = useState<null | number>(null);
   const { index } = useParams();
 
   const [isLoading, setIsLoading] = useState(true);
-  const [{ association, status }, setDemand] = useState<DemandType>({
-    association: null,
-    status: DemandStatus.PENDING,
-  });
+  const [association, setAssociation] = useState<AssociationType>(null);
+  const [associationAddress, setAssociationAddress] = useState<string>('');
 
-  const refuseDemand = async () => {
+  const switchStatus = async () => {
+    if (index === undefined) return;
+    if (!association) return;
+    if (typeof window.ethereum !== 'undefined') {
+      const provider = new ethers.BrowserProvider(window.ethereum);
+      await provider.send('eth_requestAccounts', []);
+      const signer = await provider.getSigner();
+      const plateformContract: PlateformContract = new ethers.Contract(
+        plateformContractAddress,
+        PlateformContract__factory.abi,
+        signer
+      );
+      await plateformContract.changeAssociationStatus(
+        associationAddress,
+        association.status === AssociationStatus.Active ? 1 : 0
+      );
+      getAssociation(index);
+    } else {
+      console.log('Please Install MetaMask');
+    }
+  };
+
+  const getAssociation = async (index: string) => {
     if (index === undefined) return;
     if (typeof window.ethereum !== 'undefined') {
       const provider = new ethers.BrowserProvider(window.ethereum);
       await provider.send('eth_requestAccounts', []);
       const signer = await provider.getSigner();
-      const contract: PlateformContract = new ethers.Contract(
-        plateformContractAddress,
-        PlateformContract__factory.abi,
+      const associationFactoryContract: AssociationFactory =
+        new ethers.Contract(
+          associationContractAddress,
+          AssociationFactory__factory.abi,
+          signer
+        );
+      console.log('index ', index);
+      const data = await associationFactoryContract.getAssociationWithStatus(
+        index
+      );
+      console.log('data', data[0]);
+      setAssociationAddress(data[0]);
+
+      const associationContract: AssociationContract = new ethers.Contract(
+        data[0],
+        AssociationContract__factory.abi,
         signer
       );
-      try {
-        await contract.refuseDemand(index);
-      } catch (error) {
-        console.error(error);
-      }
+
+      const associationInfo = await associationContract.getAssociationDetails();
+      console.log('Association Info', associationInfo);
+      setAssociation({
+        name: associationInfo[0],
+        description: associationInfo[1],
+        email: associationInfo[2],
+        phoneNumber: associationInfo[3],
+        country: associationInfo[4],
+        streetAddress: associationInfo[5],
+        city: associationInfo[6],
+        state: associationInfo[7],
+        postalCode: associationInfo[8],
+        creationDate: associationInfo[9],
+        size: associationInfo[10],
+        domain: 'Hard Coded Value',
+        status: numberToAssociationEnumMapper[Number(data[1])],
+      });
+      setIsLoading(false);
     } else {
       console.log('Please Install MetaMask');
     }
   };
 
-  const approveDemand = async () => {
-    if (index === undefined) return;
-    if (typeof window.ethereum !== 'undefined') {
-      const provider = new ethers.BrowserProvider(window.ethereum);
-      await provider.send('eth_requestAccounts', []);
-      const signer = await provider.getSigner();
-      const contract: PlateformContract = new ethers.Contract(
-        plateformContractAddress,
-        PlateformContract__factory.abi,
-        signer
-      );
-      const firstAdmin = await contract.admins(0);
-      console.log('First Admin', firstAdmin);
-      try {
-        await contract.acceptDemand(index);
-      } catch (error) {
-        console.error(error);
-      }
-    } else {
-      console.log('Please Install MetaMask');
-    }
-  };
-  const getDemand = async (index: number) => {
-    if (typeof window.ethereum !== 'undefined') {
-      const provider = new ethers.BrowserProvider(window.ethereum);
-      await provider.send('eth_requestAccounts', []);
-      const signer = await provider.getSigner();
-      const contract: PlateformContract = new ethers.Contract(
-        plateformContractAddress,
-        PlateformContract__factory.abi,
-        signer
-      );
-      try {
-        const data = await contract.demands(index);
-        console.log('Index ', index);
-
-        setDemand({
-          association: data[0],
-          owner: data[1],
-          status: numberToDemandStatusMapper[data[2]],
-        });
-        setIsLoading(false);
-      } catch (error) {
-        console.error(error);
-      }
-    } else {
-      console.log('Please Install MetaMask');
-      //'Please install MetaMask'
-      //Show TOAST
-    }
-  };
   useEffect(() => {
     if (index === undefined) return;
-    getDemand(index);
+    getAssociation(index);
   }, [index]);
 
   if (isLoading) {
     return <p>Loading...</p>;
   }
-  if (association === null) return <p>Demand not found</p>;
+  if (association === null) return <p>Association not found</p>;
   return (
     <Card>
-      <h1 className="text-2xl font-semibold text-gray-900">Demand Details</h1>
+      <h1 className="text-2xl font-semibold text-gray-900">
+        Association Details
+      </h1>
       <div className="flex flex-col gap-5 w-full items-start">
         <div className="flex flex-row gap-5 w-full justify-start items-center font-semibold ">
           <Avatar src="/images/default-avatar.png" />
           <p>{association.name}</p>
         </div>
         <div className="flex flex-row gap-5 w-full justify-start">
-          <Status status={status} />
+          <Status status={association.status} />
         </div>
 
         <div className="flex flex-row gap-5 w-full justify-start">
@@ -189,20 +194,23 @@ export const DemandInfo: FC = () => {
         />
       )}
       <div className="flex flex-row gap-3 w-full justify-end">
-        <button
-          className="bg-red-500 text-black py-3 px-4 text-xs font-semibold rounded-xl "
-          type="button"
-          onClick={refuseDemand}
-        >
-          Refuse{' '}
-        </button>
-        <button
-          className="bg-green-500 text-black py-3 px-4 text-xs font-semibold rounded-xl"
-          type="button"
-          onClick={approveDemand}
-        >
-          Approve{' '}
-        </button>
+        {association.status === AssociationStatus.Active ? (
+          <button
+            className="bg-red-500 text-black py-3 px-4 text-xs font-semibold rounded-xl "
+            type="button"
+            onClick={switchStatus}
+          >
+            Make Inactive
+          </button>
+        ) : (
+          <button
+            className="bg-green-500 text-black py-3 px-4 text-xs font-semibold rounded-xl"
+            type="button"
+            onClick={() => switchStatus()}
+          >
+            Make Active
+          </button>
+        )}
       </div>
     </Card>
   );

@@ -1,1 +1,5 @@
-export const contractAddress = '0x26628872DF2C914df0EEF704fbE028C2BB962535';
+export const plateformContractAddress =
+  '0xfC73Cb0BB0e43338Cc398F35e15AAfd50C6fd4C8';
+
+export const associationContractAddress =
+  '0x252392ad4226A9141051d8e6591E4D84238FE890';
