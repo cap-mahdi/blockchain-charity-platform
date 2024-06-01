@@ -5,4 +5,6 @@ import type * as associationSol from "./Association.sol";
 export type { associationSol };
 import type * as campaign from "./Campaign";
 export type { campaign };
+import type * as dao from "./DAO";
+export type { dao };
 export type { AssociationFactory } from "./AssociationFactory";
