@@ -1,7 +1,9 @@
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.7;
 
-contract Demand {
+import "./Association/AssociationFactory.sol";
+
+contract PlateformContract {
     struct Association {
         string name;
         string description;
@@ -29,6 +31,45 @@ contract Demand {
     }
 
     Demand[] public demands;
+    address[] public admins;
+    AssociationFactory private associationFactory;
+
+    constructor() {
+        admins.push(msg.sender);
+    }
+
+    function  setAssociationFactory(address _associationFactory) onlyAdmin public  {
+        associationFactory = AssociationFactory(_associationFactory);
+    }   
+
+    function addAdmin(address _admin) onlyAdmin public {
+        admins.push(_admin);
+    }
+
+    function refuseDemand(uint256 _index) onlyAdmin public {
+        demands[_index].status = Status.Refused;
+    }
+
+    function acceptDemand(uint256 _index) onlyAdmin public {
+        Demand memory demandToRemove = demands[_index];
+        demands[_index] = demands[demands.length - 1];
+        demands.pop();
+
+        Association memory association = demandToRemove.association;
+        associationFactory.deployAssociationContract(
+            association.name,
+            association.description,
+            association.email,
+            association.phoneNumber,
+            association.country,
+            association.streetAddress,
+            association.city,
+            association.state,
+            association.postalCode,
+            association.creationDate,
+            association.size
+        );
+    }
 
     function addDemand(
         string memory _name,
@@ -70,5 +111,19 @@ contract Demand {
 
     function getAllDemands() public view returns (Demand[] memory) {
         return demands;
+    }
+
+
+    modifier onlyAdmin {
+        bool isAdmin = false;
+        for (uint i = 0; i < admins.length; i++) {
+            if (admins[i] == msg.sender) {
+                isAdmin = true;
+                break;
+            }
+        }
+
+        require(isAdmin, "Only admins can call this function");
+        _;
     }
 }

@@ -17,21 +17,21 @@ const deployDemandContract: DeployFunction = async function (
   const chainId: number = network.config.chainId!;
 
   log('----------------------------------------------------');
-  log('Deploying DemandContract and waiting for confirmations...');
-  const demandContract = await deploy('Demand', {
+  log('Deploying PlateformContract and waiting for confirmations...');
+  const PlateformContract = await deploy('PlateformContract', {
     from: deployer,
     log: false,
     // we need to wait if on a live network so we can verify properly
     waitConfirmations: networkConfig[network.name].blockConfirmations || 0,
   });
-  log(`Demand deployed at ${demandContract.address}`);
+  log(`PlateformContract deployed at ${PlateformContract.address}`);
 
   if (
     !developmentChains.includes(network.name) &&
     process.env.ETHERSCAN_API_KEY
   ) {
-    await verify(demandContract.address, []);
+    await verify(PlateformContract.address, []);
   }
 };
 export default deployDemandContract;
-deployDemandContract.tags = ['all', 'Demand'];
+deployDemandContract.tags = ['all', 'Plateform'];

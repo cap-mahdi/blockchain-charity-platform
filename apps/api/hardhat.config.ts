@@ -1,6 +1,7 @@
 import 'dotenv/config';
 import 'hardhat-deploy';
 import '@typechain/hardhat';
+import '@nomiclabs/hardhat-waffle';
 import '@nomiclabs/hardhat-etherscan';
 import { HardhatUserConfig } from 'hardhat/config';
 
@@ -19,10 +20,6 @@ const PRIVATE_KEY =
   '0x11ee3108a03081fe260ecdc106554d09d9d1209bcafd46942b10e02943effc4a';
 const ETHERSCAN_API_KEY = process.env.ETHERSCAN_API_KEY || '';
 
-console.log('COINMARKETCAP_API_KEY', COINMARKETCAP_API_KEY);
-console.log('SEPOLIA_RPC_URL', process.env.SEPOLIA_RPC_URL);
-console.log('PRIVATE_KEY', PRIVATE_KEY);
-console.log('ETHERSCAN_API_KEY', ETHERSCAN_API_KEY);
 const config: HardhatUserConfig = {
   defaultNetwork: 'hardhat',
   networks: {
