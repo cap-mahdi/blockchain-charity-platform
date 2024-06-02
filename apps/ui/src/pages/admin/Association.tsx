@@ -24,6 +24,7 @@ import {
   numberToAssociationEnumMapper,
 } from '../../types/Association';
 import { Status } from '../../components/Status';
+import { Spinner } from '../../components/Spinner';
 
 export const AssociationInfo: FC = () => {
   const [selectedImage, setSelectedImage] = useState<null | number>(null);
@@ -112,7 +113,7 @@ export const AssociationInfo: FC = () => {
   }, [index]);
 
   if (isLoading) {
-    return <p>Loading...</p>;
+    return <Spinner />;
   }
   if (association === null) return <p>Association not found</p>;
   return (

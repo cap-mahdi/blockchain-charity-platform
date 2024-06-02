@@ -7,11 +7,11 @@ import {
   CharityCampaignFactory,
   CharityCampaignFactory__factory,
 } from '../../typechain-types';
-import useMetaMask from '../../hooks/useMetaMask';
 import FileUploadIPFS from '../../components/FileUploadIPFS';
+import useMetaMask from '../../context/metamaskContext';
 
 export function AddCampaign(props) {
-  const [connectedWallet] = useMetaMask();
+  const { connectedWallet } = useMetaMask();
   const [campaignFactoryContract, setCampaignFactoryContract] =
     useState<CharityCampaignFactory | null>(null);
   useLaodContract({
@@ -21,9 +21,7 @@ export function AddCampaign(props) {
     setContract: setCampaignFactoryContract,
   });
 
-
   const [ipfsHashes, setIpfsHashes] = useState([]);
-
 
   useEffect(() => {
     console.log('Campaign Factory Contract:', campaignFactoryContract);
@@ -49,7 +47,6 @@ export function AddCampaign(props) {
     const txrec = await tx.wait();
     console.log(txrec);
   };
-
 
   useEffect(() => {
     console.log(ipfsHashes);

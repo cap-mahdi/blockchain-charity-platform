@@ -1,18 +1,18 @@
 import { useState } from 'react';
-import useMetaMask from '../../hooks/useMetaMask';
-import { Button } from '../Button';
 import { Logo } from '../Logo';
 import { SearchBar } from '../SearchBar';
 import { Sections } from './Sections';
 import { MetamaskBtn } from './MetamaskBtn';
+import useMetaMask from '../../context/metamaskContext';
+import { Button } from '../Button';
 
 export function Navbar() {
   const [connectHover, setConnectHover] = useState(false);
-  const [connectedWallet, connectWallet] = useMetaMask();
+  const { connectedWallet, connectWallet } = useMetaMask();
 
   const fixedHeight = 'h-[60%]';
   const styles = {
-    wrapper: `w-[100%] h-20 bg-white flex flex-row text-black items-center  justify-between  px-4 `,
+    wrapper: `w-[100%] h-20 bg-white flex flex-row text-black items-center  justify-between  px-4 gap-2`,
     searchBar: `w-[40%] bg-light-gray ${fixedHeight} rounded-full `,
     joinUs: `w-28 h-[100%] bg-orange rounded-full font-medium ${
       connectHover ? 'hidden' : ''

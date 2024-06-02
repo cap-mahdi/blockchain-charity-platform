@@ -17,6 +17,7 @@ import {
   AssociationType,
   numberToAssociationEnumMapper,
 } from '../../types/Association';
+import { Spinner } from '../../components/Spinner';
 
 export const Associations: FC = () => {
   const [isLoading, setIsLoading] = useState(true);
@@ -80,7 +81,7 @@ export const Associations: FC = () => {
   }, []);
 
   if (isLoading) {
-    return <p>Loading...</p>;
+    return <Spinner />;
   }
   return (
     <Card className="items-start py-5">

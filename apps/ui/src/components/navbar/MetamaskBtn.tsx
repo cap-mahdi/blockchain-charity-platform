@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
 import metamask from '../../assets/MetamaskLogo.png';
-import useMetaMask from '../../hooks/useMetaMask';
 
 export function MetamaskBtn({ className, setConnectHover, connectWallet }) {
   const [hover, setHover] = useState(false);

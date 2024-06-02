@@ -16,6 +16,7 @@ import {
   PlateformContract,
   PlateformContract__factory,
 } from '../../typechain-types';
+import { Spinner } from '../../components/Spinner';
 
 export const DemandInfo: FC = () => {
   const [selectedImage, setSelectedImage] = useState<null | number>(null);
@@ -111,7 +112,7 @@ export const DemandInfo: FC = () => {
   }, [index]);
 
   if (isLoading) {
-    return <p>Loading...</p>;
+    return <Spinner />;
   }
   if (association === null) return <p>Demand not found</p>;
   return (
