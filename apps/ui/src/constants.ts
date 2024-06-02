@@ -1,5 +1,8 @@
 export const plateformContractAddress =
-  '0xfC73Cb0BB0e43338Cc398F35e15AAfd50C6fd4C8';
+  '0x4a2983e8C81E7C71d64748f952d9E5AB3f8ccCa3';
 
 export const associationContractAddress =
-  '0x252392ad4226A9141051d8e6591E4D84238FE890';
+  '0x9Cd24fd4dA6196131d53cFE347F3ff6FA686D023';
+
+export const PINATA_GATEWAY =
+  'https://violet-naval-platypus-851.mypinata.cloud/ipfs/';

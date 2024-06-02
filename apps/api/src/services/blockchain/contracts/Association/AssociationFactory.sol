@@ -57,7 +57,9 @@ contract AssociationFactory {
         string memory _state,
         string memory _postalCode,
         uint256 _creationDate,
-        uint256 _size
+        uint256 _size,
+        string memory _domain,
+        string[] memory _imagesHashes
     ) external onlyAdmin returns (address) {
         AssociationContract newContract = new AssociationContract(
             _name,
@@ -70,7 +72,9 @@ contract AssociationFactory {
             _state,
             _postalCode,
             _creationDate,
-            _size
+            _size,
+            _domain,    
+            _imagesHashes
         );
         associations[address(newContract)] = Status.Active;
         associationsArray.push(address(newContract));
