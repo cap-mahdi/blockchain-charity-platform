@@ -27,7 +27,6 @@ export const FilesUpload: FC<FilesUploadProps> = ({
         return updatedFiles;
       });
 
-      // Clear the input value to allow selecting the same file again
       if (uploadButtonRef.current) {
         uploadButtonRef.current.value = '';
       }
@@ -49,6 +48,7 @@ export const FilesUpload: FC<FilesUploadProps> = ({
         <button
           className="bg-black text-white px-2 py-1 rounded-lg"
           onClick={() => uploadButtonRef.current?.click()}
+          type="button"
         >
           + Add File{' '}
         </button>
@@ -73,6 +73,7 @@ export const FilesUpload: FC<FilesUploadProps> = ({
                 />
                 <p>{file.name}</p>
                 <button
+                  type="button"
                   className="absolute top-0 right-0 p-1 bg-red-500 text-white rounded-full"
                   onClick={() => removeFile(index)}
                 >
@@ -85,7 +86,7 @@ export const FilesUpload: FC<FilesUploadProps> = ({
         <input
           id="file-upload"
           type="file"
-          className="hidden bg-black absolute top-0 left-0 cursor-pointer"
+          className="hidden"
           onChange={handleFileChange}
           ref={uploadButtonRef}
         />
