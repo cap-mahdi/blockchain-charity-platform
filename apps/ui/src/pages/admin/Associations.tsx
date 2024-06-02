@@ -8,6 +8,8 @@ import { ethers } from 'ethers';
 import { associationContractAddress } from '../../constants';
 import { DemandType } from '../../types/Demand';
 import {
+  AssociationContract,
+  AssociationContract__factory,
   AssociationFactory,
   AssociationFactory__factory,
 } from '../../typechain-types';
@@ -15,8 +17,6 @@ import {
   AssociationType,
   numberToAssociationEnumMapper,
 } from '../../types/Association';
-import { AssociationContract } from '../../typechain-types/Association.sol';
-import { AssociationContract__factory } from '../../typechain-types/factories/Association.sol';
 
 export const Associations: FC = () => {
   const [isLoading, setIsLoading] = useState(true);

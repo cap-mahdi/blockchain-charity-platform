@@ -2,7 +2,6 @@
 pragma solidity 0.8.20;
 
 contract AssociationContract {
-    // State variables to hold the association details
     string public name;
     string public description;
     string public email;
@@ -12,8 +11,10 @@ contract AssociationContract {
     string public city;
     string public state;
     string public postalCode;
-    uint256 public creationDate; // Custom creation date for the association
+    uint256 public creationDate; 
     uint256 public size;
+    string public domain;
+    string[] public imagesHashes;
 
     // Event to be emitted when the association contract is deployed
     event AssociationContractDeployed(
@@ -27,7 +28,9 @@ contract AssociationContract {
         string state,
         string postalCode,
         uint256 creationDate,
-        uint256 size
+        uint256 size,
+        string domain,
+        string[] imagesHashes
     );
 
     // Constructor to initialize the association details
@@ -41,8 +44,10 @@ contract AssociationContract {
         string memory _city,
         string memory _state,
         string memory _postalCode,
-        uint256 _creationDate, // Custom creation date parameter
-        uint256 _size
+        uint256 _creationDate,
+        uint256 _size,
+        string memory _domain,
+        string[] memory _imagesHashes
             ) {
         name = _name;
         description = _description;
@@ -53,8 +58,10 @@ contract AssociationContract {
         city = _city;
         state = _state;
         postalCode = _postalCode;
-        creationDate = _creationDate; // Assign custom creation date
+        creationDate = _creationDate; 
         size = _size;
+        domain = _domain;
+        imagesHashes = _imagesHashes;
 
         emit AssociationContractDeployed(
             _name,
@@ -66,12 +73,13 @@ contract AssociationContract {
             _city,
             _state,
             _postalCode,
-            _creationDate, // Emit custom creation date
-            _size
+            _creationDate, 
+            _size,
+            _domain,
+            _imagesHashes
         );
     }
 
-    // Function to get the association details
     function getAssociationDetails() public view returns (
         string memory _name,
         string memory _description,
@@ -83,7 +91,10 @@ contract AssociationContract {
         string memory _state,
         string memory _postalCode,
         uint256 _creationDate,
-        uint256 _size
+        uint256 _size,
+        string memory _domain,
+        string[] memory _imagesHashes
+
     ) {
         return (
             name,
@@ -96,7 +107,9 @@ contract AssociationContract {
             state,
             postalCode,
             creationDate,
-            size
+            size,
+            domain,
+            imagesHashes
         );
     }
 }

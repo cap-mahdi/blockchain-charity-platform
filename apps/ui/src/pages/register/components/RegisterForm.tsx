@@ -3,9 +3,10 @@ import { FC, FormEvent, useState } from 'react';
 import { ProfileImageUpload } from './ProfileImageUpload';
 import { FilesUpload } from './FilesUpload';
 import { plateformContractAddress } from '../../../constants';
-import { listenForTransactionMine } from '../../../helper';
+import { listenForTransactionMine, uploadToIpfs } from '../../../helper';
 import { ethers } from 'ethers';
 import {
+  AssociationFactory,
   PlateformContract,
   PlateformContract__factory,
 } from '../../../typechain-types';
@@ -23,6 +24,7 @@ export const RegisterForm: FC = () => {
   const [creationDate, setCreationDate] = useState('2002-12-12');
   const [associationSize, setAssociationSize] = useState(5);
   const [domain, setDomain] = useState('Domain');
+  const [files, setFiles] = useState<File[]>([]);
 
   const register = async (e: FormEvent) => {
     e.preventDefault();
@@ -32,11 +34,13 @@ export const RegisterForm: FC = () => {
       const provider = new ethers.BrowserProvider(window.ethereum);
       await provider.send('eth_requestAccounts', []);
       const signer = await provider.getSigner();
-      const contract: AssociationFactory = new ethers.Contract(
-        contractAddress,
-        abi,
+      const contract: PlateformContract = new ethers.Contract(
+        plateformContractAddress,
+        PlateformContract__factory.abi,
         signer
       );
+
+      const hashes = await uploadToIpfs(files);
       console.log('MetaMask is installed!');
       try {
         const transactionResponse = await contract.addDemand(
@@ -51,7 +55,8 @@ export const RegisterForm: FC = () => {
           zip,
           new Date(creationDate).getTime(),
           associationSize,
-          domain
+          domain,
+          hashes.map((hash) => hash.data.IpfsHash)
         );
         await listenForTransactionMine(transactionResponse, provider);
         // await transactionResponse.wait(1);
@@ -169,6 +174,8 @@ export const RegisterForm: FC = () => {
         <FilesUpload
           title={'Attach legal files *'}
           description="Upload any legal Document or File that may be helpful in the process"
+          files={files}
+          setFiles={setFiles}
         />
         <div className="flex flex-row gap-2 item-start">
           <input type="checkbox" />

@@ -5,11 +5,14 @@ import { Avatar } from '../../components/Avatar';
 import { ImagesModal } from './ImagesModal';
 import { useParams } from 'react-router-dom';
 import {
+  PINATA_GATEWAY,
   associationContractAddress,
   plateformContractAddress,
 } from '../../constants';
 import { ethers } from 'ethers';
 import {
+  AssociationContract,
+  AssociationContract__factory,
   AssociationFactory,
   AssociationFactory__factory,
   PlateformContract,
@@ -20,8 +23,6 @@ import {
   AssociationType,
   numberToAssociationEnumMapper,
 } from '../../types/Association';
-import { AssociationContract } from '../../typechain-types/Association.sol';
-import { AssociationContract__factory } from '../../typechain-types/factories/Association.sol';
 import { Status } from '../../components/Status';
 
 export const AssociationInfo: FC = () => {
@@ -80,7 +81,7 @@ export const AssociationInfo: FC = () => {
       );
 
       const associationInfo = await associationContract.getAssociationDetails();
-      console.log('Association Info', associationInfo);
+      console.log('images', associationInfo[12]);
       setAssociation({
         name: associationInfo[0],
         description: associationInfo[1],
@@ -93,7 +94,10 @@ export const AssociationInfo: FC = () => {
         postalCode: associationInfo[8],
         creationDate: associationInfo[9],
         size: associationInfo[10],
-        domain: 'Hard Coded Value',
+        domain: associationInfo[11],
+        imagesHashes: associationInfo[12].map(
+          (hash) => `${PINATA_GATEWAY}${hash}`
+        ),
         status: numberToAssociationEnumMapper[Number(data[1])],
       });
       setIsLoading(false);
@@ -169,11 +173,11 @@ export const AssociationInfo: FC = () => {
           />
         </div>
         <div className="rounded-lg border-1 border-dashed border-black p-2  w-full text-gray-900  sm:text-sm sm:leading-6 flex flex-row items-center gap-4 flex-wrap">
-          {Array.from({ length: 10 }).map((_, index) => (
+          {association.imagesHashes.map((hash, index) => (
             <img
               key={index}
               className="w-60 cursor-pointer"
-              src="images/post-image.png"
+              src={hash}
               alt="files icon upload"
               onClick={() => setSelectedImage(index)}
             />
@@ -183,12 +187,7 @@ export const AssociationInfo: FC = () => {
 
       {selectedImage != null && (
         <ImagesModal
-          images={[
-            'images/post-image.png',
-            'images/post-image.png',
-            'images/post-image.png',
-            'images/post-image.png',
-          ]}
+          images={association.imagesHashes}
           selectedImage={selectedImage}
           onClose={() => setSelectedImage(null)}
         />

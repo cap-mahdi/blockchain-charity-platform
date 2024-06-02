@@ -10,7 +10,7 @@ import {
   DemandType,
   numberToDemandStatusMapper,
 } from '../../types/Demand';
-import { plateformContractAddress } from '../../constants';
+import { PINATA_GATEWAY, plateformContractAddress } from '../../constants';
 import { ethers } from 'ethers';
 import {
   PlateformContract,
@@ -24,8 +24,9 @@ export const DemandInfo: FC = () => {
   const [isLoading, setIsLoading] = useState(true);
   const [{ association, status }, setDemand] = useState<DemandType>({
     association: null,
-    status: DemandStatus.PENDING,
+    status: DemandStatus.Pending,
   });
+  console.log('association', association[12]);
 
   const refuseDemand = async () => {
     if (index === undefined) return;
@@ -85,7 +86,12 @@ export const DemandInfo: FC = () => {
         console.log('Index ', index);
 
         setDemand({
-          association: data[0],
+          association: {
+            ...data[0],
+            imagesHashes: data[0].imagesHashes.map(
+              (hash) => `${PINATA_GATEWAY}${hash}`
+            ),
+          },
           owner: data[1],
           status: numberToDemandStatusMapper[data[2]],
         });
@@ -164,11 +170,11 @@ export const DemandInfo: FC = () => {
           />
         </div>
         <div className="rounded-lg border-1 border-dashed border-black p-2  w-full text-gray-900  sm:text-sm sm:leading-6 flex flex-row items-center gap-4 flex-wrap">
-          {Array.from({ length: 10 }).map((_, index) => (
+          {association.imagesHashes.map((image, index) => (
             <img
               key={index}
               className="w-60 cursor-pointer"
-              src="images/post-image.png"
+              src={image}
               alt="files icon upload"
               onClick={() => setSelectedImage(index)}
             />
@@ -178,12 +184,7 @@ export const DemandInfo: FC = () => {
 
       {selectedImage != null && (
         <ImagesModal
-          images={[
-            'images/post-image.png',
-            'images/post-image.png',
-            'images/post-image.png',
-            'images/post-image.png',
-          ]}
+          images={association.imagesHashes}
           selectedImage={selectedImage}
           onClose={() => setSelectedImage(null)}
         />

@@ -10,6 +10,6 @@
     "hardhat-deploy": "^0.12.4"
   },
   "scripts": {
-    "hardhat:scripts": "hardhat run services/blockchain/scripts/script.ts"
+    "hardhat:scripts": "hardhat run src/services/blockchain/scripts/script.ts"
   }
 }

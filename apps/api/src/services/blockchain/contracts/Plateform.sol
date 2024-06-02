@@ -17,6 +17,7 @@ contract PlateformContract {
         uint256 creationDate;
         uint256 size;
         string domain;
+        string[] imagesHashes;
     }
 
     enum Status {
@@ -76,7 +77,9 @@ contract PlateformContract {
             association.state,
             association.postalCode,
             association.creationDate,
-            association.size
+            association.size,
+            association.domain,
+            association.imagesHashes
         );
     }
 
@@ -92,7 +95,8 @@ contract PlateformContract {
         string memory _postalCode,
         uint256 _creationDate,
         uint256 _size,
-        string memory _domain
+        string memory _domain,
+        string[] memory _imagesHashes
     ) public {
         Association memory newAssociation = Association({
             name: _name,
@@ -106,7 +110,8 @@ contract PlateformContract {
             postalCode: _postalCode,
             creationDate: _creationDate,
             size: _size,
-            domain: _domain
+            domain: _domain,
+            imagesHashes: _imagesHashes
         });
 
         Demand memory newDemand = Demand({
