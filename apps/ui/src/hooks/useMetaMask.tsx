@@ -69,4 +69,6 @@ export default function useMetaMask() {
     );
   };
   return [connectedWallet, connectWallet, signBeforeSendTransaction];
+
+  return [connectedWallet, connectWallet];
 }

@@ -11,6 +11,7 @@ import {
   PlateformContract,
   PlateformContract__factory,
 } from '../../typechain-types';
+import { Spinner } from '../../components/Spinner';
 
 export const Demands: FC = () => {
   const [isLoading, setIsLoading] = useState(true);
@@ -54,7 +55,7 @@ export const Demands: FC = () => {
   }, []);
 
   if (isLoading) {
-    return <p>Loading...</p>;
+    return <Spinner />;
   }
   return (
     <Card className="items-start py-5">
