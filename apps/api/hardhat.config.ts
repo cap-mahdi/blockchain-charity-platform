@@ -63,6 +63,10 @@ const config: HardhatUserConfig = {
     cache: './src/services/blockchain/cache',
     artifacts: './src/services/blockchain/artifacts',
   },
+  // typechain: {
+  //   outDir: './src/services/blockchain/typechain',
+  //   target: 'ethers-v5',
+  // },
 };
 
 export default config;

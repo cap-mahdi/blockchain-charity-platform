@@ -1,19 +1,15 @@
 import { ethers, getNamedAccounts } from 'hardhat';
-import {
-  AssociationFactory,
-  PlateformContract,
-} from '../../../../typechain-types';
 
 async function main() {
   const { deployer } = await getNamedAccounts();
-  const associationFactory: AssociationFactory = await ethers.getContract(
+  const associationFactory = await ethers.getContract(
     'AssociationFactory',
     deployer
   );
   console.log(
-    `Got contract AssociationFactory at ${associationFactory.address}`
+    `Got contract AssociationFactory at ${associationFactory.target}`
   );
-  const plateformContract: PlateformContract = await ethers.getContract(
+  const plateformContract = await ethers.getContract(
     'PlateformContract',
     deployer
   );
@@ -26,14 +22,14 @@ async function main() {
     'Plateform Contract Address from Contract:',
     plateformContractAddress
   );
-  console.log('Plateform Contract Address:', plateformContract.address);
+  console.log('Plateform Contract Address:', plateformContract.target);
   const associationContractAddress =
     await plateformContract.getAssociationFactory();
   console.log(
     'Association Factory Address from Contract:',
     associationContractAddress
   );
-  console.log('Association Factory Address:', associationFactory.address);
+  console.log('Association Factory Address:', associationFactory.target);
 
   // Add demand
   await plateformContract
@@ -49,9 +45,10 @@ async function main() {
       'postalCode',
       BigInt(Date.now()),
       BigInt(100),
-      'domain'
+      'domain',
+      []
     )
-    .then((tx) => tx.wait());
+    .then((tx: any) => tx.wait());
   console.log('Demand added');
 
   // Check demands length
