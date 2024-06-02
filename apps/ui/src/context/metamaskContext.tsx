@@ -1,8 +1,15 @@
-import { createContext, useContext, useEffect, useState } from 'react';
+import {
+  createContext,
+  useCallback,
+  useContext,
+  useEffect,
+  useState,
+} from 'react';
 import { Modal } from '../components/Modal';
 import { Card } from '../components/Card';
 import { toast } from 'react-toastify';
 import axios from 'axios';
+import { StepProgress } from '../components/StepProgress';
 
 type MetaMaskState = {
   connectedWallet: string | null;
@@ -10,6 +17,10 @@ type MetaMaskState = {
 type MetaMaskContextType = MetaMaskState & {
   connectWallet: () => void;
   signBeforeSendTransaction: (admin?: boolean) => Promise<any>;
+  defineSteps: (steps: any) => void;
+  nextStep: () => void;
+  failedStep: () => void;
+  terminate: () => void;
 };
 const MetaMaskContext = createContext({} as MetaMaskContextType);
 
@@ -24,6 +35,11 @@ interface MetaMaskProviderProps {
 const MetamaskProvider = ({ children }: MetaMaskProviderProps) => {
   const [state, setState] = useState<MetaMaskState>(initialState);
   const [isDialogOpen, setIsDialogOpen] = useState(false);
+  const [selectedStep, setSelectedStep] = useState<null | number>(null);
+  const [steps, setSteps] = useState([]);
+  const [stepStatus, setStepStatus] = useState<'success' | 'failure'>(
+    'success'
+  );
 
   const connectWallet = async () => {
     console.log('connectWallet');
@@ -76,6 +92,28 @@ const MetamaskProvider = ({ children }: MetaMaskProviderProps) => {
       { signature }
     );
   };
+  const defineSteps = (steps: any) => {
+    setSteps(steps);
+    setSelectedStep(0);
+    setStepStatus('success');
+  };
+
+  const nextStep = useCallback(() => {
+    setSelectedStep((prev) => prev + 1);
+  }, []);
+
+  const terminate = () => {
+    setTimeout(() => {
+      setSelectedStep(null);
+    }, 1000);
+  };
+
+  const failedStep = () => {
+    setStepStatus('failure');
+    setTimeout(() => {
+      setSelectedStep(null);
+    }, 1000);
+  };
 
   useEffect(() => {
     if (window.ethereum) {
@@ -99,11 +137,28 @@ const MetamaskProvider = ({ children }: MetaMaskProviderProps) => {
 
   return (
     <MetaMaskContext.Provider
-      value={{ ...state, connectWallet, signBeforeSendTransaction }}
+      value={{
+        ...state,
+        connectWallet,
+        signBeforeSendTransaction,
+        defineSteps,
+        nextStep,
+        failedStep,
+        terminate,
+      }}
     >
-      {isDialogOpen && (
+      {!selectedStep && isDialogOpen && (
         <Modal onClose={() => setIsDialogOpen(false)}>
           <Card>Connecting to MetaMask....</Card>
+        </Modal>
+      )}
+      {selectedStep && (
+        <Modal>
+          <StepProgress
+            steps={steps}
+            selectedStep={selectedStep}
+            status={stepStatus}
+          />
         </Modal>
       )}
       <div>{children}</div>

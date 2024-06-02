@@ -10,6 +10,8 @@ import {
   PlateformContract,
   PlateformContract__factory,
 } from '../../../typechain-types';
+import useMetaMask from '../../../context/metamaskContext';
+import { toast } from 'react-toastify';
 
 export const RegisterForm: FC = () => {
   const [name, setName] = useState('Name');
@@ -25,24 +27,49 @@ export const RegisterForm: FC = () => {
   const [associationSize, setAssociationSize] = useState(5);
   const [domain, setDomain] = useState('Domain');
   const [files, setFiles] = useState<File[]>([]);
+  const { defineSteps, nextStep, failedStep, terminate } = useMetaMask();
 
   const register = async (e: FormEvent) => {
+    console.log('Register');
     e.preventDefault();
-    console.log('Registering');
-    console.log('Registering');
-    if (typeof window.ethereum !== 'undefined') {
-      const provider = new ethers.BrowserProvider(window.ethereum);
-      await provider.send('eth_requestAccounts', []);
-      const signer = await provider.getSigner();
-      const contract: PlateformContract = new ethers.Contract(
-        plateformContractAddress,
-        PlateformContract__factory.abi,
-        signer
-      );
 
-      const hashes = await uploadToIpfs(files);
-      console.log('MetaMask is installed!');
+    if (typeof window.ethereum !== 'undefined') {
+      defineSteps([
+        {
+          title: 'Step 1',
+          description: 'Register',
+        },
+        {
+          title: 'Step 2',
+          description: 'Upload Documents',
+        },
+        {
+          title: 'Step 3',
+          description: 'Sending Transaction',
+        },
+        {
+          title: 'Step 4',
+          description: 'Verification',
+        },
+      ]);
       try {
+        const provider = new ethers.BrowserProvider(window.ethereum);
+        await provider.send('eth_requestAccounts', []);
+        const signer = await provider.getSigner();
+        const contract: PlateformContract = new ethers.Contract(
+          plateformContractAddress,
+          PlateformContract__factory.abi,
+          signer
+        );
+        console.log('Step 1');
+        nextStep();
+        const hashes = await uploadToIpfs(files);
+        console.log('Step 2');
+        nextStep();
+        console.log(
+          'MetaMask is installed!',
+          hashes.map((hash) => hash.data.IpfsHash)
+        );
         const transactionResponse = await contract.addDemand(
           name,
           about,
@@ -58,15 +85,18 @@ export const RegisterForm: FC = () => {
           domain,
           hashes.map((hash) => hash.data.IpfsHash)
         );
+        console.log('Step 3');
+        nextStep();
         await listenForTransactionMine(transactionResponse, provider);
-        // await transactionResponse.wait(1);
+        nextStep();
+        terminate();
       } catch (error) {
-        console.error(error);
+        console.error('Metmask', error);
+        failedStep();
+        toast.error('An error occured Pleas Try Again');
       }
     } else {
-      console.log('Please Install MetaMask');
-      //'Please install MetaMask'
-      //Show TOAST
+      toast.error('Install MetaMask');
     }
   };
   return (
