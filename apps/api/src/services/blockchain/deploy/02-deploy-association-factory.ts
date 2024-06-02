@@ -6,7 +6,6 @@ import {
   networkConfig,
 } from '../../../../helper-hardhat-config';
 import verify from '../utils/verify';
-import { PlateformContract } from '../../../../typechain-types';
 import { ethers } from 'hardhat';
 
 const deployAssociationFactory: DeployFunction = async function (
@@ -17,10 +16,12 @@ const deployAssociationFactory: DeployFunction = async function (
   const { deploy, log, get } = deployments;
   const { deployer } = await getNamedAccounts();
   const chainId: number = network.config.chainId!;
-  const plateformContract: PlateformContract = await ethers.getContract(
+  console.log('Deploying Association Factory', deployer);
+  const plateformContract = await ethers.getContract(
     'PlateformContract',
     deployer
   );
+  console.log(`Got contract PlateformContract at `);
   const plateformContractAddress = plateformContract.address;
   log('The Plateform contract address is:', plateformContractAddress);
   log('----------------------------------------------------');

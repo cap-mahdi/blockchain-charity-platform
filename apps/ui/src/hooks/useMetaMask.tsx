@@ -1,3 +1,4 @@
+import axios from 'axios';
 import { useEffect, useState } from 'react';
 
 export default function useMetaMask() {
@@ -5,7 +6,6 @@ export default function useMetaMask() {
   useEffect(() => {
     getConnectedWallet();
   }, []);
-
 
   const getConnectedWallet = async () => {
     if (window.ethereum) {
@@ -40,5 +40,33 @@ export default function useMetaMask() {
       console.error(err);
     }
   };
-  return [connectedWallet, connectWallet];
+
+  const signBeforeSendTransaction = async (admin = false) => {
+    if (!connectedWallet) {
+      await connectWallet();
+    }
+    const selectedAddress = window.ethereum.selectedAddress;
+    console.log('Get nonce');
+    const {
+      data: { nonce },
+    } = await axios.get(
+      `http://localhost:3000/api/auth/metamask/nonce?address=${selectedAddress}`
+    );
+    console.log('nonce', nonce);
+    const signature = await window.ethereum.request({
+      method: 'personal_sign',
+      params: [nonce, selectedAddress],
+    });
+    if (admin) {
+      return await axios.post(
+        `http://localhost:3000/api/auth/metamask/admin/login?address=${selectedAddress}`,
+        { signature }
+      );
+    }
+    return await axios.post(
+      `http://localhost:3000/api/auth/metamask/login?address=${selectedAddress}`,
+      { signature }
+    );
+  };
+  return [connectedWallet, connectWallet, signBeforeSendTransaction];
 }
