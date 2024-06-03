@@ -30,7 +30,7 @@ event CampaignCreated(address campaignAddress, address tokenAddress);
             _targetAmount,
             _refundThreshold,
             msg.sender,
-            IVotes(newToken)
+           address( newToken )
         );
 
                newToken.transfer(address(newCampaign), _tokenSupply);

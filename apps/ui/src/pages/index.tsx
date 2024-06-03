@@ -10,10 +10,11 @@ import { HomePage } from './home';
 import { FullBleedCarousel } from '../components/carousel/FullBleedCarousel';
 
 import { CompainDetails } from './compain/CompainDetails';
-import MetaMask from '../hooks/useMetaMask';
-import { CampaignFeed } from './compain/CompainFeed';
 import { CampaignProvider } from '../context/useCampaignContext';
 import { AddCampaign } from './compain/AddCampaign';
+
+import { DemandInfo, Demands } from './admin';
+import { CampaignFeed } from './compain/CompainFeed';
 
 export const router = createBrowserRouter([
   {
@@ -48,6 +49,19 @@ export const router = createBrowserRouter([
       {
         path: '/',
         element: <HomePage />,
+      },
+      {
+        path: 'admin',
+        children: [
+          {
+            path: 'demands',
+            element: <Demands />,
+          },
+          {
+            path: 'demand/:index',
+            element: <DemandInfo />,
+          },
+        ],
       },
       {
         path: '/register',

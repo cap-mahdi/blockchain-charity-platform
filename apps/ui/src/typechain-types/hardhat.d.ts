@@ -229,6 +229,10 @@ declare module "hardhat/types/runtime" {
       name: "GovToken",
       signerOrOptions?: ethers.Signer | FactoryOptions
     ): Promise<Contracts.GovToken__factory>;
+    getContractFactory(
+      name: "PlateformContract",
+      signerOrOptions?: ethers.Signer | FactoryOptions
+    ): Promise<Contracts.PlateformContract__factory>;
 
     getContractAt(
       name: "AccessControl",
@@ -500,6 +504,11 @@ declare module "hardhat/types/runtime" {
       address: string | ethers.Addressable,
       signer?: ethers.Signer
     ): Promise<Contracts.GovToken>;
+    getContractAt(
+      name: "PlateformContract",
+      address: string | ethers.Addressable,
+      signer?: ethers.Signer
+    ): Promise<Contracts.PlateformContract>;
 
     deployContract(
       name: "AccessControl",
@@ -717,6 +726,10 @@ declare module "hardhat/types/runtime" {
       name: "GovToken",
       signerOrOptions?: ethers.Signer | DeployContractOptions
     ): Promise<Contracts.GovToken>;
+    deployContract(
+      name: "PlateformContract",
+      signerOrOptions?: ethers.Signer | DeployContractOptions
+    ): Promise<Contracts.PlateformContract>;
 
     deployContract(
       name: "AccessControl",
@@ -988,6 +1001,11 @@ declare module "hardhat/types/runtime" {
       args: any[],
       signerOrOptions?: ethers.Signer | DeployContractOptions
     ): Promise<Contracts.GovToken>;
+    deployContract(
+      name: "PlateformContract",
+      args: any[],
+      signerOrOptions?: ethers.Signer | DeployContractOptions
+    ): Promise<Contracts.PlateformContract>;
 
     // default types
     getContractFactory(

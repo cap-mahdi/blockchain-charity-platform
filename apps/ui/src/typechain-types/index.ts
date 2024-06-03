@@ -94,10 +94,10 @@ export type { Checkpoints } from "./@openzeppelin/contracts/utils/structs/Checkp
 export { Checkpoints__factory } from "./factories/@openzeppelin/contracts/utils/structs/Checkpoints__factory";
 export type { DoubleEndedQueue } from "./@openzeppelin/contracts/utils/structs/DoubleEndedQueue";
 export { DoubleEndedQueue__factory } from "./factories/@openzeppelin/contracts/utils/structs/DoubleEndedQueue__factory";
-export type { AssociationContract } from "./src/services/blockchain/contracts/Association.sol/AssociationContract";
-export { AssociationContract__factory } from "./factories/src/services/blockchain/contracts/Association.sol/AssociationContract__factory";
-export type { AssociationFactory } from "./src/services/blockchain/contracts/AssociationFactory";
-export { AssociationFactory__factory } from "./factories/src/services/blockchain/contracts/AssociationFactory__factory";
+export type { AssociationContract } from "./src/services/blockchain/contracts/Association/Association.sol/AssociationContract";
+export { AssociationContract__factory } from "./factories/src/services/blockchain/contracts/Association/Association.sol/AssociationContract__factory";
+export type { AssociationFactory } from "./src/services/blockchain/contracts/Association/AssociationFactory";
+export { AssociationFactory__factory } from "./factories/src/services/blockchain/contracts/Association/AssociationFactory__factory";
 export type { CharityCampaign } from "./src/services/blockchain/contracts/Campaign/CharityCampaign";
 export { CharityCampaign__factory } from "./factories/src/services/blockchain/contracts/Campaign/CharityCampaign__factory";
 export type { CharityCampaignFactory } from "./src/services/blockchain/contracts/Campaign/CharityCampaignFactory";
@@ -114,3 +114,5 @@ export type { MyGovernor } from "./src/services/blockchain/contracts/DAO/Governo
 export { MyGovernor__factory } from "./factories/src/services/blockchain/contracts/DAO/GovernorContract.sol/MyGovernor__factory";
 export type { GovToken } from "./src/services/blockchain/contracts/DAO/GovToken";
 export { GovToken__factory } from "./factories/src/services/blockchain/contracts/DAO/GovToken__factory";
+export type { PlateformContract } from "./src/services/blockchain/contracts/Plateform.sol/PlateformContract";
+export { PlateformContract__factory } from "./factories/src/services/blockchain/contracts/Plateform.sol/PlateformContract__factory";
