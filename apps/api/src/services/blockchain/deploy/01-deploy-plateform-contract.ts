@@ -1,6 +1,5 @@
 import { HardhatRuntimeEnvironment } from 'hardhat/types';
 import { DeployFunction } from 'hardhat-deploy/types';
-// import verify from '../utils/verify';
 import {
   developmentChains,
   networkConfig,
@@ -12,25 +11,25 @@ const deployDemandContract: DeployFunction = async function (
 ) {
   // @ts-ignore
   const { getNamedAccounts, deployments, network } = hre;
-  const { deploy, log } = deployments;
+  const { deploy, log, get } = deployments;
   const { deployer } = await getNamedAccounts();
   const chainId: number = network.config.chainId!;
 
   log('----------------------------------------------------');
   log('Deploying PlateformContract and waiting for confirmations...');
-  const PlateformContract = await deploy('PlateformContract', {
+  const plateformContract = await deploy('PlateformContract', {
     from: deployer,
     log: false,
     // we need to wait if on a live network so we can verify properly
-    waitConfirmations: networkConfig[network.name].blockConfirmations || 0,
+    waitConfirmations: networkConfig[network.name].blockConfirmations || 1,
   });
-  log(`PlateformContract deployed at ${PlateformContract.address}`);
+  log(`PlateformContract deployed at ${plateformContract.address}`);
 
   if (
     !developmentChains.includes(network.name) &&
     process.env.ETHERSCAN_API_KEY
   ) {
-    await verify(PlateformContract.address, []);
+    await verify(plateformContract.address, []);
   }
 };
 export default deployDemandContract;

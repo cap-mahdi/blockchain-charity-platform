@@ -1,14 +1,15 @@
-interface ButtonProps {
+type ButtonProps = {
   className?: string;
   onClick?: () => void | Promise<void>;
   children: React.ReactNode;
   disablePointer?: boolean;
-}
+} & React.HTMLAttributes<HTMLDivElement>;
 export function Button({
   className = '',
   onClick,
   children,
   disablePointer = false,
+  ...props
 }: ButtonProps) {
   return (
     <div
@@ -18,6 +19,7 @@ export function Button({
         className
       }
       onClick={onClick}
+      {...props}
     >
       {children}
     </div>

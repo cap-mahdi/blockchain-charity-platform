@@ -5,43 +5,69 @@ import { TbListDetails } from 'react-icons/tb';
 import { Pagination } from '../../components/Pagination';
 import { Status } from '../../components/Status';
 import { ethers } from 'ethers';
-import { plateformContractAddress } from '../../constants';
-import { DemandType, numberToDemandStatusMapper } from '../../types/Demand';
+import { associationContractAddress } from '../../constants';
+import { DemandType } from '../../types/Demand';
 import {
-  PlateformContract,
-  PlateformContract__factory,
+  AssociationContract,
+  AssociationContract__factory,
+  AssociationFactory,
+  AssociationFactory__factory,
 } from '../../typechain-types';
+import {
+  AssociationType,
+  numberToAssociationEnumMapper,
+} from '../../types/Association';
 import { Spinner } from '../../components/Spinner';
 
-export const Demands: FC = () => {
+export const Associations: FC = () => {
   const [isLoading, setIsLoading] = useState(true);
   const [page, setPage] = useState(1);
-  const [demands, setDemands] = useState<DemandType[]>([]);
+  const [associations, setAssociations] = useState<AssociationType[]>([]);
   const totalElementPerPage = 10;
-  const pages = Math.ceil(demands.length / totalElementPerPage);
-  const getDemands = async () => {
+  const pages = Math.ceil(associations.length / totalElementPerPage);
+  const getAssociations = async () => {
     console.log('Registering');
     if (typeof window.ethereum !== 'undefined') {
       const provider = new ethers.BrowserProvider(window.ethereum);
       await provider.send('eth_requestAccounts', []);
       const signer = await provider.getSigner();
-      const contract: PlateformContract = new ethers.Contract(
-        plateformContractAddress,
-        PlateformContract__factory.abi,
+      const contract: AssociationFactory = new ethers.Contract(
+        associationContractAddress,
+        AssociationFactory__factory.abi,
         signer
       );
+
       console.log('contract', contract);
       try {
-        const data = await contract.getAllDemands();
-        console.log('date', data);
-        const demands: DemandType[] = data.map((proxy: any) => {
-          return {
-            association: proxy[0],
-            owner: proxy[1],
-            status: numberToDemandStatusMapper[proxy[2]],
-          };
-        });
-        setDemands(demands);
+        const data = await contract.getAssociationsWithStatus();
+        const associations = await Promise.all(
+          data.map(async (asso: any) => {
+            const associationContract: AssociationContract =
+              new ethers.Contract(
+                asso.associationAddress,
+                AssociationContract__factory.abi,
+                signer
+              );
+
+            const assoInfo = await associationContract.getAssociationDetails();
+            return {
+              name: assoInfo[0],
+              description: assoInfo[1],
+              email: assoInfo[2],
+              country: assoInfo[3],
+              streetAddress: assoInfo[4],
+              city: assoInfo[5],
+              state: assoInfo[6],
+              postalCode: assoInfo[7],
+              creationDate: assoInfo[8],
+              size: assoInfo[9],
+              status: numberToAssociationEnumMapper[asso.status],
+            };
+          })
+        );
+        console.log('associations', associations);
+
+        setAssociations(associations);
         setIsLoading(false);
       } catch (error) {
         console.error(error);
@@ -51,7 +77,7 @@ export const Demands: FC = () => {
     }
   };
   useEffect(() => {
-    getDemands();
+    getAssociations();
   }, []);
 
   if (isLoading) {
@@ -59,7 +85,7 @@ export const Demands: FC = () => {
   }
   return (
     <Card className="items-start py-5">
-      <h1 className="text-2xl font-extrabold">Demands</h1>
+      <h1 className="text-2xl font-extrabold">Associations</h1>
       <div className="flex flex-col w-full">
         <div className="flex flex-row py-2 px-3">
           <h3 className="w-1/12 p-1 font-extrabold">Name</h3>
@@ -69,9 +95,9 @@ export const Demands: FC = () => {
           <h3 className="w-2/12 p-1 font-extrabold">Status</h3>
           <p className="w-1/12 p-1 font-extrabold"></p>
         </div>
-        {demands
+        {associations
           .slice((page - 1) * totalElementPerPage, page * totalElementPerPage)
-          .map(({ association, status }, index) => (
+          .map((association, index) => (
             <div
               key={index}
               className={`flex flex-row justify-start ${
@@ -86,10 +112,10 @@ export const Demands: FC = () => {
               </p>
               <p className="w-2/12 p-1">{association.email}</p>
               <p className="w-2/12 p-1">{association.country}</p>
-              <Status status={status} />
+              <Status status={association.status} />
               <p className="w-1/12  p-1 flex justify-center text-lg">
                 <Link
-                  to={`/admin/demand/${
+                  to={`/admin/association/${
                     index + (page - 1) * totalElementPerPage
                   }`}
                 >

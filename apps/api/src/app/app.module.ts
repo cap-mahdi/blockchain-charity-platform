@@ -12,7 +12,7 @@ import { AppLoggerMiddleware } from '../middlewares/appLogger.middleware';
     AuthModule,
     TypeOrmModule.forRoot({
       type: 'postgres',
-      url: 'postgres://postgres:postgres@localhost:5432/charity-blockchain',
+      url: 'postgres://postgres:root@localhost:5432/charity-blockchain',
       entities: [UserSignature],
       autoLoadEntities: true,
       synchronize: true,

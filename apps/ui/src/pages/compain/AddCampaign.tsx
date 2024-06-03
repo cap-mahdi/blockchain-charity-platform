@@ -7,11 +7,11 @@ import {
   CharityCampaignFactoryDAO,
   CharityCampaignFactoryDAO__factory,
 } from '../../typechain-types';
-import useMetaMask from '../../hooks/useMetaMask';
 import FileUploadIPFS from '../../components/FileUploadIPFS';
+import useMetaMask from '../../context/metamaskContext';
 
 export function AddCampaign(props) {
-  const [connectedWallet] = useMetaMask();
+  const { connectedWallet } = useMetaMask();
   const [campaignFactoryContract, setCampaignFactoryContract] =
     useState<CharityCampaignFactoryDAO | null>(null);
   useLaodContract({

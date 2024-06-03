@@ -20,6 +20,12 @@ export class UserSignatureService {
 
   async create(address: string) {
     const nonce = this.createNonce();
+    const us = await this.userSignatureRepository.findOne({
+      where: { address },
+    });
+    if (us) {
+      throw new Error('Already an address in database');
+    }
     return this.userSignatureRepository.save({ address, nonce });
   }
 

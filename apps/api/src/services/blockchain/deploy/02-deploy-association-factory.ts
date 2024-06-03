@@ -6,7 +6,6 @@ import {
   networkConfig,
 } from '../../../../helper-hardhat-config';
 import verify from '../utils/verify';
-import { PlateformContract } from '../../../../typechain-types';
 import { ethers } from 'hardhat';
 
 const deployAssociationFactory: DeployFunction = async function (
@@ -14,16 +13,16 @@ const deployAssociationFactory: DeployFunction = async function (
 ) {
   // @ts-ignore
   const { getNamedAccounts, deployments, network } = hre;
-  const { deploy, log } = deployments;
+  const { deploy, log, get } = deployments;
   const { deployer } = await getNamedAccounts();
   const chainId: number = network.config.chainId!;
-  console.log('here', deployer);
-  const plateformContract: PlateformContract = await ethers.getContract(
+  console.log('Deploying Association Factory', deployer);
+  const plateformContract = await ethers.getContract(
     'PlateformContract',
     deployer
   );
-  console.log('here');
-  const plateformContractAddress = '0x5FbDB2315678afecb367f032d93F642f64180aa3';
+  console.log(`Got contract PlateformContract at `);
+  const plateformContractAddress = plateformContract.address;
   log('The Plateform contract address is:', plateformContractAddress);
   log('----------------------------------------------------');
   log('Deploying AssociationFactory and waiting for confirmations...');
@@ -41,7 +40,15 @@ const deployAssociationFactory: DeployFunction = async function (
   ) {
     await verify(associationFactory.address, [plateformContractAddress]);
   }
-  await plateformContract.setAssociationFactory(associationFactory.address);
+  const tx = await plateformContract.setAssociationFactory(
+    associationFactory.address
+  );
+  await tx.wait();
+  const associationFactoryAddress =
+    await plateformContract.getAssociationFactory();
+  log(
+    `Association Factory Address from Contract: ${associationFactoryAddress}`
+  );
 };
 
 export default deployAssociationFactory;

@@ -1,39 +1,18 @@
 import { useState } from 'react';
-import useMetaMask from '../../hooks/useMetaMask';
-import { Button } from '../Button';
 import { Logo } from '../Logo';
 import { SearchBar } from '../SearchBar';
 import { Sections } from './Sections';
 import { MetamaskBtn } from './MetamaskBtn';
-import axios from 'axios';
+import useMetaMask from '../../context/metamaskContext';
+import { Button } from '../Button';
 
 export function Navbar() {
   const [connectHover, setConnectHover] = useState(false);
-  const [connectedWallet, connectWallet] = useMetaMask();
-  const connectWithMetamask = async () => {
-    if (!connectedWallet) {
-      connectWallet();
-    }
-    const selectedAddress = window.ethereum.selectedAddress;
-    const {
-      data: { nonce },
-    } = await axios.get(
-      `http://localhost:3000/api/auth/metamask/nonce?address=${selectedAddress}`
-    );
-    console.log('nonce', nonce);
-    const signature = await window.ethereum.request({
-      method: 'personal_sign',
-      params: [nonce, selectedAddress],
-    });
+  const { connectedWallet, connectWallet } = useMetaMask();
 
-    await axios.post(
-      `http://localhost:3000/api/auth/metamask/login?address=${selectedAddress}`,
-      { signature }
-    );
-  };
   const fixedHeight = 'h-[60%]';
   const styles = {
-    wrapper: `w-[100%] h-20 bg-white flex flex-row text-black items-center  justify-between  px-4 `,
+    wrapper: `w-[100%] h-20 bg-white flex flex-row text-black items-center  justify-between  px-4 gap-2`,
     searchBar: `w-[40%] bg-light-gray ${fixedHeight} rounded-full `,
     joinUs: `w-28 h-[100%] bg-orange rounded-full font-medium ${
       connectHover ? 'hidden' : ''
@@ -57,7 +36,7 @@ export function Navbar() {
             <MetamaskBtn
               className={styles.connectBtn}
               setConnectHover={setConnectHover}
-              connectWallet={connectWithMetamask}
+              connectWallet={connectWallet}
             />
           </div>
         ) : (
@@ -65,7 +44,7 @@ export function Navbar() {
           //   <IoOptionsOutline className="h-8 w-8  " />
           //   <Avatar src="https://www.croissant-rouge.tn/logo.png" />
           // </div>
-          <Button className="bg-orange text-sm" onClick={connectWithMetamask}>
+          <Button className="bg-orange text-sm">
             Connected as {connectedWallet}
           </Button>
         )}

@@ -2,10 +2,16 @@ import { TextArea, TextField } from '../../../components';
 import { FC, FormEvent, useState } from 'react';
 import { ProfileImageUpload } from './ProfileImageUpload';
 import { FilesUpload } from './FilesUpload';
-import { contractAddress } from '../../../constants';
-import { listenForTransactionMine } from '../../../helper';
+import { plateformContractAddress } from '../../../constants';
+import { listenForTransactionMine, uploadToIpfs } from '../../../helper';
 import { ethers } from 'ethers';
-import { Demand, Demand__factory } from '../../../typechain-types';
+import {
+  AssociationFactory,
+  PlateformContract,
+  PlateformContract__factory,
+} from '../../../typechain-types';
+import useMetaMask from '../../../context/metamaskContext';
+import { toast } from 'react-toastify';
 
 export const RegisterForm: FC = () => {
   const [name, setName] = useState('Name');
@@ -20,21 +26,50 @@ export const RegisterForm: FC = () => {
   const [creationDate, setCreationDate] = useState('2002-12-12');
   const [associationSize, setAssociationSize] = useState(5);
   const [domain, setDomain] = useState('Domain');
+  const [files, setFiles] = useState<File[]>([]);
+  const { defineSteps, nextStep, failedStep, terminate } = useMetaMask();
 
   const register = async (e: FormEvent) => {
+    console.log('Register');
     e.preventDefault();
-    console.log('Registering');
+
     if (typeof window.ethereum !== 'undefined') {
-      const provider = new ethers.BrowserProvider(window.ethereum);
-      await provider.send('eth_requestAccounts', []);
-      const signer = await provider.getSigner();
-      const contract: Demand = new ethers.Contract(
-        contractAddress,
-        Demand__factory.abi,
-        signer
-      );
-      console.log('MetaMask is installed!');
+      defineSteps([
+        {
+          title: 'Step 1',
+          description: 'Register',
+        },
+        {
+          title: 'Step 2',
+          description: 'Upload Documents',
+        },
+        {
+          title: 'Step 3',
+          description: 'Sending Transaction',
+        },
+        {
+          title: 'Step 4',
+          description: 'Verification',
+        },
+      ]);
       try {
+        const provider = new ethers.BrowserProvider(window.ethereum);
+        await provider.send('eth_requestAccounts', []);
+        const signer = await provider.getSigner();
+        const contract: PlateformContract = new ethers.Contract(
+          plateformContractAddress,
+          PlateformContract__factory.abi,
+          signer
+        );
+        console.log('Step 1');
+        nextStep();
+        const hashes = await uploadToIpfs(files);
+        console.log('Step 2');
+        nextStep();
+        console.log(
+          'MetaMask is installed!',
+          hashes.map((hash) => hash.data.IpfsHash)
+        );
         const transactionResponse = await contract.addDemand(
           name,
           about,
@@ -47,17 +82,21 @@ export const RegisterForm: FC = () => {
           zip,
           new Date(creationDate).getTime(),
           associationSize,
-          domain
+          domain,
+          hashes.map((hash) => hash.data.IpfsHash)
         );
+        console.log('Step 3');
+        nextStep();
         await listenForTransactionMine(transactionResponse, provider);
-        // await transactionResponse.wait(1);
+        nextStep();
+        terminate();
       } catch (error) {
-        console.error(error);
+        console.error('Metmask', error);
+        failedStep();
+        toast.error('An error occured Pleas Try Again');
       }
     } else {
-      console.log('Please Install MetaMask');
-      //'Please install MetaMask'
-      //Show TOAST
+      toast.error('Install MetaMask');
     }
   };
   return (
@@ -165,6 +204,8 @@ export const RegisterForm: FC = () => {
         <FilesUpload
           title={'Attach legal files *'}
           description="Upload any legal Document or File that may be helpful in the process"
+          files={files}
+          setFiles={setFiles}
         />
         <div className="flex flex-row gap-2 item-start">
           <input type="checkbox" />

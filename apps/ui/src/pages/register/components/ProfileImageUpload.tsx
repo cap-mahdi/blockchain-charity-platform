@@ -8,7 +8,10 @@ export const ProfileImageUpload: FC = () => {
         src="images/default-avatar.png"
         alt=""
       />
-      <button className="bg-orange text-black py-2 px-6 text-sm font-medium rounded-full">
+      <button
+        className="bg-orange text-black py-2 px-6 text-sm font-medium rounded-full"
+        type="button"
+      >
         Change
       </button>
     </div>

@@ -16,4 +16,10 @@ export class AuthController {
   login() {
     return 'Logged in!';
   }
+
+  @Post('admin/login')
+  @UseGuards(SignatureMatch)
+  loginAdmin(@Query('address') address: string) {
+    return this.authService.isAdmin(address);
+  }
 }

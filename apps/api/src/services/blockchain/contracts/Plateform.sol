@@ -17,6 +17,7 @@ contract PlateformContract {
         uint256 creationDate;
         uint256 size;
         string domain;
+        string[] imagesHashes;
     }
 
     enum Status {
@@ -38,19 +39,28 @@ contract PlateformContract {
         admins.push(msg.sender);
     }
 
-    function  setAssociationFactory(address _associationFactory) onlyAdmin public  {
-        associationFactory = AssociationFactory(_associationFactory);
-    }   
+    function getAllDemands() public view returns (Demand[] memory) {
+        return demands;
+    }
 
-    function addAdmin(address _admin) onlyAdmin public {
+    function setAssociationFactory(address _associationFactory) public onlyAdmin {
+        associationFactory =  AssociationFactory(_associationFactory);
+    }
+    function getAssociationFactory() public view returns (address) {
+        return address(associationFactory);
+    }
+
+    function addAdmin(address _admin) public onlyAdmin {
         admins.push(_admin);
     }
 
-    function refuseDemand(uint256 _index) onlyAdmin public {
+    function refuseDemand(uint256 _index) public onlyAdmin {
         demands[_index].status = Status.Refused;
     }
 
-    function acceptDemand(uint256 _index) onlyAdmin public {
+    function acceptDemand(uint256 _index) public onlyAdmin {
+        require(_index < demands.length, "Demand index out of bounds");
+        
         Demand memory demandToRemove = demands[_index];
         demands[_index] = demands[demands.length - 1];
         demands.pop();
@@ -67,7 +77,9 @@ contract PlateformContract {
             association.state,
             association.postalCode,
             association.creationDate,
-            association.size
+            association.size,
+            association.domain,
+            association.imagesHashes
         );
     }
 
@@ -83,7 +95,8 @@ contract PlateformContract {
         string memory _postalCode,
         uint256 _creationDate,
         uint256 _size,
-        string memory _domain
+        string memory _domain,
+        string[] memory _imagesHashes
     ) public {
         Association memory newAssociation = Association({
             name: _name,
@@ -97,7 +110,8 @@ contract PlateformContract {
             postalCode: _postalCode,
             creationDate: _creationDate,
             size: _size,
-            domain: _domain
+            domain: _domain,
+            imagesHashes: _imagesHashes
         });
 
         Demand memory newDemand = Demand({
@@ -109,10 +123,9 @@ contract PlateformContract {
         demands.push(newDemand);
     }
 
-    function getAllDemands() public view returns (Demand[] memory) {
-        return demands;
+    function changeAssociationStatus(address _associationAddress, AssociationFactory.Status _status) public onlyAdmin {
+        associationFactory.changeAssociationStatus(_associationAddress, _status);
     }
-
 
     modifier onlyAdmin {
         bool isAdmin = false;
