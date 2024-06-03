@@ -6,6 +6,7 @@ import {
   networkConfig,
 } from '../../../../helper-hardhat-config';
 import verify from '../utils/verify';
+import { ethers } from 'hardhat';
 
 const deployDemandContract: DeployFunction = async function (
   hre: HardhatRuntimeEnvironment
@@ -15,12 +16,16 @@ const deployDemandContract: DeployFunction = async function (
   const { deploy, log } = deployments;
   const { deployer } = await getNamedAccounts();
   const chainId: number = network.config.chainId!;
-
+  const associationFacortyContract = await ethers.getContract(
+    'AssociationFactory',
+    deployer
+  );
   log('----------------------------------------------------');
   log('Deploying CharityCampaignFactoryDAO and waiting for confirmations...');
   const CharityCampaignFactoryDAO = await deploy('CharityCampaignFactoryDAO', {
     from: deployer,
     log: false,
+    args: [associationFacortyContract.address],
     // we need to wait if on a live network so we can verify properly
     waitConfirmations: networkConfig[network.name].blockConfirmations || 0,
   });
@@ -32,7 +37,9 @@ const deployDemandContract: DeployFunction = async function (
     !developmentChains.includes(network.name) &&
     process.env.ETHERSCAN_API_KEY
   ) {
-    await verify(CharityCampaignFactoryDAO.address, []);
+    await verify(CharityCampaignFactoryDAO.address, [
+      associationFacortyContract.address,
+    ]);
   }
 };
 export default deployDemandContract;

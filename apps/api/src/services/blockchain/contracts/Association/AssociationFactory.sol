@@ -19,6 +19,8 @@ contract AssociationFactory {
     }
 
     mapping(address => Status) public associations;
+    mapping(address => address) public walletToAssociation;
+
     address[] public associationsArray;
     uint public associationsCount;
 
@@ -59,8 +61,12 @@ contract AssociationFactory {
         uint256 _creationDate,
         uint256 _size,
         string memory _domain,
-        string[] memory _imagesHashes
+        string[] memory _imagesHashes,
+        address _walletAddress
     ) external onlyAdmin returns (address) {
+        if( walletToAssociation[_walletAddress] != address(0) ) {
+            revert("This wallet address is already associated with an association");
+        }
         AssociationContract newContract = new AssociationContract(
             _name,
             _description,
@@ -79,6 +85,7 @@ contract AssociationFactory {
         associations[address(newContract)] = Status.Active;
         associationsArray.push(address(newContract));
         associationsCount++;
+        walletToAssociation[_walletAddress] = address(newContract);
 
         emit AssociationContractDeployed(address(newContract), msg.sender);
 
@@ -93,6 +100,20 @@ contract AssociationFactory {
         associations[_associationAddress] = _status;
     }
 
+    function isAssociationAdmin( address _adminAddress) external view returns (bool, address) {
+        if( walletToAssociation[_adminAddress] != address(0) ) {
+            return (true, walletToAssociation[_adminAddress]);
+        }else {
+            return (false, address(0)); 
+        }
+    }   
+
+    function addAdminToAssociation( address _adminToAdd) public{
+        if( walletToAssociation[msg.sender] == address(0) ) {
+            revert("This wallet address is not associated with any association");
+        }
+        walletToAssociation[_adminToAdd] = walletToAssociation[msg.sender];
+    }
     modifier onlyAdmin {
         require(plateformAddress == msg.sender, "Only admin can call this function");
         _;
