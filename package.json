@@ -60,6 +60,7 @@
     "@nestjs/typeorm": "^10.0.2",
     "@nrwl/nx-cloud": "^18.0.0",
     "@openzeppelin/contracts": "^5.0.2",
+    "@snapshot-labs/snapshot.js": "^0.11.27",
     "@types/uniqid": "^5.3.4",
     "axios": "^1.7.2",
     "ethers": "^6.12.1",

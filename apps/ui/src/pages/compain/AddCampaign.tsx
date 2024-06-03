@@ -4,8 +4,8 @@ import { FormHeader } from '../../components/Form/FormHeader';
 import { CampaignForm } from './CampaignForm';
 import { useLaodContract } from '../../hooks/useLaodContract';
 import {
-  CharityCampaignFactory,
-  CharityCampaignFactory__factory,
+  CharityCampaignFactoryDAO,
+  CharityCampaignFactoryDAO__factory,
 } from '../../typechain-types';
 import FileUploadIPFS from '../../components/FileUploadIPFS';
 import useMetaMask from '../../context/metamaskContext';
@@ -13,10 +13,10 @@ import useMetaMask from '../../context/metamaskContext';
 export function AddCampaign(props) {
   const { connectedWallet } = useMetaMask();
   const [campaignFactoryContract, setCampaignFactoryContract] =
-    useState<CharityCampaignFactory | null>(null);
+    useState<CharityCampaignFactoryDAO | null>(null);
   useLaodContract({
     contractAddress: '0x912a059CF95E9b1caafdbd39E6B13201e169B458',
-    abi: CharityCampaignFactory__factory.abi,
+    abi: CharityCampaignFactoryDAO__factory.abi,
     contract: campaignFactoryContract,
     setContract: setCampaignFactoryContract,
   });
@@ -55,7 +55,6 @@ export function AddCampaign(props) {
   return (
     <Card>
       <FileUploadIPFS setIpfsHashes={setIpfsHashes} style={{}} />
-
       <FormHeader
         title="Create a New Campaign"
         subTitle="Help Save The World"

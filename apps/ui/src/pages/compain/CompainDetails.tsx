@@ -9,8 +9,8 @@ import { ethers } from 'ethers';
 import useCampaignContext from '../../context/useCampaignContext';
 import { useLaodContract } from '../../hooks/useLaodContract';
 import {
-  CharityCampaign,
-  CharityCampaign__factory,
+  CharityCampaignDAO,
+  CharityCampaignDAO__factory,
 } from '../../typechain-types';
 
 export function CompainDetails(props) {
@@ -18,9 +18,9 @@ export function CompainDetails(props) {
   const [campaignState, setCampaignState] = useCampaignContext();
   useLaodContract({
     contractAddress: campaignAddress,
-    abi: CharityCampaign__factory.abi,
+    abi: CharityCampaignDAO__factory.abi,
     contract: campaignState.contract,
-    setContract: (contract: CharityCampaign) => {
+    setContract: (contract: CharityCampaignDAO) => {
       setCampaignState((prev) => {
         return {
           ...prev,

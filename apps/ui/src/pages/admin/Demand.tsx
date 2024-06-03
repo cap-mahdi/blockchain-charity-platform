@@ -27,7 +27,8 @@ export const DemandInfo: FC = () => {
     association: null,
     status: DemandStatus.Pending,
   });
-  console.log('association', association[12]);
+  // console.log('association', association[12]);
+  // console.log('demand', association.name);
 
   const refuseDemand = async () => {
     if (index === undefined) return;
@@ -85,10 +86,23 @@ export const DemandInfo: FC = () => {
       try {
         const data = await contract.demands(index);
         console.log('Index ', index);
+        console.log('Data ', data);
 
         setDemand({
           association: {
-            ...data[0],
+            name: data[0].name,
+            description: data[0].description,
+            email: data[0].email,
+            phoneNumber: data[0].phoneNumber,
+            country: data[0].country,
+            streetAddress: data[0].streetAddress,
+            city: data[0].city,
+            state: data[0].state,
+            postalCode: data[0].postalCode,
+            creationDate: data[0].creationDate,
+            size: data[0].size,
+            domain: data[0].domain,
+
             imagesHashes: data[0].imagesHashes.map(
               (hash) => `${PINATA_GATEWAY}${hash}`
             ),
@@ -167,7 +181,7 @@ export const DemandInfo: FC = () => {
           <InfoDisplayer
             label="Association Domain"
             // value={association.domain}
-            value="This value is hard coded"
+            value={association.domain}
           />
         </div>
         <div className="rounded-lg border-1 border-dashed border-black p-2  w-full text-gray-900  sm:text-sm sm:leading-6 flex flex-row items-center gap-4 flex-wrap">
