@@ -4,9 +4,15 @@ pragma solidity ^0.8.20;
 
 import "./CharityCampaignDAO.sol";
 import "./GovToken.sol";
+import "../Association/AssociationFactory.sol";
 
 contract CharityCampaignFactoryDAO {
 event CampaignCreated(address campaignAddress, address tokenAddress);
+
+    AssociationFactory public associationFactory;
+    constructor(address _associationFactory) {
+        associationFactory = AssociationFactory(_associationFactory);
+    }
 
     function createCampaign(
         string memory _name,
@@ -18,6 +24,14 @@ event CampaignCreated(address campaignAddress, address tokenAddress);
         string memory _tokenName,
         string memory _tokenSymbol // Add the token name and abbreviation parameters
     ) external  {
+
+        bool isAdmin  ;
+        address associationAddress ; 
+
+
+( isAdmin  , associationAddress) =associationFactory.isAssociationAdmin(msg.sender);
+        // Deploy the token contract
+require(isAdmin , "You are not an association admin");
        GovToken newToken = new GovToken(_tokenSupply, _tokenName, _tokenSymbol);
 
        
@@ -29,8 +43,9 @@ event CampaignCreated(address campaignAddress, address tokenAddress);
             _targetUser,
             _targetAmount,
             _refundThreshold,
-            msg.sender,
-           address( newToken )
+            associationAddress,
+           address( newToken ) , 
+           address (associationFactory)
         );
 
 

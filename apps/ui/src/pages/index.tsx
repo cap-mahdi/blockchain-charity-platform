@@ -18,33 +18,10 @@ import { DemandInfo, Demands } from './admin';
 import { Associations } from './admin/Associations';
 import { AssociationInfo } from './admin/Association';
 import { AdminRoute } from '../routes/AdminRoute';
+import { AssociationsPage } from './association/AssociationsPage';
+import { AssociationDetails } from './association/AssociationDetails';
 
 export const router = createBrowserRouter([
-  {
-    path: '/auth',
-    element: <FullBleedCarousel />,
-  },
-
-  {
-    path: '/card-test',
-    element: (
-      <Card>
-        <StyledChart />
-      </Card>
-    ),
-  },
-  {
-    path: '/nav-test',
-    element: (
-      <div>
-        <Navbar />
-        <div className="flex flex-row max-w-10  overflow-hidden justify-center ">
-          <CompainCard />
-        </div>
-      </div>
-    ),
-  },
-
   {
     path: '',
     element: <AppLayout />,
@@ -54,7 +31,7 @@ export const router = createBrowserRouter([
         element: <HomePage />,
       },
       {
-        path: 'admin',
+        path: '/admin',
         element: <AdminRoute />,
         children: [
           {
@@ -95,6 +72,14 @@ export const router = createBrowserRouter([
       {
         path: '/campaign-feed',
         element: <CampaignFeed />,
+      },
+      {
+        path: '/associations',
+        element: <AssociationsPage />,
+      },
+      {
+        path: '/association/:asssociationId',
+        element: <AssociationDetails />,
       },
     ],
   },

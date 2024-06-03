@@ -79,7 +79,8 @@ contract PlateformContract {
             association.creationDate,
             association.size,
             association.domain,
-            association.imagesHashes
+            association.imagesHashes,
+            demandToRemove.owner
         );
     }
 

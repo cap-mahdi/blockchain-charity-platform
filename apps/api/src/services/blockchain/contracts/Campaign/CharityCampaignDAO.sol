@@ -1,6 +1,7 @@
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.20;
 import "@openzeppelin/contracts/token/ERC20/IERC20.sol";
+import "../Association/AssociationFactory.sol";
 
 
 
@@ -32,12 +33,13 @@ contract CharityCampaignDAO  {
     address public owner;
     uint public duration  = 120;
     uint startTimeStamp  ; 
-
     uint256 public proposalDelay = 120;
         uint256 public trancheDelay = 120;
 
     bool public allowWithdraw ;
-    uint public lastTimeStamp;    
+    uint public lastTimeStamp;   
+
+    bool public ingoingCampaign = true ; 
 
 
     IERC20 public tokenAddress; // The associated token contract
@@ -49,6 +51,8 @@ contract CharityCampaignDAO  {
     address[] public  donors ;
     mapping(uint256 => Proposal) public proposals;
     uint256 public numProposals;
+            AssociationFactory  associationFactory  ; 
+
     Tranche[] public tranches ;
 
 
@@ -71,7 +75,8 @@ contract CharityCampaignDAO  {
         uint256 _targetAmount,
         uint256 _refundThreshold,
         address _owner,
-        address _tokenAddress // Address of the associated token contract
+        address _tokenAddress ,  // Address of the associated token contract
+        address _associationFactory 
     ) {
         title = _title;
         description = _description;
@@ -82,6 +87,7 @@ contract CharityCampaignDAO  {
         tokenAddress = IERC20(_tokenAddress);
         startTimeStamp = block.timestamp;
         allowWithdraw = true ; 
+        associationFactory = AssociationFactory(_associationFactory) ;
         tranches.push(Tranche(false ,20 ));
         tranches.push(Tranche(false ,30 ));
         tranches.push(Tranche(false ,50 ));
@@ -96,7 +102,13 @@ contract CharityCampaignDAO  {
   
     }
 
+
+
     function donate() external payable {
+          if (ingoingCampaign && block.timestamp>(startTimeStamp+duration)){
+            ingoingCampaign = false ; 
+        }
+
         require(msg.value > 0, "Donation amount must be greater than zero");
 
         // Calculate the amount of tokens to issue to the donor
@@ -215,16 +227,22 @@ contract CharityCampaignDAO  {
     function withdrawFunds() external {
         require(block.timestamp>(startTimeStamp+duration) , "Ongoing Campaign : you can't withdraw");
 
+        if (ingoingCampaign && block.timestamp>(startTimeStamp+duration)){
+            ingoingCampaign = false ; 
+        }
+
         if (!tranches[0].state ){
          require(allowWithdraw, "Funds withdrawal not allowed");
-        require(msg.sender == owner, "Only the owner can withdraw funds");
-
+          bool isAdmin  ;
+        address associationAddress ; 
+        ( isAdmin  , associationAddress) =associationFactory.isAssociationAdmin(msg.sender);
+        require (isAdmin , "You are not an association admin");
         finalBalance = address(this).balance ; 
         uint amountToTransfer = (finalBalance* tranches[0].percentage)/100 ;
 
         tranches[0].state = true ; 
         lastTimeStamp = block.timestamp;
-        payable(msg.sender).transfer(amountToTransfer);
+        payable(owner).transfer(amountToTransfer);
         createProposal();
 
         }
@@ -234,8 +252,10 @@ contract CharityCampaignDAO  {
         this.executeProposal();
  
         if(allowWithdraw){
-   require(msg.sender == owner, "Only the owner can withdraw funds");
-        tranches[1].state = true ; 
+   bool isAdmin  ;
+        address associationAddress ; 
+        ( isAdmin  , associationAddress) =associationFactory.isAssociationAdmin(msg.sender);
+        require (isAdmin , "You are not an association admin");        tranches[1].state = true ; 
         lastTimeStamp = block.timestamp;
         createProposal();
         uint amountToTransfer = (finalBalance* tranches[1].percentage)/100 ;
@@ -254,7 +274,10 @@ contract CharityCampaignDAO  {
 
 
         if(allowWithdraw){
-        require(msg.sender == owner, "Only the owner can withdraw funds");
+           bool isAdmin  ;
+        address associationAddress ; 
+        ( isAdmin  , associationAddress) =associationFactory.isAssociationAdmin(msg.sender);
+        require (isAdmin , "You are not an association admin");
         tranches[2].state = true ; 
         uint amountToTransfer = (finalBalance* tranches[2].percentage)/100 ;
 

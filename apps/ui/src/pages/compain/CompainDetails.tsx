@@ -12,6 +12,8 @@ import {
   CharityCampaignDAO,
   CharityCampaignDAO__factory,
 } from '../../typechain-types';
+import { FaLongArrowAltRight } from 'react-icons/fa';
+import { VoteSection } from './VoteSection';
 
 export function CompainDetails(props) {
   const { campaignAddress } = useParams();
@@ -30,7 +32,7 @@ export function CompainDetails(props) {
     },
   });
 
-  const [campaign, setCampaign] = useState<CharityCampaign | null>(null);
+  const [campaign, setCampaign] = useState<CharityCampaignDAO | null>(null);
 
   useEffect(() => {
     if (campaignState.contract) {
@@ -50,7 +52,7 @@ export function CompainDetails(props) {
   }, [campaignState.contract]);
   return (
     <CompainLayout>
-      <div className=" w-full px-8 pb-8 ">
+      <div className=" w-full px-8 pb-8  ">
         <h1 className="text-3xl font-[500] mb-4">Description</h1>
         <p className="text-lg mb-12">{campaign?.description}</p>
 
@@ -61,6 +63,13 @@ export function CompainDetails(props) {
           <Button className="bg-orange">White papaer and documents</Button>
         </div>
         <ExchangeSection />
+        <VoteSection />
+      </div>
+      <div className="w-full flex flex-row justify-end mr-4 mb-4">
+        <Button className="bg-orange w-fit flex flex-row items-center gap-2">
+          <p>Follow the news | Acess Feed</p>
+          <FaLongArrowAltRight className="w-6 h-6" />
+        </Button>
       </div>
     </CompainLayout>
   );

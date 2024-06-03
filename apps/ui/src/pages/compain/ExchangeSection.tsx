@@ -8,11 +8,14 @@ import tokenIcon from '../../assets/tokenIcon.png';
 import { useParams } from 'react-router-dom';
 import useCampaignContext from '../../context/useCampaignContext';
 import { ethers } from 'ethers';
+import { BsCurrencyDollar } from 'react-icons/bs';
+import { ProgressBar } from '../../components/ProgressBar';
 
 const convertTokens = (amount: number, conversionRate: number) => {
   return amount * conversionRate;
 };
 const conversionRate = 1.5;
+const ETHERSCAN_URL = import.meta.env.VITE_ETHERSCAN_URL;
 
 export function ExchangeSection(props) {
   const [campainState, setCampaignState] = useCampaignContext();
@@ -38,12 +41,62 @@ export function ExchangeSection(props) {
   };
 
   const params = useParams();
-  // console.log(params);
+  console.log(ETHERSCAN_URL + '/address/' + params?.campaignAddress);
   return (
     <div className="flex flex-row w-full p-5 h-48 ">
       {/* Left Section  */}
 
-      <div className=" w-[65%] bg-yellow-300">Hi</div>
+      <div className="flex flex-col gap-2 w-[65%]">
+        <Box>
+          <div className="flex flex-row items-center justify-center w-full h-full">
+            <div className="ml-1 w-[50%] border-r-[1.5px] border-[#B8B5B5] h-full">
+              <h1 className="text-[8px] font-medium text-light-blue ">
+                TOTAL RAISED
+              </h1>
+              <div className="flex items-center gap-1">
+                <BsCurrencyDollar className="w-4 h-4  text-dark-gray font-bold" />
+
+                <h1 className="text-[14px] font-bold leading-[0.7rem] text-dark-gray">
+                  254.99
+                </h1>
+              </div>
+            </div>
+
+            <div className="ml-1 w-[50%]">
+              <h1 className="text-[8px] font-medium text-light-blue ">
+                TOTAL RAISED
+              </h1>
+              <div className="flex items-center gap-1">
+                <img src={tetherIcon} alt="icon" className="w-4 h-4 " />
+
+                <h1 className="text-[14px] font-bold leading-[0.7rem] text-dark-gray">
+                  254.99
+                </h1>
+              </div>
+            </div>
+          </div>
+        </Box>
+
+        <ProgressBar
+          width={'100%'}
+          percentage={50}
+          label={{ text: '3 days 2 hours 45 minutes left', size: 10 }}
+        />
+        <Box>
+          <div className="flex flex-rox gap-2 items-center">
+            <img src={tetherIcon} alt="icon" className="w-5 h-5 " />
+            <a
+              href={ETHERSCAN_URL + '/address/' + params?.campaignAddress}
+              target="blank"
+              className="text-[1vw] font-medium text-[#414D55] "
+            >
+              <h1 className="text-[1vw] font-medium text-[#414D55] ">
+                {params?.campaignAddress}
+              </h1>
+            </a>
+          </div>
+        </Box>
+      </div>
 
       {/* Divider  */}
 
@@ -51,7 +104,7 @@ export function ExchangeSection(props) {
 
       {/* Right Section  */}
 
-      <div className="w-[35%]  px-2 flex flex-col justify-between  ">
+      <div className="w-[35%]  pl-2 flex flex-col justify-between  ">
         <div className=" flex flex-col justify-between gap-2 relative ">
           <TokenBox
             imageSrc={tetherIcon}
