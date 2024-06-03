@@ -4,9 +4,15 @@ pragma solidity ^0.8.20;
 
 import "./CharityCampaignDAO.sol";
 import "./GovToken.sol";
+import "../Association/AssociationFactory.sol";
 
 contract CharityCampaignFactoryDAO {
 event CampaignCreated(address campaignAddress, address tokenAddress);
+
+    AssociationFactory public associationFactory;
+    constructor(address _associationFactory) {
+        associationFactory = AssociationFactory(_associationFactory);
+    }
 
     function createCampaign(
         string memory _name,
