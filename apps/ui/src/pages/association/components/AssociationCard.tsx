@@ -3,6 +3,7 @@ import { AssociationType } from '../../../types/Association';
 import { FiMaximize2 } from 'react-icons/fi';
 import TextExpander from '../../../components/TextExpander';
 import { BsCurrencyDollar } from 'react-icons/bs';
+import { PlateformContract } from '../../../typechain-types';
 
 // interface Association {
 //     name?: string,
@@ -23,7 +24,7 @@ import { BsCurrencyDollar } from 'react-icons/bs';
 export function AssociationCard({
   association,
 }: {
-  association: AssociationType;
+  association: PlateformContract.AssociationStruct;
 }) {
   const styles = {
     wrapper: ` bg-beige flex flex-col h-[22rem] p-5 rounded-2xl box-border min-h-[100px]`,
@@ -31,14 +32,14 @@ export function AssociationCard({
     name: `text-dark-gray font-bold   `,
     textExpander: `text-dark-gray text-xs font-medium mt-2 px-2`,
   };
+  console.log('association fromm fdfsdfs<g<', association);
+
   return (
     <div style={{ width: '23.5%' }} className={styles.wrapper}>
       <div className="flex flex-row justify-between">
         <div>
           {/* Category */}
-          <h1 className={styles.category}>
-            {association?.domain.toUpperCase()}
-          </h1>
+          <h1 className={styles.category}>{association?.domain}</h1>
           {/* Compain Name */}
           <h1 className={styles.name}>{association?.name}</h1>
         </div>

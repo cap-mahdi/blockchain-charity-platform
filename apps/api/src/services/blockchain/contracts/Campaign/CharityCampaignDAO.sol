@@ -105,9 +105,8 @@ contract CharityCampaignDAO  {
 
 
     function donate() external payable {
-          if (ingoingCampaign && block.timestamp>(startTimeStamp+duration)){
-            ingoingCampaign = false ; 
-        }
+          require (block.timestamp<=(startTimeStamp+duration) , "Campaign is over"  ) ; 
+        
 
         require(msg.value > 0, "Donation amount must be greater than zero");
 
@@ -227,22 +226,19 @@ contract CharityCampaignDAO  {
     function withdrawFunds() external {
         require(block.timestamp>(startTimeStamp+duration) , "Ongoing Campaign : you can't withdraw");
 
-        if (ingoingCampaign && block.timestamp>(startTimeStamp+duration)){
-            ingoingCampaign = false ; 
-        }
-
+       
         if (!tranches[0].state ){
          require(allowWithdraw, "Funds withdrawal not allowed");
-          bool isAdmin  ;
-        address associationAddress ; 
-        ( isAdmin  , associationAddress) =associationFactory.isAssociationAdmin(msg.sender);
-        require (isAdmin , "You are not an association admin");
+        //   bool isAdmin  ;
+        // address associationAddress ; 
+        // ( isAdmin  , associationAddress) =associationFactory.isAssociationAdmin(msg.sender);
+        // require (isAdmin , "You are not an association admin");
         finalBalance = address(this).balance ; 
         uint amountToTransfer = (finalBalance* tranches[0].percentage)/100 ;
 
         tranches[0].state = true ; 
         lastTimeStamp = block.timestamp;
-        payable(owner).transfer(amountToTransfer);
+        payable(msg.sender).transfer(amountToTransfer);
         createProposal();
 
         }
@@ -252,10 +248,11 @@ contract CharityCampaignDAO  {
         this.executeProposal();
  
         if(allowWithdraw){
-   bool isAdmin  ;
-        address associationAddress ; 
-        ( isAdmin  , associationAddress) =associationFactory.isAssociationAdmin(msg.sender);
-        require (isAdmin , "You are not an association admin");        tranches[1].state = true ; 
+//    bool isAdmin  ;
+//         address associationAddress ; 
+//         ( isAdmin  , associationAddress) =associationFactory.isAssociationAdmin(msg.sender);
+//         require (isAdmin , "You are not an association admin");       
+         tranches[1].state = true ; 
         lastTimeStamp = block.timestamp;
         createProposal();
         uint amountToTransfer = (finalBalance* tranches[1].percentage)/100 ;
@@ -274,10 +271,10 @@ contract CharityCampaignDAO  {
 
 
         if(allowWithdraw){
-           bool isAdmin  ;
-        address associationAddress ; 
-        ( isAdmin  , associationAddress) =associationFactory.isAssociationAdmin(msg.sender);
-        require (isAdmin , "You are not an association admin");
+        //    bool isAdmin  ;
+        // address associationAddress ; 
+        // ( isAdmin  , associationAddress) =associationFactory.isAssociationAdmin(msg.sender);
+        // require (isAdmin , "You are not an association admin");
         tranches[2].state = true ; 
         uint amountToTransfer = (finalBalance* tranches[2].percentage)/100 ;
 

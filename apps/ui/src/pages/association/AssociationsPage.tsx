@@ -1,94 +1,88 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { Card } from '../../components/Card';
 import { FormHeader } from '../../components/Form/FormHeader';
 import { AssociationCard } from './components/AssociationCard';
 import { domain } from '@snapshot-labs/snapshot.js/dist/sign';
-
-const associations = [
-  {
-    name: 'Tech Innovators Association',
-    description:
-      'A global network of professionals dedicated to advancing technology and innovation.',
-    email: 'contact@techinnovators.org',
-    country: 'United States',
-    streetAddress: '1234 Innovation Drive',
-    city: 'Silicon Valley',
-    state: 'California',
-    postalCode: '94027',
-    creationDate: '2012-05-15',
-    size: '5000',
-    domain: 'Art & Culture',
-
-    status: 'Active',
-  },
-  {
-    name: 'Health Professionals Network',
-    description:
-      'An international organization focused on healthcare advancements and professional development.',
-    email: 'info@healthpro.org',
-    country: 'Canada',
-    streetAddress: '5678 Wellness Ave',
-    city: 'Toronto',
-    state: 'Ontario',
-    postalCode: 'M5G 1L5',
-    creationDate: '2008-09-23',
-    size: '3000',
-    domain: 'Art & Culture',
-
-    status: 'Active',
-  },
-  {
-    name: 'Global Environmental Advocates',
-    description:
-      'A coalition of environmentalists working towards sustainable development and conservation.',
-    email: 'support@greenadvocates.org',
-    country: 'Germany',
-    streetAddress: '91011 Eco Street',
-    city: 'Berlin',
-    state: 'Berlin',
-    postalCode: '10115',
-    creationDate: '2015-03-11',
-    size: '1200',
-    domain: 'Art & Culture',
-
-    status: 'Active',
-  },
-  {
-    name: 'Education for All Foundation',
-    description:
-      'Dedicated to improving access to education worldwide through community projects and scholarships.',
-    email: 'contact@edforall.org',
-    country: 'India',
-    streetAddress: '1213 Knowledge Park',
-    city: 'New Delhi',
-    state: 'Delhi',
-    postalCode: '110001',
-    creationDate: '2010-07-30',
-    size: '8000',
-    domain: 'Art & Culture',
-
-    status: 'Active',
-  },
-  {
-    name: 'Art & Culture Society',
-    description:
-      'Promoting art and culture through exhibitions, workshops, and cultural exchange programs.',
-    email: 'info@artculture.org',
-    country: 'France',
-    streetAddress: '1415 Museum Road',
-    city: 'Paris',
-    state: 'Île-de-France',
-    postalCode: '75001',
-    creationDate: '2005-11-18',
-    size: '4500',
-    domain: 'Art & Culture',
-    status: 'Active',
-  },
-];
+import {
+  AssociationContract,
+  AssociationFactory,
+  AssociationFactory__factory,
+  PlateformContract,
+} from '../../typechain-types';
+import { associationContractAddress } from '../../constants';
+import { AssociationContract__factory } from '../../typechain-types/factories/src/services/blockchain/contracts/Association.sol';
+import { numberToAssociationEnumMapper } from '../../types/Association';
+import { Spinner } from '../../components/Spinner';
+import { ethers } from 'ethers';
 
 export function AssociationsPage(props) {
+  const [associations, setAssociations] = React.useState<
+    PlateformContract.DemandStruct['association'][]
+  >([]);
+  const [isLoading, setIsLoading] = useState(true);
+
+  const getAssociations = async () => {
+    console.log('Registering');
+    if (typeof window.ethereum !== 'undefined') {
+      const provider = new ethers.BrowserProvider(window.ethereum);
+      await provider.send('eth_requestAccounts', []);
+      const signer = await provider.getSigner();
+      const contract: AssociationFactory = new ethers.Contract(
+        associationContractAddress,
+        AssociationFactory__factory.abi,
+        signer
+      );
+
+      console.log('contract', contract);
+      try {
+        const data = await contract.getAssociationsWithStatus();
+        const associations = await Promise.all(
+          data.map(async (asso: any) => {
+            const associationContract: AssociationContract =
+              new ethers.Contract(
+                asso.associationAddress,
+                AssociationContract__factory.abi,
+                signer
+              );
+
+            const assoInfo = await associationContract.getAssociationDetails();
+            console.log('assoInfo', assoInfo);
+
+            return {
+              name: assoInfo[0],
+              description: assoInfo[1],
+              email: assoInfo[2],
+              phone: assoInfo[3],
+              country: assoInfo[4],
+              streetAddress: assoInfo[5],
+              city: assoInfo[6],
+              state: assoInfo[7],
+              postalCode: assoInfo[8],
+              creationDate: assoInfo[9],
+              size: assoInfo[10],
+              // domain: assoInfo[11],
+            };
+          })
+        );
+        console.log('associations', associations);
+
+        setAssociations(associations);
+        setIsLoading(false);
+      } catch (error) {
+        console.error(error);
+      }
+    } else {
+      console.log('Please Install MetaMask');
+    }
+  };
+  useEffect(() => {
+    getAssociations();
+  }, []);
+  if (isLoading) {
+    return <Spinner />;
+  }
   return (
-    <Card>
+    <Card className="py-8 px-8 h-full overflow-y-auto">
       <FormHeader
         title="Associations"
         subTitle="Here you can go throught all the available associations"

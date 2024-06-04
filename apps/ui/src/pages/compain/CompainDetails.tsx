@@ -51,7 +51,7 @@ export function CompainDetails(props) {
     }
   }, [campaignState.contract]);
   return (
-    <CompainLayout>
+    <CompainLayout title={campaign?.title}>
       <div className=" w-full px-8 pb-8  ">
         <h1 className="text-3xl font-[500] mb-4">Description</h1>
         <p className="text-lg mb-12">{campaign?.description}</p>
@@ -63,7 +63,18 @@ export function CompainDetails(props) {
           <Button className="bg-orange">White papaer and documents</Button>
         </div>
         <ExchangeSection />
-        <VoteSection />
+        <VoteSection campaign={campaignState.contract} />
+        <Button
+          onClick={async () => {
+            const tx = await campaignState.contract?.withdrawFunds({
+              gas: 1000000,
+            });
+            const txrec = await tx.wait();
+            console.log(txrec);
+          }}
+        >
+          Withdraw
+        </Button>
       </div>
       <div className="w-full flex flex-row justify-end mr-4 mb-4">
         <Button className="bg-orange w-fit flex flex-row items-center gap-2">

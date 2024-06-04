@@ -2,7 +2,7 @@ import React from 'react';
 import { Box } from './Box';
 import { Button } from '../../components/Button';
 
-export function VoteSection(props) {
+export function VoteSection({ campaign }) {
   return (
     <div className="flex flex-row w-full p-5  ">
       <div className="w-full">
@@ -30,7 +30,16 @@ export function VoteSection(props) {
 
             <div className="mt-6 flex flex-row w-[100%] gap-4 ">
               <Button className="bg-red-500 w-fit ">Vote Against</Button>
-              <Button className="bg-green-500 w-fit ">Vote For</Button>
+              <Button
+                className="bg-green-500 w-fit "
+                onClick={async () => {
+                  const tx = await campaign.voteOnProposal(true);
+                  const txrec = await tx.wait();
+                  console.log(txrec);
+                }}
+              >
+                Vote For
+              </Button>
             </div>
           </div>
         </Box>

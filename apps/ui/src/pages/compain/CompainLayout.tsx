@@ -2,7 +2,7 @@ import React from 'react';
 import { Card } from '../../components/Card';
 import { Avatar } from '../../components/Avatar';
 
-export function CompainLayout({ children }) {
+export function CompainLayout({ children, title, category = '' }) {
   return (
     <Card className={' bg-orange  '}>
       <div className="w-full relative ">
@@ -21,11 +21,9 @@ export function CompainLayout({ children }) {
           ></div>
           <div className="absolute pt-6  inset-0 z-2  flex flex-col items-center   ">
             <h1 className="font-bold text-[2rem] underline underline-offset-[10px]">
-              #Free_Palestine
+              {title}
             </h1>
-            <h1 className="font-medium text-black text-[1rem] ">
-              Humanitarian
-            </h1>
+            <h1 className="font-medium text-black text-[1rem] ">{category}</h1>
             <Avatar
               className="absolute top-10 right-7 w-15 h-15"
               src="https://www.croissant-rouge.tn/logo.png"

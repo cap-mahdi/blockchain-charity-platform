@@ -135,7 +135,7 @@ export function ExchangeSection(props) {
             if (contract) {
               // const amountToSend = ethers.parseEther(sourceAmount + '');
               const tx = await contract.donate({
-                value: sourceAmount,
+                value: BigInt(sourceAmount + ''),
                 gasLimit: 1000000,
               });
               console.log('tx', tx);
