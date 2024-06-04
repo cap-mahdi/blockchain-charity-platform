@@ -17,10 +17,16 @@ import {
   PlateformContract__factory,
 } from '../../typechain-types';
 import { Spinner } from '../../components/Spinner';
+import { toast } from 'react-toastify';
+import useMetaMask from '../../context/metamaskContext';
+import { IoIosLogIn } from 'react-icons/io';
+import { FaHourglassEnd } from 'react-icons/fa';
+import { MdDomainVerification } from 'react-icons/md';
 
 export const DemandInfo: FC = () => {
   const [selectedImage, setSelectedImage] = useState<null | number>(null);
   const { index } = useParams();
+  const { defineSteps, nextStep, failedStep, terminate } = useMetaMask();
 
   const [isLoading, setIsLoading] = useState(true);
   const [{ association, status }, setDemand] = useState<DemandType>({
@@ -33,44 +39,93 @@ export const DemandInfo: FC = () => {
   const refuseDemand = async () => {
     if (index === undefined) return;
     if (typeof window.ethereum !== 'undefined') {
-      const provider = new ethers.BrowserProvider(window.ethereum);
-      await provider.send('eth_requestAccounts', []);
-      const signer = await provider.getSigner();
-      const contract: PlateformContract = new ethers.Contract(
-        plateformContractAddress,
-        PlateformContract__factory.abi,
-        signer
-      );
       try {
-        await contract.refuseDemand(index);
+        defineSteps([
+          {
+            title: 'Step 1',
+            description: 'Register with MetaMask',
+            icon: <IoIosLogIn />,
+          },
+          {
+            title: 'Step 2',
+            description: 'Sending Transaction (refuse demand)',
+            icon: <FaHourglassEnd />,
+          },
+          {
+            title: 'Step 3',
+            description: 'Verification Transaction',
+            icon: <MdDomainVerification />,
+          },
+        ]);
+        const provider = new ethers.BrowserProvider(window.ethereum);
+        await provider.send('eth_requestAccounts', []);
+        const signer = await provider.getSigner();
+        const contract: PlateformContract = new ethers.Contract(
+          plateformContractAddress,
+          PlateformContract__factory.abi,
+          signer
+        );
+        nextStep();
+        const tx = await contract.refuseDemand(index);
+        nextStep();
+        await tx.wait();
+        nextStep();
+        terminate();
+        toast.success('Demand Refused');
+        getDemand(index);
+        toast.success('Demand Refused');
       } catch (error) {
-        console.error(error);
+        failedStep();
+        toast.error('An error occured, please try again');
       }
     } else {
-      console.log('Please Install MetaMask');
+      toast.error('Please Install MetaMask');
     }
   };
 
   const approveDemand = async () => {
     if (index === undefined) return;
     if (typeof window.ethereum !== 'undefined') {
-      const provider = new ethers.BrowserProvider(window.ethereum);
-      await provider.send('eth_requestAccounts', []);
-      const signer = await provider.getSigner();
-      const contract: PlateformContract = new ethers.Contract(
-        plateformContractAddress,
-        PlateformContract__factory.abi,
-        signer
-      );
-      const firstAdmin = await contract.admins(0);
-      console.log('First Admin', firstAdmin);
       try {
-        await contract.acceptDemand(index);
+        defineSteps([
+          {
+            title: 'Step 1',
+            description: 'Register with MetaMask',
+            icon: <IoIosLogIn />,
+          },
+          {
+            title: 'Step 2',
+            description: 'Sending Transaction (approve demand)',
+            icon: <FaHourglassEnd />,
+          },
+          {
+            title: 'Step 3',
+            description: 'Verification Transaction',
+            icon: <MdDomainVerification />,
+          },
+        ]);
+        const provider = new ethers.BrowserProvider(window.ethereum);
+        await provider.send('eth_requestAccounts', []);
+        const signer = await provider.getSigner();
+        nextStep();
+        const contract: PlateformContract = new ethers.Contract(
+          plateformContractAddress,
+          PlateformContract__factory.abi,
+          signer
+        );
+        const tx = await contract.acceptDemand(index);
+        nextStep();
+        await tx.wait();
+        nextStep();
+        terminate();
+        getDemand(index);
+        toast.success('Demand Approved');
       } catch (error) {
-        console.error(error);
+        failedStep();
+        toast.error('An error occured, please try again');
       }
     } else {
-      console.log('Please Install MetaMask');
+      toast.error('Please Install MetaMask');
     }
   };
   const getDemand = async (index: number) => {
@@ -112,10 +167,10 @@ export const DemandInfo: FC = () => {
         });
         setIsLoading(false);
       } catch (error) {
-        console.error(error);
+        toast.error('An error occured, please try again');
       }
     } else {
-      console.log('Please Install MetaMask');
+      toast.error('Please Install MetaMask');
       //'Please install MetaMask'
       //Show TOAST
     }

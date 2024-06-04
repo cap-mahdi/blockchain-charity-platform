@@ -25,6 +25,11 @@ import {
 } from '../../types/Association';
 import { Status } from '../../components/Status';
 import { Spinner } from '../../components/Spinner';
+import useMetaMask from '../../context/metamaskContext';
+import { toast } from 'react-toastify';
+import { IoIosLogIn } from 'react-icons/io';
+import { FaHourglassEnd } from 'react-icons/fa';
+import { MdDomainVerification } from 'react-icons/md';
 
 export const AssociationInfo: FC = () => {
   const [selectedImage, setSelectedImage] = useState<null | number>(null);
@@ -33,26 +38,54 @@ export const AssociationInfo: FC = () => {
   const [isLoading, setIsLoading] = useState(true);
   const [association, setAssociation] = useState<AssociationType>(null);
   const [associationAddress, setAssociationAddress] = useState<string>('');
-
+  const { defineSteps, nextStep, failedStep, terminate } = useMetaMask();
   const switchStatus = async () => {
     if (index === undefined) return;
     if (!association) return;
     if (typeof window.ethereum !== 'undefined') {
-      const provider = new ethers.BrowserProvider(window.ethereum);
-      await provider.send('eth_requestAccounts', []);
-      const signer = await provider.getSigner();
-      const plateformContract: PlateformContract = new ethers.Contract(
-        plateformContractAddress,
-        PlateformContract__factory.abi,
-        signer
-      );
-      await plateformContract.changeAssociationStatus(
-        associationAddress,
-        association.status === AssociationStatus.Active ? 1 : 0
-      );
-      getAssociation(index);
+      try {
+        defineSteps([
+          {
+            title: 'Step 1',
+            description: 'Register with MetaMask',
+            icon: <IoIosLogIn />,
+          },
+          {
+            title: 'Step 2',
+            description: 'Sending Transaction (refuse demand)',
+            icon: <FaHourglassEnd />,
+          },
+          {
+            title: 'Step 3',
+            description: 'Verification Transaction',
+            icon: <MdDomainVerification />,
+          },
+        ]);
+        const provider = new ethers.BrowserProvider(window.ethereum);
+        await provider.send('eth_requestAccounts', []);
+        const signer = await provider.getSigner();
+        nextStep();
+        const plateformContract: PlateformContract = new ethers.Contract(
+          plateformContractAddress,
+          PlateformContract__factory.abi,
+          signer
+        );
+        const tx = await plateformContract.changeAssociationStatus(
+          associationAddress,
+          association.status === AssociationStatus.Active ? 1 : 0
+        );
+        nextStep();
+        await tx.wait();
+        nextStep();
+        terminate();
+        getAssociation(index);
+      } catch (err) {
+        console.log(err);
+        failedStep();
+        toast.error('An error occured,Please try again');
+      }
     } else {
-      console.log('Please Install MetaMask');
+      toast.error('Please Install MetaMask');
     }
   };
 
