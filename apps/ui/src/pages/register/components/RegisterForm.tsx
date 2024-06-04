@@ -12,6 +12,10 @@ import {
 } from '../../../typechain-types';
 import useMetaMask from '../../../context/metamaskContext';
 import { toast } from 'react-toastify';
+import { IoIosLogIn } from 'react-icons/io';
+import { FaCloudUploadAlt } from 'react-icons/fa';
+import { FaHourglassEnd } from 'react-icons/fa';
+import { MdDomainVerification } from 'react-icons/md';
 
 export const RegisterForm: FC = () => {
   const [name, setName] = useState('Name');
@@ -37,19 +41,23 @@ export const RegisterForm: FC = () => {
       defineSteps([
         {
           title: 'Step 1',
-          description: 'Register',
+          description: 'Register with MetaMask',
+          icon: <IoIosLogIn />,
         },
         {
           title: 'Step 2',
-          description: 'Upload Documents',
+          description: 'Upload Documents to IPFS',
+          icon: <FaCloudUploadAlt />,
         },
         {
           title: 'Step 3',
           description: 'Sending Transaction',
+          icon: <FaHourglassEnd />,
         },
         {
           title: 'Step 4',
-          description: 'Verification',
+          description: 'Verification Transaction',
+          icon: <MdDomainVerification />,
         },
       ]);
       try {
