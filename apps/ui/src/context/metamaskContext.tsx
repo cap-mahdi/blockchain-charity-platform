@@ -15,7 +15,7 @@ type MetaMaskState = {
   connectedWallet: string | null;
 };
 type MetaMaskContextType = MetaMaskState & {
-  connectWallet: () => void;
+  connectWallet: () => Promise<void>;
   signBeforeSendTransaction: (admin?: boolean) => Promise<any>;
   defineSteps: (steps: any) => void;
   nextStep: () => void;

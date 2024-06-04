@@ -6,14 +6,26 @@ import { AuthModule } from './auth/auth.module';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { UserSignature } from '../entities/UserSignature.entity';
 import { AppLoggerMiddleware } from '../middlewares/appLogger.middleware';
+import { CommnetModule } from './comments/comment.module';
+import { MulterModule } from '@nestjs/platform-express';
+import { ServeStaticModule } from '@nestjs/serve-static';
+import { join } from 'path';
+import { Comment } from '../entities/Comment.entity';
 
 @Module({
   imports: [
     AuthModule,
+    CommnetModule,
+    MulterModule.register({
+      dest: './files',
+    }),
+    ServeStaticModule.forRoot({
+      rootPath: join(__dirname, '..', 'files'),
+    }),
     TypeOrmModule.forRoot({
       type: 'postgres',
-      url: 'postgres://postgres:root@localhost:5432/charity-blockchain',
-      entities: [UserSignature],
+      url: 'postgres://postgres:postgres@localhost:5432/charity-blockchain',
+      entities: [UserSignature, Comment],
       autoLoadEntities: true,
       synchronize: true,
     }),

@@ -10,7 +10,6 @@ import {
   PlateformContract,
 } from '../../typechain-types';
 import { associationContractAddress } from '../../constants';
-import { AssociationContract__factory } from '../../typechain-types/factories/src/services/blockchain/contracts/Association.sol';
 import { numberToAssociationEnumMapper } from '../../types/Association';
 import { Spinner } from '../../components/Spinner';
 import { ethers } from 'ethers';

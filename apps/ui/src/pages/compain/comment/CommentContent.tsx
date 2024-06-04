@@ -1,7 +1,18 @@
 import { IoMdTime } from 'react-icons/io';
 import { FaRegHeart } from 'react-icons/fa6';
+import { FC } from 'react';
+import { dateToAgo } from '../../../helpers';
 
-export const CommentContent = () => {
+interface CommentContentProps {
+  content: string;
+  wallet: string;
+  createdAt: Date;
+}
+export const CommentContent: FC<CommentContentProps> = ({
+  content,
+  wallet,
+  createdAt,
+}) => {
   return (
     <div className="flex flex-col gap-4 w-full">
       <div className="flex flex-row gap-4 items-center">
@@ -12,17 +23,17 @@ export const CommentContent = () => {
         />{' '}
         <div className="flex flex-col gap-2">
           <p className="font-medium text-sm">
-            Med Gdoura <span className="font-normal">updates his status</span>
+            {wallet} <span className="font-normal"></span>
           </p>
           <p className="flex flex-row gap-2 items-center text-dark-gray text-xs font-medium">
             <IoMdTime size="25" />
-            <span>35 minutes ago</span>
+            <span>{dateToAgo(createdAt)}</span>
           </p>
         </div>
       </div>
       <div className="flex flex-col gap-3">
-        <p>Hey guys! What's your favorite framework?</p>
-        <img src="images/post-image.png" alt="post" />
+        <p>{content}</p>
+        {/* <img src="images/post-image.png" alt="post" /> */}
       </div>
       <p className="flex flex-row gap-2 items-center text-black font-secondary text-sm">
         <FaRegHeart color="red" size="20" />
