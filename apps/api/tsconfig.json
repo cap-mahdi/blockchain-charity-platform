@@ -11,6 +11,8 @@
     "experimentalDecorators": true,
     "strictPropertyInitialization": false,
     "rootDirs": ["./src", "./scripts", "./test"],
+    "typeRoots": ["./node_modules/@types", "./types"]
+
   },
   "exclude": ["dist", "node_modules"],
   "include": ["./test", "./src", "./scripts", "typechain-types"],

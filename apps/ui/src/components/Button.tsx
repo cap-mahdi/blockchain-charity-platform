@@ -1,6 +1,6 @@
 type ButtonProps = {
   className?: string;
-  onClick?: () => void | Promise<void>;
+  onClick?: () => any;
   children: React.ReactNode;
   disablePointer?: boolean;
 } & React.HTMLAttributes<HTMLDivElement>;
