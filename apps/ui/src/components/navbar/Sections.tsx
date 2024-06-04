@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { Link } from 'react-router-dom';
 interface PropsType {
   sections: string[];
   uppercase: boolean;
@@ -6,7 +7,14 @@ interface PropsType {
 }
 
 export function Sections({
-  sections = ['home', 'categories', 'about us', 'contact us'],
+  sections = ['home', 'register', 'Create campaign', 'Associations'],
+  routes = {
+    home: '/',
+    register: '/register',
+    'Create campaign': '/create-campaign',
+    'contact us': '/',
+    Associations: '/associations',
+  },
   uppercase = true,
   classname = '',
 }) {
@@ -27,23 +35,25 @@ export function Sections({
       }}
     >
       {sections.map((section, i) => (
-        <h1
-          className={
-            styles.sectionStyle +
-            `${
-              selected === i && hover === selected ? styles.selectedStyle : ''
-            } ` +
-            styles.hoverStyle
-          }
-          onClick={() => {
-            setSelected(i);
-          }}
-          onPointerEnter={() => {
-            setHover(i);
-          }}
-        >
-          {uppercase ? section.toUpperCase() : section}
-        </h1>
+        <Link to={routes[section]}>
+          <h1
+            className={
+              styles.sectionStyle +
+              `${
+                selected === i && hover === selected ? styles.selectedStyle : ''
+              } ` +
+              styles.hoverStyle
+            }
+            onClick={() => {
+              setSelected(i);
+            }}
+            onPointerEnter={() => {
+              setHover(i);
+            }}
+          >
+            {uppercase ? section.toUpperCase() : section}
+          </h1>
+        </Link>
       ))}
     </div>
   );

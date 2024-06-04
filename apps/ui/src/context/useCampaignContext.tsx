@@ -5,10 +5,10 @@ import {
   useContext,
   useState,
 } from 'react';
-import { CharityCampaign } from '../typechain-types';
+import { CharityCampaign, CharityCampaignDAO } from '../typechain-types';
 
 interface CampaignState {
-  contract: CharityCampaign | null;
+  contract: CharityCampaignDAO | null;
 }
 const initialState: CampaignState = {
   contract: null,

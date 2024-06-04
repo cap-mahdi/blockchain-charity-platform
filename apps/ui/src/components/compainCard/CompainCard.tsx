@@ -4,6 +4,7 @@ import { FiMaximize2 } from 'react-icons/fi';
 import { BsCurrencyDollar } from 'react-icons/bs';
 
 import TextExpander from '../TextExpander';
+import { Link } from 'react-router-dom';
 
 interface PropsType {
   width: string | number;
@@ -11,6 +12,7 @@ interface PropsType {
   category: string;
   compainName: string;
   description: string;
+  campaign: any;
 }
 
 export function CompainCard({
@@ -19,6 +21,7 @@ export function CompainCard({
   category = 'Humanitarian',
   compainName = '#Free_Palestine',
   description = 'Rebuilding Alliance is dedicated to advancing equal rights for Palestinians through education, advocacy, and support that assures Palestinian families the right to a home, schooling, economic security, safety, and a promising future.',
+  campaign,
 }: PropsType) {
   const styles = {
     wrapper: ` bg-beige p-5 rounded-2xl box-border `,
@@ -33,9 +36,11 @@ export function CompainCard({
           {/* Category */}
           <h1 className={styles.category}>{category.toUpperCase()}</h1>
           {/* Compain Name */}
-          <h1 className={styles.compainName}>{compainName}</h1>
+          <h1 className={styles.compainName}>{campaign?.title}</h1>
         </div>
-        <FiMaximize2 className="w-4 h-4 text-dark-gray" />
+        <Link to={`/campaign/${campaign?.campaignAddress}`}>
+          <FiMaximize2 className="w-4 h-4 text-dark-gray" />
+        </Link>
       </div>
 
       {/* Photo Section */}
@@ -61,18 +66,23 @@ export function CompainCard({
       {/* ProgressBar */}
       <ProgressBar
         label={{ text: '3 days 2 hours 45 minutes left', size: 10 }}
-        percentage={Math.random() * 100}
+        percentage={campaign?.percentage < 100 ? campaign?.percentage : 100}
       />
 
       {/* Description */}
-      <TextExpander
-        className={styles.textExpander}
-        withChar={false}
-        collapsedNumWords={20}
-        buttonColor={'light-blue'}
-      >
-        {description}
-      </TextExpander>
+
+      {campaign?.description ? (
+        <TextExpander
+          className={styles.textExpander}
+          withChar={false}
+          collapsedNumWords={20}
+          buttonColor={'light-blue'}
+        >
+          {campaign?.description}
+        </TextExpander>
+      ) : (
+        ''
+      )}
 
       {/* Donation Section */}
 
@@ -86,15 +96,17 @@ export function CompainCard({
               TOTAL RAISED
             </h1>
             <h1 className="text-[14px] font-bold leading-[0.7rem] text-dark-gray">
-              254.99
+              {campaign?.totalDonations}
             </h1>
           </div>
         </div>
-        <button
-          className={`w-50% bg-blue text-white font-semibold text-[13px] py-2 px-4 rounded-lg`}
-        >
-          Donate Now
-        </button>
+        <Link to={`/campaign/${campaign?.campaignAddress}`}>
+          <button
+            className={`w-50% bg-blue text-white font-semibold text-[13px] py-2 px-4 rounded-lg`}
+          >
+            Donate Now
+          </button>
+        </Link>
       </div>
     </div>
   );
