@@ -1,4 +1,4 @@
-import { createBrowserRouter } from 'react-router-dom';
+import { Outlet, createBrowserRouter } from 'react-router-dom';
 import { Register } from './register';
 
 import { CompainCard } from '../components/compainCard/CompainCard';
@@ -64,15 +64,21 @@ export const router = createBrowserRouter([
         path: '/campaign/:campaignAddress',
         element: (
           <CampaignProvider>
-            {' '}
-            <CompainDetails />{' '}
+            <Outlet />{' '}
           </CampaignProvider>
         ),
+        children: [
+          {
+            path: '',
+            element: <CompainDetails />,
+          },
+          {
+            path: 'feed',
+            element: <CampaignFeed />,
+          },
+        ],
       },
-      {
-        path: '/campaign-feed',
-        element: <CampaignFeed />,
-      },
+
       {
         path: '/associations',
         element: <AssociationsPage />,

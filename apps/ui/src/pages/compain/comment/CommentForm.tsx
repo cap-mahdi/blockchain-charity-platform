@@ -1,11 +1,39 @@
-import { FC } from 'react';
+import { FC, useState } from 'react';
 import { TextArea } from '../../../components';
 import { Button } from '../../../components/Button';
+import useMetaMask from '../../../context/metamaskContext';
+import axios from 'axios';
+import { useParams } from 'react-router-dom';
 
 interface CommentFormProps {
   mode: 'send' | 'publish';
 }
 export const CommentForm: FC<CommentFormProps> = ({ mode }) => {
+  const { campaignAddress } = useParams();
+  const [content, setContent] = useState('');
+  const { connectWallet, connectedWallet } = useMetaMask();
+  const publish = async () => {
+    if (!connectedWallet) {
+      await connectWallet();
+    }
+    const selectedAddress = window.ethereum.selectedAddress;
+    console.log('Get nonce');
+    const {
+      data: { nonce },
+    } = await axios.get(
+      `http://localhost:3000/api/auth/metamask/nonce?address=${selectedAddress}`
+    );
+    console.log('nonce', nonce);
+    const signature = await window.ethereum.request({
+      method: 'personal_sign',
+      params: [nonce, selectedAddress],
+    });
+
+    return await axios.post(
+      `http://localhost:3000/api/comment?address=${selectedAddress}`,
+      { content, campaignAddress, signature }
+    );
+  };
   return (
     <div className="flex flex-row gap-3 justify-center items-start w-full">
       <img
@@ -19,6 +47,8 @@ export const CommentForm: FC<CommentFormProps> = ({ mode }) => {
             mode === 'publish' ? "What's on your mind?" : 'Type your reply'
           }
           className="h-24 border-gray placeholder:text-dark-gray "
+          value={content}
+          onChange={(e) => setContent(e.target.value)}
         />
         <div className="flex flex-row justify-between items-center">
           <div className="flex flex-row gap-3 justify-center items-start [&>*]:text-dark-gray [&>*]:cursor-pointer ">
@@ -26,7 +56,7 @@ export const CommentForm: FC<CommentFormProps> = ({ mode }) => {
             <AttachFileSVG />
             <EmoijiSVG />
           </div>
-          <Button className="bg-blue text-white text-sm">
+          <Button className="bg-blue text-white text-sm" onClick={publish}>
             {mode === 'publish' ? 'Post' : 'Send'}
           </Button>
         </div>
