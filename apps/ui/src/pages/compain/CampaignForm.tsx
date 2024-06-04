@@ -7,11 +7,11 @@ interface CampaignFormProps {
 }
 
 export function CampaignForm({ onSubmit }: CampaignFormProps) {
-  const [name, setName] = useState('');
-  const [description, setDescription] = useState('');
-  const [goal, setGoal] = useState('');
-  const [tokenName, setTokenName] = useState('');
-  const [tokenSymbol, setTokenSymbol] = useState('');
+  const [name, setName] = useState('name of the campaign');
+  const [description, setDescription] = useState('description of the campaign');
+  const [goal, setGoal] = useState('goal of the campaign');
+  const [tokenName, setTokenName] = useState('Token name');
+  const [tokenSymbol, setTokenSymbol] = useState('TTT');
 
   const [startDate, setStartDate] = useState('2002-12-12');
   const [endDate, setEndDate] = useState('2002-12-12');

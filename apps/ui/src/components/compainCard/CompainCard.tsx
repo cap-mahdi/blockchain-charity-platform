@@ -61,7 +61,7 @@ export function CompainCard({
       {/* ProgressBar */}
       <ProgressBar
         label={{ text: '3 days 2 hours 45 minutes left', size: 10 }}
-        percentage={Math.random()}
+        percentage={Math.random() * 100}
       />
 
       {/* Description */}

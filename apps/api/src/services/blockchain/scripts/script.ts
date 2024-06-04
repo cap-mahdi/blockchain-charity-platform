@@ -13,6 +13,14 @@ async function main() {
     'PlateformContract',
     deployer
   );
+  const campaignFactory = await ethers.getContract(
+    'CharityCampaignFactoryDAO',
+    deployer
+  );
+  const dataIsAdminAssociation = await associationFactory.isAssociationAdmin(
+    '0xec45b94e14356ef63cf9b2e0b4320c16ae887a31'
+  );
+  console.log('Is Admin Association:', dataIsAdminAssociation);
 
   const admin = await plateformContract.admins(0);
   console.log('First Admin:', admin);

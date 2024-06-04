@@ -21,7 +21,7 @@ export function ProgressBar({
   percentage = 0.3,
   label = { text: '', size: '20px' },
 }: PropsType) {
-  const progressWidth = width * percentage;
+  const progressWidth = percentage + '%';
   const styles = {
     common: `  rounded-[12px] `,
     blankBar: `  bg-gray absolute `,

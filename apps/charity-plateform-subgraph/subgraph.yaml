@@ -8,7 +8,7 @@ dataSources:
     name: CharityCampaignFactory
     network: sepolia
     source:
-      address: '0x912a059CF95E9b1caafdbd39E6B13201e169B458'
+      address: '0x01ba6629862612954bBe3823b6153d0C31978343'
       abi: CharityCampaignFactory
       startBlock: 6005632
     mapping:
@@ -19,9 +19,9 @@ dataSources:
         - CharityCampaign
       abis:
         - name: CharityCampaignFactory
-          file: ./abis/CharityCampaignFactory.json
+          file: ./abis/CharityCampaignFactoryDAO.json
         - name: CharityCampaign
-          file: ./abis/CharityCampaign.json
+          file: ./abis/CharityCampaignDAO.json
       eventHandlers:
         - event: CampaignCreated(address,address)
           handler: handleCampaignCreated
@@ -41,7 +41,7 @@ templates:
         - CharityCampaignEntity
       abis:
         - name: CharityCampaign
-          file: ./abis/CharityCampaign.json
+          file: ./abis/CharityCampaignDAO.json
       eventHandlers:
         - event: DonationReceived(indexed address,uint256,uint256)
           handler: handleDonationReceived

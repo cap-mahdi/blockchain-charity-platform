@@ -1,0 +1,93 @@
+[
+  {
+    "inputs": [
+      {
+        "internalType": "address",
+        "name": "_associationFactory",
+        "type": "address"
+      }
+    ],
+    "stateMutability": "nonpayable",
+    "type": "constructor"
+  },
+  {
+    "anonymous": false,
+    "inputs": [
+      {
+        "indexed": false,
+        "internalType": "address",
+        "name": "campaignAddress",
+        "type": "address"
+      },
+      {
+        "indexed": false,
+        "internalType": "address",
+        "name": "tokenAddress",
+        "type": "address"
+      }
+    ],
+    "name": "CampaignCreated",
+    "type": "event"
+  },
+  {
+    "inputs": [],
+    "name": "associationFactory",
+    "outputs": [
+      {
+        "internalType": "contract AssociationFactory",
+        "name": "",
+        "type": "address"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "string",
+        "name": "_name",
+        "type": "string"
+      },
+      {
+        "internalType": "string",
+        "name": "_description",
+        "type": "string"
+      },
+      {
+        "internalType": "address",
+        "name": "_targetUser",
+        "type": "address"
+      },
+      {
+        "internalType": "uint256",
+        "name": "_targetAmount",
+        "type": "uint256"
+      },
+      {
+        "internalType": "uint256",
+        "name": "_refundThreshold",
+        "type": "uint256"
+      },
+      {
+        "internalType": "uint256",
+        "name": "_tokenSupply",
+        "type": "uint256"
+      },
+      {
+        "internalType": "string",
+        "name": "_tokenName",
+        "type": "string"
+      },
+      {
+        "internalType": "string",
+        "name": "_tokenSymbol",
+        "type": "string"
+      }
+    ],
+    "name": "createCampaign",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  }
+]
