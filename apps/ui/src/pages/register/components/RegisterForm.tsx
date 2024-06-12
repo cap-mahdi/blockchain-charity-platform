@@ -6,7 +6,6 @@ import { plateformContractAddress } from '../../../constants';
 import { listenForTransactionMine, uploadToIpfs } from '../../../helper';
 import { ethers } from 'ethers';
 import {
-  AssociationFactory,
   PlateformContract,
   PlateformContract__factory,
 } from '../../../typechain-types';
@@ -16,6 +15,7 @@ import { IoIosLogIn } from 'react-icons/io';
 import { FaCloudUploadAlt } from 'react-icons/fa';
 import { FaHourglassEnd } from 'react-icons/fa';
 import { MdDomainVerification } from 'react-icons/md';
+import { useNavigate } from 'react-router-dom';
 
 export const RegisterForm: FC = () => {
   const [name, setName] = useState('Name');
@@ -32,6 +32,7 @@ export const RegisterForm: FC = () => {
   const [domain, setDomain] = useState('Domain');
   const [files, setFiles] = useState<File[]>([]);
   const { defineSteps, nextStep, failedStep, terminate } = useMetaMask();
+  const navigate = useNavigate();
 
   const register = async (e: FormEvent) => {
     console.log('Register');
@@ -97,7 +98,9 @@ export const RegisterForm: FC = () => {
         nextStep();
         await listenForTransactionMine(transactionResponse, provider);
         nextStep();
-        terminate();
+        terminate(() => {
+          navigate(`/`);
+        });
       } catch (error) {
         console.error('Metmask', error);
         failedStep();

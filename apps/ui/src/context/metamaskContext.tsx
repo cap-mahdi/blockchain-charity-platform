@@ -20,7 +20,7 @@ type MetaMaskContextType = MetaMaskState & {
   defineSteps: (steps: any) => void;
   nextStep: () => void;
   failedStep: () => void;
-  terminate: () => void;
+  terminate: (after?: () => any) => void;
 };
 const MetaMaskContext = createContext({} as MetaMaskContextType);
 
@@ -102,9 +102,10 @@ const MetamaskProvider = ({ children }: MetaMaskProviderProps) => {
     setSelectedStep((prev) => prev + 1);
   }, []);
 
-  const terminate = () => {
+  const terminate = (after = () => {}) => {
     setTimeout(() => {
       setSelectedStep(null);
+      after();
     }, 1000);
   };
 

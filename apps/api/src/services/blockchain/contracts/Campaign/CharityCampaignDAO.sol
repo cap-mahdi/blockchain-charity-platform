@@ -32,7 +32,7 @@ contract CharityCampaignDAO  {
     uint public finalBalance ; 
     address public owner;
     uint public duration  = 120;
-    uint startTimeStamp  ; 
+    uint public startTimeStamp  ; 
     uint256 public proposalDelay = 120;
         uint256 public trancheDelay = 120;
 

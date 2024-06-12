@@ -10,18 +10,46 @@ import useCampaignContext from '../../context/useCampaignContext';
 import { ethers } from 'ethers';
 import { BsCurrencyDollar } from 'react-icons/bs';
 import { ProgressBar } from '../../components/ProgressBar';
+import { CharityCampaignDAO } from '../../typechain-types';
 
 const convertTokens = (amount: number, conversionRate: number) => {
   return amount * conversionRate;
 };
-const conversionRate = 1.5;
+const conversionRate = 1;
 const ETHERSCAN_URL = import.meta.env.VITE_ETHERSCAN_URL;
 
 export function ExchangeSection(props) {
-  const [campainState, setCampaignState] = useCampaignContext();
+  const [campaignState, setCampaignState] = useCampaignContext();
+
+  const [campaign, setCampaign] = useState(null);
 
   const [sourceAmount, setSourceAmount] = useState<number | string>(0);
   const [targetAmount, setTargetAmount] = useState<number | string>(0);
+
+  useEffect(() => {
+    if (campaignState.contract) {
+      const getData = async () => {
+        // const startTimeStamp = await campaignState.contract?.startTimeStamp();
+        const proposalDelay = await campaignState.contract?.proposalDelay();
+        const totalDonations = await campaignState.contract?.totalDonations();
+
+        setCampaign({
+          totalDonations,
+          // startTimeStamp,
+          proposalDelay,
+        });
+        console.log({
+          totalDonations,
+          // startTimeStamp,
+          proposalDelay,
+          numProposals,
+        });
+      };
+
+      getData();
+    }
+  }, [campaignState.contract]);
+
   const handleSourceAmountChange = (newAmount: number | string) => {
     setSourceAmount(newAmount);
     if (typeof newAmount === 'string') {
@@ -39,6 +67,12 @@ export function ExchangeSection(props) {
     const convertedAmount = convertTokens(newAmount, 1 / conversionRate);
     setSourceAmount(convertedAmount.toFixed(2));
   };
+  let totaldonation = campaign?.totalDonations
+    ? ethers.getBigInt(campaign?.totalDonations)
+    : 0;
+  totaldonation = campaign?.totalDonations
+    ? ethers.formatEther(totaldonation)
+    : 0;
 
   const params = useParams();
   console.log(ETHERSCAN_URL + '/address/' + params?.campaignAddress);
@@ -57,7 +91,7 @@ export function ExchangeSection(props) {
                 <BsCurrencyDollar className="w-4 h-4  text-dark-gray font-bold" />
 
                 <h1 className="text-[14px] font-bold leading-[0.7rem] text-dark-gray">
-                  254.99
+                  {totaldonation.toString()}{' '}
                 </h1>
               </div>
             </div>
@@ -70,7 +104,7 @@ export function ExchangeSection(props) {
                 <img src={tetherIcon} alt="icon" className="w-4 h-4 " />
 
                 <h1 className="text-[14px] font-bold leading-[0.7rem] text-dark-gray">
-                  254.99
+                  {totaldonation}{' '}
                 </h1>
               </div>
             </div>
@@ -128,7 +162,7 @@ export function ExchangeSection(props) {
         <button
           className="bg-orange text-center h-11  flex flex-col items-center justify-center rounded-lg font-medium"
           onClick={async () => {
-            const contract = campainState.contract;
+            const contract = campaignState.contract;
             const amountToSend = ethers.parseEther(sourceAmount + '');
             console.log(sourceAmount);
 

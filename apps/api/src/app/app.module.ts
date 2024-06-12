@@ -24,7 +24,7 @@ import { Comment } from '../entities/Comment.entity';
     }),
     TypeOrmModule.forRoot({
       type: 'postgres',
-      url: 'postgres://postgres:postgres@localhost:5432/charity-blockchain',
+      url: 'postgres://postgres:root@localhost:5432/charity-blockchain',
       entities: [UserSignature, Comment],
       autoLoadEntities: true,
       synchronize: true,

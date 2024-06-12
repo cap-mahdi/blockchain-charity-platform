@@ -259,22 +259,24 @@ export const DemandInfo: FC = () => {
           onClose={() => setSelectedImage(null)}
         />
       )}
-      <div className="flex flex-row gap-3 w-full justify-end">
-        <button
-          className="bg-red-500 text-black py-3 px-4 text-xs font-semibold rounded-xl "
-          type="button"
-          onClick={refuseDemand}
-        >
-          Refuse{' '}
-        </button>
-        <button
-          className="bg-green-500 text-black py-3 px-4 text-xs font-semibold rounded-xl"
-          type="button"
-          onClick={approveDemand}
-        >
-          Approve{' '}
-        </button>
-      </div>
+      {status === DemandStatus.Pending && (
+        <div className="flex flex-row gap-3 w-full justify-end">
+          <button
+            className="bg-red-500 text-black py-3 px-4 text-xs font-semibold rounded-xl "
+            type="button"
+            onClick={refuseDemand}
+          >
+            Refuse{' '}
+          </button>
+          <button
+            className="bg-green-500 text-black py-3 px-4 text-xs font-semibold rounded-xl"
+            type="button"
+            onClick={approveDemand}
+          >
+            Approve{' '}
+          </button>
+        </div>
+      )}
     </Card>
   );
 };

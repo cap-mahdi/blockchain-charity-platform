@@ -8,7 +8,7 @@ dataSources:
     name: CharityCampaignFactory
     network: sepolia
     source:
-      address: '0x01ba6629862612954bBe3823b6153d0C31978343'
+      address: '0x2B402d93Dee29E1FC622B5DF6d89e7D5A926e09b'
       abi: CharityCampaignFactory
       startBlock: 6005632
     mapping:

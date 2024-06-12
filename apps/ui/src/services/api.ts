@@ -9,7 +9,7 @@ import { setContext } from '@apollo/client/link/context';
 
 const restLink = new RestLink({ uri: 'http://localhost:3000/api' });
 const httpLink = createHttpLink({
-  uri: 'https://api.studio.thegraph.com/query/69025/charity-plateform-subgraph/v0.0.4',
+  uri: 'https://api.studio.thegraph.com/query/69025/charity-plateform-subgraph/v0.0.6',
 });
 // const authLink = setContext((_, { headers }) => {
 //   let token = localStorage.getItem('token');
