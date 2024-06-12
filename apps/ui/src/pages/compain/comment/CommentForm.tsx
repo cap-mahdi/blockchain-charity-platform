@@ -8,7 +8,7 @@ import { useParams } from 'react-router-dom';
 interface CommentFormProps {
   mode: 'send' | 'publish';
 }
-export const CommentForm: FC<CommentFormProps> = ({ mode }) => {
+export const CommentForm: FC<CommentFormProps> = ({ mode, getComments }) => {
   const { campaignAddress } = useParams();
   const [content, setContent] = useState('');
   const { connectWallet, connectedWallet } = useMetaMask();
@@ -29,10 +29,16 @@ export const CommentForm: FC<CommentFormProps> = ({ mode }) => {
       params: [nonce, selectedAddress],
     });
 
-    return await axios.post(
-      `http://localhost:3000/api/comment?address=${selectedAddress}`,
-      { content, campaignAddress, signature }
-    );
+    return await axios
+      .post(`http://localhost:3000/api/comment?address=${selectedAddress}`, {
+        content,
+        campaignAddress,
+        signature,
+      })
+      .then(() => {
+        setContent('');
+        getComments(campaignAddress);
+      });
   };
   return (
     <div className="flex flex-row gap-3 justify-center items-start w-full">

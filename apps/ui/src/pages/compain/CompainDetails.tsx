@@ -4,20 +4,40 @@ import filesIcon from '../../assets/files-icon.png';
 import { Button } from '../../components/Button';
 import { ExchangeSection } from './ExchangeSection';
 
-import { useParams } from 'react-router-dom';
+import { Link, useParams } from 'react-router-dom';
 import { ethers } from 'ethers';
 import useCampaignContext from '../../context/useCampaignContext';
 import { useLaodContract } from '../../hooks/useLaodContract';
 import {
+  AssociationFactory,
+  AssociationFactory__factory,
   CharityCampaignDAO,
   CharityCampaignDAO__factory,
 } from '../../typechain-types';
-import { FaLongArrowAltRight } from 'react-icons/fa';
+import { FaHourglassEnd, FaLongArrowAltRight } from 'react-icons/fa';
 import { VoteSection } from './VoteSection';
+import { associationContractAddress } from '../../constants';
+import { AssociationContract__factory } from '../../typechain-types/factories/src/services/blockchain/contracts/Association.sol';
+import { AssociationContract } from '../../typechain-types/src/services/blockchain/contracts/Association.sol';
+import useMetaMask from '../../context/metamaskContext';
+import { toast } from 'react-toastify';
+import { IoIosLogIn } from 'react-icons/io';
+import { MdDomainVerification } from 'react-icons/md';
 
 export function CompainDetails(props) {
   const { campaignAddress } = useParams();
   const [campaignState, setCampaignState] = useCampaignContext();
+  const {
+    connectedWallet,
+    defineSteps,
+    nextStep,
+    failedStep,
+    terminate,
+    connectWallet,
+  } = useMetaMask();
+  const [associationFactoryContract, setAssociationFactoryContract] =
+    useState<AssociationFactory>();
+  const [isAdmin, setIsAdmin] = useState(false);
   useLaodContract({
     contractAddress: campaignAddress,
     abi: CharityCampaignDAO__factory.abi,
@@ -30,6 +50,12 @@ export function CompainDetails(props) {
         };
       });
     },
+  });
+  useLaodContract({
+    contractAddress: associationContractAddress,
+    abi: AssociationFactory__factory.abi,
+    contract: associationFactoryContract,
+    setContract: setAssociationFactoryContract,
   });
 
   const [campaign, setCampaign] = useState<CharityCampaignDAO | null>(null);
@@ -69,6 +95,22 @@ export function CompainDetails(props) {
       getData();
     }
   }, [campaignState.contract]);
+
+  useEffect(() => {
+    if (associationFactoryContract && campaignState.contract) {
+      const getData = async () => {
+        const data = await associationFactoryContract.isAssociationAdmin(
+          connectedWallet
+        );
+        const owner = await campaignState?.contract.owner();
+        console.log(data[1]);
+        console.log(owner);
+        setIsAdmin(data[1] === owner);
+      };
+      getData();
+    }
+  }, [associationFactoryContract, connectedWallet, campaignState.contract]);
+
   return (
     <CompainLayout title={campaign?.title}>
       <div className=" w-full px-8 pb-8  ">
@@ -88,23 +130,63 @@ export function CompainDetails(props) {
         ) : (
           ''
         )}{' '}
-        <Button
-          onClick={async () => {
-            const tx = await campaignState.contract?.withdrawFunds({
-              gas: 1000000,
-            });
-            const txrec = await tx.wait();
-            console.log(txrec);
-          }}
-        >
-          Withdraw
-        </Button>
+        {isAdmin ? (
+          <Button
+            onClick={async () => {
+              if (window.ethereum === 'undefined') {
+                toast.error('Please Install MetaMask');
+                return;
+              }
+              try {
+                defineSteps([
+                  {
+                    title: 'Step 1',
+                    description: 'Register with MetaMask',
+                    icon: <IoIosLogIn />,
+                  },
+                  {
+                    title: 'Step 2',
+                    description: 'Sending Transaction',
+                    icon: <FaHourglassEnd />,
+                  },
+                  {
+                    title: 'Step 3',
+                    description: 'Verification Transaction',
+                    icon: <MdDomainVerification />,
+                  },
+                ]);
+                if (!connectedWallet) await connectWallet();
+                nextStep();
+                const tx = await campaignState.contract?.withdrawFunds({
+                  gas: 1000000,
+                });
+                nextStep();
+                const txrec = await tx.wait();
+                nextStep();
+                terminate();
+                toast.success('Funds withdrawn successfully');
+                console.log(txrec);
+              } catch (error) {
+                console.log(error);
+                failedStep();
+                toast.error('An error occured while withdrawing funds');
+              }
+            }}
+            className="bg-[#71B4AC] w-fit mx-5"
+          >
+            Withdraw
+          </Button>
+        ) : (
+          ''
+        )}
       </div>
       <div className="w-full flex flex-row justify-end mr-4 mb-4">
-        <Button className="bg-orange w-fit flex flex-row items-center gap-2">
-          <p>Follow the news | Acess Feed</p>
-          <FaLongArrowAltRight className="w-6 h-6" />
-        </Button>
+        <Link to="feed">
+          <Button className="bg-orange w-fit flex flex-row items-center gap-2">
+            <p>Follow the news | Acess Feed</p>
+            <FaLongArrowAltRight className="w-6 h-6" />
+          </Button>
+        </Link>
       </div>
     </CompainLayout>
   );

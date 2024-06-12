@@ -1,9 +1,13 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { Card } from '../../components/Card';
 import { FormHeader } from '../../components/Form/FormHeader';
 import { InfoDisplayer } from '../../components/InfoDisplayer';
 import { Button } from '../../components/Button';
 import filesIcon from '../../assets/files-icon.png';
+import { useParams } from 'react-router-dom';
+import { AssociationContract } from '../../typechain-types';
+import { useLaodContract } from '../../hooks/useLaodContract';
+import { AssociationContract__factory } from '../../typechain-types/factories/src/services/blockchain/contracts/Association.sol';
 
 const association = {
   name: 'Health Professionals Network',
@@ -23,6 +27,41 @@ const association = {
 };
 
 export function AssociationDetails(props) {
+  const [associationContract, setAssociationContract] =
+    useState<AssociationContract>();
+  const [association, setAssociation] = useState({});
+  const params = useParams();
+  console.log('params', params);
+
+  useLaodContract({
+    contractAddress: params.asssociationId,
+    abi: AssociationContract__factory.abi,
+    contract: associationContract,
+    setContract: setAssociationContract,
+  });
+
+  useEffect(() => {
+    if (associationContract) {
+      const getData = async () => {
+        const data = await associationContract.getAssociationDetails();
+        setAssociation({
+          name: data[0],
+          description: data[1],
+          email: data[2],
+          country: data[3],
+          streetAddress: data[4],
+          city: data[5],
+          state: data[6],
+          postalCode: data[7],
+          creationDate: data[8],
+          size: data[9],
+          status: data[10],
+        });
+      };
+      getData();
+    }
+  }, [associationContract]);
+
   return (
     <Card className="mt-10 py-8 px-8">
       <div className="relative  w-full h-full ">
@@ -76,10 +115,6 @@ export function AssociationDetails(props) {
           <div>
             <h1 className="text-2xl font-[500] mb-2">Postal Code</h1>
             <p className="text-lg mb-6">{association?.postalCode}</p>
-          </div>
-          <div>
-            <h1 className="text-2xl font-[500] mb-2">Status</h1>
-            <p className="text-lg mb-6">{association?.status}</p>
           </div>
         </div>
         <div className="flex flex-row gap-4 justify-start items-center">

@@ -1,11 +1,11 @@
 export const plateformContractAddress =
-  '0xFBf3E34828E9E42f227505aA0D3bd7057124f224';
+  '0xF9Ad450337605be48eDc144Eb4b7b89De1cCFCc5';
 
 export const associationContractAddress =
-  '0x047b46743dBC6217C682275D2150904F2fC8e536';
+  '0x3513Ecff5Cb63eeb03fF7b9Fa06555D61D5D31a2';
 
 export const campaignFactoryContractAddress =
-  '0x24Ea043772f2FBD2Fb8725f2d58C7C1c4A14C5D6';
+  '0x2B402d93Dee29E1FC622B5DF6d89e7D5A926e09b';
 
 export const PINATA_GATEWAY =
   'https://violet-naval-platypus-851.mypinata.cloud/ipfs/';

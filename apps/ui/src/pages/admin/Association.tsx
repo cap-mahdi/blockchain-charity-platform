@@ -52,7 +52,7 @@ export const AssociationInfo: FC = () => {
           },
           {
             title: 'Step 2',
-            description: 'Sending Transaction (refuse demand)',
+            description: 'Sending Transaction',
             icon: <FaHourglassEnd />,
           },
           {
@@ -202,8 +202,7 @@ export const AssociationInfo: FC = () => {
           />
           <InfoDisplayer
             label="Association Domain"
-            // value={association.domain}
-            value="This value is hard coded"
+            value={association.domain}
           />
         </div>
         <div className="rounded-lg border-1 border-dashed border-black p-2  w-full text-gray-900  sm:text-sm sm:leading-6 flex flex-row items-center gap-4 flex-wrap">

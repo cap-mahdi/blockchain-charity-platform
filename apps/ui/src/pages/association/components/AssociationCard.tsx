@@ -4,6 +4,7 @@ import { FiMaximize2 } from 'react-icons/fi';
 import TextExpander from '../../../components/TextExpander';
 import { BsCurrencyDollar } from 'react-icons/bs';
 import { PlateformContract } from '../../../typechain-types';
+import { Link } from 'react-router-dom';
 
 // interface Association {
 //     name?: string,
@@ -43,7 +44,9 @@ export function AssociationCard({
           {/* Compain Name */}
           <h1 className={styles.name}>{association?.name}</h1>
         </div>
-        <FiMaximize2 className="w-4 h-4 text-dark-gray" />
+        <Link to={`/association/${association.contractAddress}`}>
+          <FiMaximize2 className="w-4 h-4 text-dark-gray" />
+        </Link>
       </div>
 
       {/* Photo Section */}

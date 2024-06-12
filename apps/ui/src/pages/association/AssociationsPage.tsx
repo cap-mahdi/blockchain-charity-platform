@@ -13,6 +13,8 @@ import { associationContractAddress } from '../../constants';
 import { numberToAssociationEnumMapper } from '../../types/Association';
 import { Spinner } from '../../components/Spinner';
 import { ethers } from 'ethers';
+import { AssociationContract__factory } from '../../typechain-types/factories/src/services/blockchain/contracts/Association.sol';
+import { Link } from 'react-router-dom';
 
 export function AssociationsPage(props) {
   const [associations, setAssociations] = React.useState<
@@ -48,6 +50,7 @@ export function AssociationsPage(props) {
             console.log('assoInfo', assoInfo);
 
             return {
+              contractAddress: asso.associationAddress,
               name: assoInfo[0],
               description: assoInfo[1],
               email: assoInfo[2],

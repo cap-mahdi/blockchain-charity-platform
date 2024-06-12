@@ -2,9 +2,22 @@ import React, { useEffect, useState } from 'react';
 import { Box } from './Box';
 import { Button } from '../../components/Button';
 import { ethers } from 'ethers';
+import useMetaMask from '../../context/metamaskContext';
+import { toast } from 'react-toastify';
+import { IoIosLogIn } from 'react-icons/io';
+import { FaHourglassEnd } from 'react-icons/fa';
+import { MdDomainVerification } from 'react-icons/md';
 
 export function VoteSection({ campaign }) {
   const [campaignState, setCampaignState] = useState();
+  const {
+    defineSteps,
+    nextStep,
+    failedStep,
+    terminate,
+    connectWallet,
+    connectedWallet,
+  } = useMetaMask();
 
   useEffect(() => {
     if (campaign) {
@@ -59,9 +72,43 @@ export function VoteSection({ campaign }) {
               <Button
                 className="bg-red-500 w-fit "
                 onClick={async () => {
-                  const tx = await campaign.voteOnProposal(false);
-                  const txrec = await tx.wait();
-                  console.log(txrec);
+                  if (window.ethereum === 'undefined') {
+                    toast.error('Please Install MetaMask');
+                    return;
+                  }
+                  try {
+                    defineSteps([
+                      {
+                        title: 'Step 1',
+                        description: 'Register with MetaMask',
+                        icon: <IoIosLogIn />,
+                      },
+
+                      {
+                        title: 'Step 2',
+                        description: 'Sending Transaction',
+                        icon: <FaHourglassEnd />,
+                      },
+                      {
+                        title: 'Step 3',
+                        description: 'Verification Transaction',
+                        icon: <MdDomainVerification />,
+                      },
+                    ]);
+                    if (!connectedWallet) await connectWallet();
+                    nextStep();
+                    const tx = await campaign.voteOnProposal(false);
+                    nextStep();
+                    const txrec = await tx.wait();
+                    nextStep();
+                    terminate();
+                    toast.success('Vote Against successful');
+                    console.log(txrec);
+                  } catch (err) {
+                    console.log(err);
+                    failedStep();
+                    toast.error('An error occured while voting against');
+                  }
                 }}
               >
                 Vote Against
@@ -69,9 +116,43 @@ export function VoteSection({ campaign }) {
               <Button
                 className="bg-green-500 w-fit "
                 onClick={async () => {
-                  const tx = await campaign.voteOnProposal(true);
-                  const txrec = await tx.wait();
-                  console.log(txrec);
+                  if (window.ethereum === 'undefined') {
+                    toast.error('Please Install MetaMask');
+                    return;
+                  }
+                  try {
+                    defineSteps([
+                      {
+                        title: 'Step 1',
+                        description: 'Register with MetaMask',
+                        icon: <IoIosLogIn />,
+                      },
+
+                      {
+                        title: 'Step 2',
+                        description: 'Sending Transaction',
+                        icon: <FaHourglassEnd />,
+                      },
+                      {
+                        title: 'Step 3',
+                        description: 'Verification Transaction',
+                        icon: <MdDomainVerification />,
+                      },
+                    ]);
+                    if (!connectedWallet) await connectWallet();
+                    nextStep();
+                    const tx = await campaign.voteOnProposal(true);
+                    nextStep();
+                    const txrec = await tx.wait();
+                    nextStep();
+                    terminate();
+                    toast.success('Vote For successful');
+                    console.log(txrec);
+                  } catch (err) {
+                    console.log(err);
+                    failedStep();
+                    toast.error('An error occured while voting for');
+                  }
                 }}
               >
                 Vote For
